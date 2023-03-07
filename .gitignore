@@ -1,0 +1,6 @@
+/src/main/resources/application.properties
+/mvnw
+/mvnw.cmd
+/target/
+/nms-monolith.iml
+/.mvn/wrapper/
