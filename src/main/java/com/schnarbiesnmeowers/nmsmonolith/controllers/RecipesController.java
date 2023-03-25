@@ -1,6 +1,11 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Section;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +14,12 @@ import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
 import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
@@ -164,4 +170,100 @@ public class RecipesController {
 		exporter.export(response);
 
 	}*/
+
+	@PostMapping(path = "/print")
+	public ResponseEntity<String> printRecipe(HttpServletResponse response,
+		@Valid @RequestBody RecipeFormDTO data) throws Exception {
+		// HttpServletResponse response,
+		response.setContentType("application/pdf");
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=iTextHelloWorld.pdf";
+		response.setHeader(headerKey, headerValue);
+
+		Font fontTitle = new Font(Font.FontFamily.COURIER, 30,
+				Font.BOLD, BaseColor.BLACK);
+		Font fontSubTitles = new Font(Font.FontFamily.COURIER, 24,
+				Font.BOLD, BaseColor.BLACK);
+		Font normalText = new Font(Font.FontFamily.COURIER, 16,
+				Font.NORMAL);
+
+		Document document = new Document();
+		PdfWriter.getInstance(document, /*response.getOutputStream()*/new FileOutputStream("recipe.pdf"));
+		document.open();
+
+		// add recipe name
+		Paragraph titlePara = new Paragraph(data.getRecipeMetaData().getRecipeName(), fontTitle);
+		Chapter catPart = new Chapter(1);
+		Section subCatPart = catPart.addSection(titlePara);
+		// add blank lines
+		Paragraph paragraph = new Paragraph();
+		addEmptyLine(paragraph, 2);
+		subCatPart.add(paragraph);
+		// add ingredients title
+		subCatPart.add(new Paragraph("Ingredients:", fontSubTitles));
+		// add ingredients
+		createIngredientList(subCatPart,data.getRecipeIngredients(),normalText);
+		// add blank lines
+		addEmptyLine(paragraph, 1);
+		subCatPart.add(paragraph);
+		// add ingredients title
+		subCatPart.add(new Paragraph("Spices:", fontSubTitles));
+		// add spices
+		createSpicesList(subCatPart,data.getRecipeSpices(),normalText);
+		// add blank lines
+		addEmptyLine(paragraph, 1);
+		subCatPart.add(paragraph);
+		// add ingredients title
+		subCatPart.add(new Paragraph("Steps:", fontSubTitles));
+		// add steps
+		createStepsList(subCatPart,data.getRecipeSteps(),normalText);
+
+		// add all to the document
+		document.add(catPart);
+		document.close();
+		response.getOutputStream().flush();
+		/*File file = new File("iTextHelloWorld.pdf");
+		FileInputStream fis = new FileInputStream(file);
+		byte [] outputdata = new byte[(int)file.length()];
+		fis.read(outputdata);
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		outputdata = bos.toByteArray();
+		response.getOutputStream().write(outputdata);*/
+		return ResponseEntity.status(HttpStatus.OK).body("OK");
+	}
+
+	private static void createIngredientList(Section subCatPart, List<RecipeIngredientDisplay> ingredients,Font font) {
+		com.itextpdf.text.List list = new com.itextpdf.text.List(false, false);
+		for(RecipeIngredientDisplay ingredient : ingredients) {
+			String display = ingredient.getServSz() + " " + ingredient.getServUnitDesc() + " "
+					+ ingredient.getDescription();
+			list.add(new ListItem(display,font));
+		}
+		subCatPart.add(list);
+	}
+
+	private static void createSpicesList(Section subCatPart, List<RecipeSpiceDisplay> spices,Font font) {
+		com.itextpdf.text.List list = new com.itextpdf.text.List(false, false);
+		for(RecipeSpiceDisplay spice : spices) {
+			String display = spice.getServSz() + " " + spice.getServUnitDesc() + " "
+					+ spice.getDescription();
+			list.add(new ListItem(display,font));
+		}
+		subCatPart.add(list);
+	}
+
+	private static void createStepsList(Section subCatPart, List<RecipeStepsDisplay> steps,Font font ) {
+		com.itextpdf.text.List list = new com.itextpdf.text.List(false, false);
+		for(RecipeStepsDisplay step : steps) {
+			String display = step.getStepDescription();
+			list.add(new ListItem(display,font));
+		}
+		subCatPart.add(list);
+	}
+
+	private static void addEmptyLine(Paragraph paragraph, int number) {
+		for (int i = 0; i < number; i++) {
+			paragraph.add(new Paragraph(" "));
+		}
+	}
 }

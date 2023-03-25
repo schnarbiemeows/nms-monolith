@@ -753,10 +753,12 @@ public class RecipesService {
     private static BigDecimal adder(BigDecimal beginningTotal, BigDecimal recordServingSize,
                                     BigDecimal ingredientServingSize, BigDecimal multiplier,
                                     BigDecimal ingredientTotalPerServing, BigDecimal recipeNumServings) {
-        BigDecimal i1 = recordServingSize.divide(ingredientServingSize).setScale(2,RoundingMode.HALF_UP);
+        BigDecimal i1 = recordServingSize.divide(ingredientServingSize,2,RoundingMode.HALF_UP)
+                .setScale(2,RoundingMode.HALF_UP);
         BigDecimal i2 = i1.multiply(multiplier);
         BigDecimal i3 = i2.multiply(ingredientTotalPerServing);
-        BigDecimal i4 = i3.divide(recipeNumServings).setScale(2,RoundingMode.HALF_UP);
+        BigDecimal i4 = i3.divide(recipeNumServings,2,RoundingMode.HALF_UP)
+                .setScale(2,RoundingMode.HALF_UP);
         return beginningTotal.add(i4);
     }
     private static void addToTotals(IngredientsDTO result, RecipeIngredientDisplay rec, BigDecimal m1,

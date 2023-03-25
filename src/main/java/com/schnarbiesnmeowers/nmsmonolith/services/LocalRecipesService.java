@@ -416,10 +416,12 @@ public class LocalRecipesService {
     private static BigDecimal adder(BigDecimal beginningTotal, BigDecimal recordServingSize,
                                     BigDecimal ingredientServingSize, BigDecimal multiplier,
                                     BigDecimal ingredientTotalPerServing, BigDecimal recipeNumServings) {
-        BigDecimal i1 = recordServingSize.divide(ingredientServingSize,2,RoundingMode.HALF_UP);
+        BigDecimal i1 = recordServingSize.divide(ingredientServingSize,2,RoundingMode.HALF_UP)
+                .setScale(2,RoundingMode.HALF_UP);;
         BigDecimal i2 = i1.multiply(multiplier);
         BigDecimal i3 = i2.multiply(ingredientTotalPerServing);
-        BigDecimal i4 = i3.divide(recipeNumServings,2,RoundingMode.HALF_UP);
+        BigDecimal i4 = i3.divide(recipeNumServings,2,RoundingMode.HALF_UP)
+                .setScale(2,RoundingMode.HALF_UP);;
         return beginningTotal.add(i4);
     }
     private static void addToTotals(LocalIngredientsDTO result, RecipeIngredientDisplay rec, BigDecimal m1,
@@ -768,6 +770,7 @@ public class LocalRecipesService {
                 LocalRecipeIngredientsDTO dto = new LocalRecipeIngredientsDTO();
                 dto.setRecipeId(recipeId);
                 dto.setActv("Y");
+                dto.setLocalRecpIngr(rec.isLocal());
                 dto.setRecipeFlg(rec.isRecipe() == true ? "Y" : "N");
                 dto.setRecOrIngrId(rec.getIngrId());
                 dto.setServSz(rec.getServSz());
