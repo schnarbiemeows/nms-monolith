@@ -19,4 +19,10 @@ public interface FavoriteRecipesRepository extends JpaRepository<FavoriteRecipes
 
     @Query(value = "select * from favorite_recipes fr where fr.is_local=false and fr.recipe_id=?1 and fr.actv='Y'", nativeQuery = true)
     public Iterable<FavoriteRecipes> findGlobalRecipesInAnyUserFavorites(int recipeId);
+
+    @Query(value = "select * from favorite_recipes fr where fr.is_local=true and fr.recipe_id=?1", nativeQuery = true)
+    public FavoriteRecipes findFavoriteLocalRecipeForUser(int recipeId);
+
+    @Query(value = "select * from favorite_recipes fr where fr.is_local=false and fr.recipe_id=?1", nativeQuery = true)
+    public FavoriteRecipes findFavoriteGlobalRecipeForUser(int recipeId);
 }

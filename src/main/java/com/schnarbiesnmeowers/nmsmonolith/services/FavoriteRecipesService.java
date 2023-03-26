@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteIngredients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
@@ -124,6 +123,58 @@ public class FavoriteRecipesService {
 				return true;
 			}
 			return false;
+		}
+	}
+
+	/**
+	 * if there is already an active favorite(say, in case of edit), then just don't do anything
+	 * @param recipeId
+	 * @param userId
+	 * @throws Exception
+	 */
+    public void upsertFavoriteLocalRecipe(Integer recipeId, Integer userId) throws Exception {
+		if(recipeId==null) {
+			FavoriteRecipesDTO newFavorite = new FavoriteRecipesDTO(null,recipeId,true,"Y",
+					userId);
+			createFavoriteRecipes(newFavorite);
+		} else {
+			FavoriteRecipes recipe = favoriteRecipesRepository.findFavoriteLocalRecipeForUser(recipeId);
+			if(recipe==null) {
+				FavoriteRecipesDTO newFavorite = new FavoriteRecipesDTO(null,recipeId,true,"Y",
+						userId);
+				createFavoriteRecipes(newFavorite);
+			} else {
+				if(recipe.getActv().equals("N")) {
+					recipe.setActv("Y");
+					updateFavoriteRecipes(recipe.toDTO());
+				}
+			}
+		}
+    }
+
+	/**
+	 * if there is already an active favorite(say, in case of edit), then just don't do anything
+	 * @param recipeId
+	 * @param userId
+	 * @throws Exception
+	 */
+	public void upsertFavoriteGlobalRecipe(Integer recipeId, Integer userId) throws Exception {
+		if(recipeId==null) {
+			FavoriteRecipesDTO newFavorite = new FavoriteRecipesDTO(null,recipeId,true,"Y",
+					userId);
+			createFavoriteRecipes(newFavorite);
+		} else {
+			FavoriteRecipes recipe = favoriteRecipesRepository.findFavoriteGlobalRecipeForUser(recipeId);
+			if(recipe==null) {
+				FavoriteRecipesDTO newFavorite = new FavoriteRecipesDTO(null,recipeId,true,"Y",
+						userId);
+				createFavoriteRecipes(newFavorite);
+			} else {
+				if(recipe.getActv().equals("N")) {
+					recipe.setActv("Y");
+					updateFavoriteRecipes(recipe.toDTO());
+				}
+			}
 		}
 	}
 }

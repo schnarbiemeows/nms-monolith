@@ -21,12 +21,13 @@ public class RecipeFormDTO implements Serializable {
 
     private List<RecipeStepsDisplay> recipeSteps;
 
+    private boolean favor;
     public RecipeFormDTO() {
     }
 
     public RecipeFormDTO(RecipesDTO recipeMetaData, boolean local, BigDecimal servingSize, Integer servingTypeId,
         Integer userId, List<RecipeIngredientDisplay> recipeIngredients, List<RecipeSpiceDisplay> recipeSpices,
-                         List<RecipeStepsDisplay> recipeSteps) {
+                         List<RecipeStepsDisplay> recipeSteps,boolean favor) {
         this.recipeMetaData = recipeMetaData;
         this.local = local;
         this.servingSize = servingSize;
@@ -35,6 +36,7 @@ public class RecipeFormDTO implements Serializable {
         this.recipeIngredients = recipeIngredients;
         this.recipeSpices = recipeSpices;
         this.recipeSteps = recipeSteps;
+        this.favor = favor;
     }
 
     public RecipesDTO getRecipeMetaData() {
@@ -101,6 +103,14 @@ public class RecipeFormDTO implements Serializable {
         this.recipeSteps = recipeSteps;
     }
 
+    public boolean isFavor() {
+        return favor;
+    }
+
+    public void setFavor(boolean favor) {
+        this.favor = favor;
+    }
+
     @Override
     public String toString() {
         return "RecipeFormDTO{" +
@@ -112,6 +122,7 @@ public class RecipeFormDTO implements Serializable {
                 ", recipeIngredients=" + recipeIngredients +
                 ", recipeSpices=" + recipeSpices +
                 ", recipeSteps=" + recipeSteps +
+                ", favor=" + favor +
                 '}';
     }
 }

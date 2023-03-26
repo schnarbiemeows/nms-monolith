@@ -271,6 +271,10 @@ public class LocalRecipesService {
         createRecipeIngredientRecords(recipeIngredients, createdData.getRecipeId(), data.getUserId());
         createRecipeSpiceRecords(data.getRecipeSpices(), createdData.getRecipeId(), data.getUserId());
         createRecipeStepRecords(data.getRecipeSteps(), createdData.getRecipeId(), data.getUserId());
+        if(data.isFavor()) {
+            favoriteRecipesService.upsertFavoriteLocalRecipe(createdData.getRecipeId(),
+                    data.getUserId());
+        }
         return createdData.toDTO();
     }
 
@@ -609,6 +613,10 @@ public class LocalRecipesService {
                                 + record.getUserId() + " for date = " + record.getCalendarDate());
                     }
                 }
+            }
+            if(data.isFavor()) {
+                favoriteRecipesService.upsertFavoriteLocalRecipe(data.getRecipeMetaData().getRecipeId(),
+                        data.getUserId());
             }
             return updatedData.toDTO();
         } else {

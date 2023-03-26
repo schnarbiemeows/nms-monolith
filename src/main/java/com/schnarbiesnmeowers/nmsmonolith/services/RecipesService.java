@@ -277,6 +277,10 @@ public class RecipesService {
         createRecipeSpiceRecords(data.getRecipeSpices(),createdData.getRecipeId());
         // make the recipe_step records
         createRecipeStepRecords(data.getRecipeSteps(), createdData.getRecipeId());
+        if(data.isFavor()) {
+            favoriteRecipesService.upsertFavoriteGlobalRecipe(createdData.getRecipeId(),
+                    data.getUserId());
+        }
         return createdData.toDTO();
     }
 
@@ -390,6 +394,10 @@ public class RecipesService {
                                 + record.getUserId() + " for date = " + record.getCalendarDate());
                     }
                 }
+            }
+            if(data.isFavor()) {
+                favoriteRecipesService.upsertFavoriteGlobalRecipe(data.getRecipeMetaData().getRecipeId(),
+                        data.getUserId());
             }
             return updatedData.toDTO();
         } else {
