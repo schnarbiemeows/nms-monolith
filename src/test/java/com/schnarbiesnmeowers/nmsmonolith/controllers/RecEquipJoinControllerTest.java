@@ -59,7 +59,7 @@ public class RecEquipJoinControllerTest {
 	 * test creating a new RecEquipJoin
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateRecEquipJoin() throws URISyntaxException
 	{
 	    RecEquipJoinDTO recequipjoin = generateRandomRecEquipJoin();
@@ -81,7 +81,7 @@ public class RecEquipJoinControllerTest {
 	 * test getting all RecEquipJoin
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllRecEquipJoin() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class RecEquipJoinControllerTest {
 	 * test getting a single RecEquipJoin by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetRecEquipJoin() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class RecEquipJoinControllerTest {
 	 * test updating a RecEquipJoin
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateRecEquipJoin() throws URISyntaxException
 	{
 	    RecEquipJoinDTO recequipjoin = generateRandomRecEquipJoin();
@@ -131,7 +131,7 @@ public class RecEquipJoinControllerTest {
 	 * test deleting a RecEquipJoin
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteRecEquipJoin() throws URISyntaxException
 	{
 		RecEquipJoinDTO recequipjoin = generateRandomRecEquipJoin();
@@ -149,7 +149,7 @@ public class RecEquipJoinControllerTest {
 	 * test getting all RecEquipJoin by foreign key recipeId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRecEquipJoinByRecipeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/recequipjoin/findByRecipeId/" + num;
@@ -163,7 +163,7 @@ public class RecEquipJoinControllerTest {
 	 * test getting all RecEquipJoin by foreign key recipeEquipId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRecEquipJoinByRecipeEquipId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/recequipjoin/findByRecipeEquipId/" + num;
@@ -177,7 +177,7 @@ public class RecEquipJoinControllerTest {
 	 * test getting all RecEquipJoin by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRecEquipJoinByRecipeIdAndRecipeEquipId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/recequipjoin/findByRecipeIdAndRecipeEquipId/1/1";

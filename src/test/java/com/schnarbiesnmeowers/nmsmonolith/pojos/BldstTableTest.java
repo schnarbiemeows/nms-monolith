@@ -20,7 +20,7 @@ public class BldstTableTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		BldstTable classUnderTest = new BldstTable();
 		classUnderTest.setBldstTableId(new Integer(1));

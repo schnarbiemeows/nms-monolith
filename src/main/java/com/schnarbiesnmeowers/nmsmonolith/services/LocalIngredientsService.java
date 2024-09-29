@@ -224,7 +224,7 @@ public class LocalIngredientsService {
 
 	private boolean checkIfWeNeedToRecursivelyUpdate(LocalIngredientsDTO ingredientRecord,
 		LocalIngredientsDTO currentRecipeRecord) throws Exception {
-		return !areTheyTheSame(ingredientRecord,currentRecipeRecord);
+		return /*!areTheyTheSame(ingredientRecord,currentRecipeRecord);*/ false;
 	}
 
 	private boolean areTheyTheSame(LocalIngredientsDTO ingredientRecord, LocalIngredientsDTO currentRecipeRecord) {

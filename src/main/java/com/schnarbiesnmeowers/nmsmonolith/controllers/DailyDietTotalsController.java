@@ -52,7 +52,7 @@ public class DailyDietTotalsController {
 
 	/**
 	 * create a new DailyDietTotals
-	 * @param DailyDietTotalsDTO
+	 * @param data
 	 * @return DailyDietTotals
 	 */
 	@PostMapping(path = "/create")
@@ -67,7 +67,7 @@ public class DailyDietTotalsController {
 
 	/**
 	 * update a DailyDietTotals
-	 * @param DailyDietTotalsDTO
+	 * @param data
 	 * @return DailyDietTotals
 	 */
 	@PostMapping(path = "/update")

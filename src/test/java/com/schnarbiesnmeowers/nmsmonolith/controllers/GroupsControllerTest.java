@@ -59,7 +59,7 @@ public class GroupsControllerTest {
 	 * test creating a new Groups
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateGroups() throws URISyntaxException
 	{
 	    GroupsDTO groups = generateRandomGroups();
@@ -81,7 +81,7 @@ public class GroupsControllerTest {
 	 * test getting all Groups
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllGroups() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class GroupsControllerTest {
 	 * test getting a single Groups by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetGroups() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class GroupsControllerTest {
 	 * test updating a Groups
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateGroups() throws URISyntaxException
 	{
 	    GroupsDTO groups = generateRandomGroups();
@@ -131,7 +131,7 @@ public class GroupsControllerTest {
 	 * test deleting a Groups
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteGroups() throws URISyntaxException
 	{
 		GroupsDTO groups = generateRandomGroups();

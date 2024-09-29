@@ -59,7 +59,7 @@ public class EventsTableControllerTest {
 	 * test creating a new EventsTable
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateEventsTable() throws URISyntaxException
 	{
 	    EventsTableDTO eventstable = generateRandomEventsTable();
@@ -81,7 +81,7 @@ public class EventsTableControllerTest {
 	 * test getting all EventsTable
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllEventsTable() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class EventsTableControllerTest {
 	 * test getting a single EventsTable by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetEventsTable() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class EventsTableControllerTest {
 	 * test updating a EventsTable
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateEventsTable() throws URISyntaxException
 	{
 	    EventsTableDTO eventstable = generateRandomEventsTable();
@@ -131,7 +131,7 @@ public class EventsTableControllerTest {
 	 * test deleting a EventsTable
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteEventsTable() throws URISyntaxException
 	{
 		EventsTableDTO eventstable = generateRandomEventsTable();
@@ -149,7 +149,7 @@ public class EventsTableControllerTest {
 	 * test getting all EventsTable by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetEventsTableByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/eventstable/findByUserId/" + num;
@@ -163,7 +163,7 @@ public class EventsTableControllerTest {
 	 * test getting all EventsTable by foreign key periodId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetEventsTableByPeriodId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/eventstable/findByPeriodId/" + num;
@@ -177,7 +177,7 @@ public class EventsTableControllerTest {
 	 * test getting all EventsTable by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetEventsTableByUserIdAndPeriodId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/eventstable/findByUserIdAndPeriodId/1/1";

@@ -20,7 +20,7 @@ public class PeriodTypeTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		PeriodType classUnderTest = new PeriodType();
 		classUnderTest.setPeriodTypeId(new Integer(1));

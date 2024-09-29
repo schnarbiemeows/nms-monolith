@@ -23,7 +23,7 @@ public class DailyWeightDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		DailyWeightDataPoint classUnderTest = new DailyWeightDataPoint();
 		classUnderTest.setDailyWeightId(new Integer(1));

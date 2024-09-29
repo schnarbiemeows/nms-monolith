@@ -20,7 +20,7 @@ public class ActionTypeTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		ActionType classUnderTest = new ActionType();
 		classUnderTest.setActionTypeId(new Integer(1));

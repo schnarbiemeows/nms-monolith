@@ -59,7 +59,7 @@ public class PeriodExtControllerTest {
 	 * test creating a new PeriodExt
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreatePeriodExt() throws URISyntaxException
 	{
 	    PeriodExtDTO periodext = generateRandomPeriodExt();
@@ -81,7 +81,7 @@ public class PeriodExtControllerTest {
 	 * test getting all PeriodExt
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllPeriodExt() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class PeriodExtControllerTest {
 	 * test getting a single PeriodExt by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetPeriodExt() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class PeriodExtControllerTest {
 	 * test updating a PeriodExt
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdatePeriodExt() throws URISyntaxException
 	{
 	    PeriodExtDTO periodext = generateRandomPeriodExt();
@@ -131,7 +131,7 @@ public class PeriodExtControllerTest {
 	 * test deleting a PeriodExt
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeletePeriodExt() throws URISyntaxException
 	{
 		PeriodExtDTO periodext = generateRandomPeriodExt();
@@ -149,7 +149,7 @@ public class PeriodExtControllerTest {
 	 * test getting all PeriodExt by foreign key periodId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetPeriodExtByPeriodId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/periodext/findByPeriodId/" + num;

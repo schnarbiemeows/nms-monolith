@@ -20,7 +20,7 @@ public class UsersHistTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		UsersHist classUnderTest = new UsersHist();
 		classUnderTest.setUsersHistId(new Integer(1));

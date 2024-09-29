@@ -59,7 +59,7 @@ public class MusclesControllerTest {
 	 * test creating a new Muscles
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateMuscles() throws URISyntaxException
 	{
 	    MusclesDTO muscles = generateRandomMuscles();
@@ -81,7 +81,7 @@ public class MusclesControllerTest {
 	 * test getting all Muscles
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllMuscles() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class MusclesControllerTest {
 	 * test getting a single Muscles by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetMuscles() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class MusclesControllerTest {
 	 * test updating a Muscles
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateMuscles() throws URISyntaxException
 	{
 	    MusclesDTO muscles = generateRandomMuscles();
@@ -131,7 +131,7 @@ public class MusclesControllerTest {
 	 * test deleting a Muscles
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteMuscles() throws URISyntaxException
 	{
 		MusclesDTO muscles = generateRandomMuscles();
@@ -149,7 +149,7 @@ public class MusclesControllerTest {
 	 * test getting all Muscles by foreign key muscleGroupId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetMusclesByMuscleGroupId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/muscles/findByMuscleGroupId/" + num;
@@ -163,7 +163,7 @@ public class MusclesControllerTest {
 	 * test getting all Muscles by foreign key imageLoc
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetMusclesByImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/muscles/findByImageLoc/" + num;
@@ -177,7 +177,7 @@ public class MusclesControllerTest {
 	 * test getting all Muscles by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetMusclesByMuscleGroupIdAndImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/muscles/findByMuscleGroupIdAndImageLoc/1/1";

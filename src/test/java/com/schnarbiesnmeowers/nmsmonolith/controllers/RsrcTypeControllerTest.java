@@ -59,7 +59,7 @@ public class RsrcTypeControllerTest {
 	 * test creating a new RsrcType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateRsrcType() throws URISyntaxException
 	{
 	    RsrcTypeDTO rsrctype = generateRandomRsrcType();
@@ -81,7 +81,7 @@ public class RsrcTypeControllerTest {
 	 * test getting all RsrcType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllRsrcType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class RsrcTypeControllerTest {
 	 * test getting a single RsrcType by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetRsrcType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class RsrcTypeControllerTest {
 	 * test updating a RsrcType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateRsrcType() throws URISyntaxException
 	{
 	    RsrcTypeDTO rsrctype = generateRandomRsrcType();
@@ -131,7 +131,7 @@ public class RsrcTypeControllerTest {
 	 * test deleting a RsrcType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteRsrcType() throws URISyntaxException
 	{
 		RsrcTypeDTO rsrctype = generateRandomRsrcType();

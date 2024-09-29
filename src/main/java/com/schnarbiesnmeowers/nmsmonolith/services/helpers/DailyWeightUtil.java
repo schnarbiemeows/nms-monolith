@@ -48,7 +48,7 @@ public class DailyWeightUtil {
      * @param records
      * @return
      */
-    public static List<LocalDate> findMissingDates(List<DailyWeightDataPoint> records, List<LocalDate> dateList, int daysBack) {
+    public static List<LocalDate> findMissingDates(List<DailyWeightDataPoint> records, List<LocalDate> dateList) {
         List<LocalDate> missingDates = new ArrayList();
         if(null!=records&&!records.isEmpty()) {
             // 2. map the records to a <LocalDate,datapoint> map

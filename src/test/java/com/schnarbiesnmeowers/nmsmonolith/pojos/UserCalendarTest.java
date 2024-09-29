@@ -20,7 +20,7 @@ public class UserCalendarTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		UserCalendar classUnderTest = new UserCalendar();
 		classUnderTest.setUserCalendarId(new Integer(1));

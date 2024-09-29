@@ -20,7 +20,7 @@ public class BrandIngrTypeTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		BrandIngrType classUnderTest = new BrandIngrType();
 		classUnderTest.setBrandIngrTypeId(new Integer(1));

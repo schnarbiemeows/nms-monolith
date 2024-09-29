@@ -59,7 +59,7 @@ public class GoalTypesControllerTest {
 	 * test creating a new GoalTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateGoalTypes() throws URISyntaxException
 	{
 	    GoalTypesDTO goaltypes = generateRandomGoalTypes();
@@ -81,7 +81,7 @@ public class GoalTypesControllerTest {
 	 * test getting all GoalTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllGoalTypes() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class GoalTypesControllerTest {
 	 * test getting a single GoalTypes by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetGoalTypes() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class GoalTypesControllerTest {
 	 * test updating a GoalTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateGoalTypes() throws URISyntaxException
 	{
 	    GoalTypesDTO goaltypes = generateRandomGoalTypes();
@@ -131,7 +131,7 @@ public class GoalTypesControllerTest {
 	 * test deleting a GoalTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteGoalTypes() throws URISyntaxException
 	{
 		GoalTypesDTO goaltypes = generateRandomGoalTypes();

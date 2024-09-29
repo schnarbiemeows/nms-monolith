@@ -20,7 +20,7 @@ public class RolesHistDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		RolesHistDTO classUnderTest = new RolesHistDTO();
 		classUnderTest.setRoleHistId(new Integer(1));

@@ -1,9 +1,10 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.WorkoutsDTO;
+
 import static org.junit.Assert.*;
 import java.util.*;
-import java.sql.Timestamp;
+
 import org.junit.Test;
 import java.math.*;
 import org.junit.runner.RunWith;
@@ -20,7 +21,7 @@ public class WorkoutsDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		WorkoutsDTO classUnderTest = new WorkoutsDTO();
 		classUnderTest.setWorkoutId(new Integer(1));

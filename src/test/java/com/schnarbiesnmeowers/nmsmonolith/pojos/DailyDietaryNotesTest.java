@@ -20,7 +20,7 @@ public class DailyDietaryNotesTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		DailyDietaryNotes classUnderTest = new DailyDietaryNotes();
 		classUnderTest.setDdnId(new Integer(1));

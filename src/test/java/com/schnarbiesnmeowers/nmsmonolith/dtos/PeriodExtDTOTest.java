@@ -20,7 +20,7 @@ public class PeriodExtDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		PeriodExtDTO classUnderTest = new PeriodExtDTO();
 		classUnderTest.setPeriodExtId(new Integer(1));

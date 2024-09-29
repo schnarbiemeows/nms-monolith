@@ -1,6 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GraphRelationsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.dtos.RecipeTypeMappingsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipetypes.RecipeTypeDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipetypes.RecipeTypeHierachy;
 import com.schnarbiesnmeowers.nmsmonolith.services.RecipeTypeService;
@@ -99,6 +100,12 @@ public class RecipeTypeController {
 		recipeTypeService.deleteRecipeType(id);
 		ResponseMessage rb = new ResponseMessage("successfully deleted");
 		return ResponseEntity.status(HttpStatus.OK).body(rb);
+	}
+
+	@GetMapping(path = "/getRecipeTypeMappings")
+	public ResponseEntity<List<RecipeTypeMappingsDTO>> getRecipeTypeMappings() throws Exception {
+		List<RecipeTypeMappingsDTO> results = recipeTypeService.getRecipeTypeMappings();
+		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 
 	@GetMapping(path = "/getRecipeTypeHierarchy")

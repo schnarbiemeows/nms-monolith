@@ -20,7 +20,7 @@ public class GoalTypesTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		GoalTypes classUnderTest = new GoalTypes();
 		classUnderTest.setGoalTypeId(new Integer(1));

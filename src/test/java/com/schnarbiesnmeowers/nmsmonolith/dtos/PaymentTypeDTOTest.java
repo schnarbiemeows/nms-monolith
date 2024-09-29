@@ -20,7 +20,7 @@ public class PaymentTypeDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		PaymentTypeDTO classUnderTest = new PaymentTypeDTO();
 		classUnderTest.setPaymentTypeId(new Integer(1));

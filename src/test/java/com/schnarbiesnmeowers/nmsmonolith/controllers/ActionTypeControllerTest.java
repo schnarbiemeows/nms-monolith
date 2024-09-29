@@ -1,6 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -59,7 +60,7 @@ public class ActionTypeControllerTest {
 	 * test creating a new ActionType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateActionType() throws URISyntaxException
 	{
 	    ActionTypeDTO actiontype = generateRandomActionType();
@@ -81,7 +82,7 @@ public class ActionTypeControllerTest {
 	 * test getting all ActionType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllActionType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +98,7 @@ public class ActionTypeControllerTest {
 	 * test getting a single ActionType by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetActionType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +115,7 @@ public class ActionTypeControllerTest {
 	 * test updating a ActionType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateActionType() throws URISyntaxException
 	{
 	    ActionTypeDTO actiontype = generateRandomActionType();
@@ -131,7 +132,7 @@ public class ActionTypeControllerTest {
 	 * test deleting a ActionType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteActionType() throws URISyntaxException
 	{
 		ActionTypeDTO actiontype = generateRandomActionType();

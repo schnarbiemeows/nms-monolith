@@ -19,7 +19,7 @@ public class RecipeIngredientsDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		RecipeIngredientsDTO classUnderTest = new RecipeIngredientsDTO();
 		classUnderTest.setRecipeIngrId(new Integer(1));

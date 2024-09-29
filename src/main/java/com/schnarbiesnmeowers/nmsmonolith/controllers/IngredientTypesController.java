@@ -1,5 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import com.schnarbiesnmeowers.nmsmonolith.dtos.IngredientTypeMappingsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredienttype.IngredientTypeMinDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredienttype.IngredientTypesDTO;
 import org.springframework.web.bind.annotation.*;
@@ -106,4 +107,9 @@ public class IngredientTypesController {
 		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 
+	@GetMapping(path = "/getIngredientTypeMappings")
+	public ResponseEntity<List<IngredientTypeMappingsDTO>> getIngredientTypeMappings() throws Exception {
+		List<IngredientTypeMappingsDTO> results = ingredientTypesService.getIngredientTypeMappings();
+		return ResponseEntity.status(HttpStatus.OK).body(results);
+	}
 }

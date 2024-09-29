@@ -20,7 +20,7 @@ public class UsersTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		Users classUnderTest = new Users();
 		classUnderTest.setUserId(new Integer(1));

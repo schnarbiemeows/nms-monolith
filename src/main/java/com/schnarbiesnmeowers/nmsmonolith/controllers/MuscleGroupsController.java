@@ -39,6 +39,12 @@ public class MuscleGroupsController {
 		return ResponseEntity.status(HttpStatus.OK).body(musclegroups);
 	}
 
+	@GetMapping(path = "/weightWorkouts")
+	public ResponseEntity<List<MuscleGroupsDTO>> getWeightWorkoutTypes() throws Exception {
+		List<MuscleGroupsDTO> musclegroups = businessService.getWeightWorkoutTypes();
+		return ResponseEntity.status(HttpStatus.OK).body(musclegroups);
+	}
+
 	/**
 	 * get MuscleGroups by primary key
 	 * @param id

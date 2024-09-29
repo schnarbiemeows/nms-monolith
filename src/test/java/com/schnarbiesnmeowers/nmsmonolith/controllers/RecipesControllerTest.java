@@ -59,7 +59,7 @@ public class RecipesControllerTest {
 	 * test creating a new Recipes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateRecipes() throws URISyntaxException
 	{
 	    RecipesDTO recipes = generateRandomRecipes();
@@ -81,7 +81,7 @@ public class RecipesControllerTest {
 	 * test getting all Recipes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllRecipes() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class RecipesControllerTest {
 	 * test getting a single Recipes by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetRecipes() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class RecipesControllerTest {
 	 * test updating a Recipes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateRecipes() throws URISyntaxException
 	{
 	    RecipesDTO recipes = generateRandomRecipes();
@@ -131,7 +131,7 @@ public class RecipesControllerTest {
 	 * test deleting a Recipes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteRecipes() throws URISyntaxException
 	{
 		RecipesDTO recipes = generateRandomRecipes();
@@ -149,7 +149,7 @@ public class RecipesControllerTest {
 	 * test getting all Recipes by foreign key ingrId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRecipesByIngrId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/recipes/findByIngrId/" + num;

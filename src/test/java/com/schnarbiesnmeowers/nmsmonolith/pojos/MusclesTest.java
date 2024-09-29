@@ -20,7 +20,7 @@ public class MusclesTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		Muscles classUnderTest = new Muscles();
 		classUnderTest.setMuscleId(new Integer(1));

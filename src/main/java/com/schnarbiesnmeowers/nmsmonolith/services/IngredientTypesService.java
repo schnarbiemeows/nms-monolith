@@ -4,8 +4,14 @@ import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.schnarbiesnmeowers.nmsmonolith.dtos.IngredientTypeMappingsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.dtos.RecipeTypeMappingsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredienttype.IngredientTypeMinDTO;
+import com.schnarbiesnmeowers.nmsmonolith.pojos.IngredientTypeMappings;
+import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeTypeMappings;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.IngredientTypeMappingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredienttype.IngredientTypesDTO;
@@ -30,6 +36,9 @@ public class IngredientTypesService {
 	 */
 	@Autowired
 	private IngredientTypesRepository ingredientTypesRepository;
+
+	@Autowired
+	private IngredientTypeMappingsRepository ingredientTypeMappingsRepository;
 
 	/**
 	 * get all IngredientTypes records
@@ -135,5 +144,18 @@ public class IngredientTypesService {
 			minimumData.add(new IngredientTypeMinDTO(type.getIngrTypeId(), type.getIngrTypeDesc()));
 		}
 		return minimumData;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public List<IngredientTypeMappingsDTO> getIngredientTypeMappings() {
+		List<IngredientTypeMappings> ingredientTypeMappings = ingredientTypeMappingsRepository.getIngredientTypeMappings();
+		IngredientTypeMappings first = ingredientTypeMappings.get(0);
+		System.out.println(first.toString());
+		List<IngredientTypeMappingsDTO> results = ingredientTypeMappings.stream().map(rec ->
+				rec.toDTO()).collect(Collectors.toList());
+		return results;
 	}
 }

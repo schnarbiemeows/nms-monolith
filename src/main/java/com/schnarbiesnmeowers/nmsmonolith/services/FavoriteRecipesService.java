@@ -160,13 +160,13 @@ public class FavoriteRecipesService {
 	 */
 	public void upsertFavoriteGlobalRecipe(Integer recipeId, Integer userId) throws Exception {
 		if(recipeId==null) {
-			FavoriteRecipesDTO newFavorite = new FavoriteRecipesDTO(null,recipeId,true,"Y",
+			FavoriteRecipesDTO newFavorite = new FavoriteRecipesDTO(null,recipeId,false,"Y",
 					userId);
 			createFavoriteRecipes(newFavorite);
 		} else {
 			FavoriteRecipes recipe = favoriteRecipesRepository.findFavoriteGlobalRecipeForUser(recipeId);
 			if(recipe==null) {
-				FavoriteRecipesDTO newFavorite = new FavoriteRecipesDTO(null,recipeId,true,"Y",
+				FavoriteRecipesDTO newFavorite = new FavoriteRecipesDTO(null,recipeId,false,"Y",
 						userId);
 				createFavoriteRecipes(newFavorite);
 			} else {

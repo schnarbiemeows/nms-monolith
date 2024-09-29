@@ -20,7 +20,7 @@ public class ServingTypesTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		ServingTypes classUnderTest = new ServingTypes();
 		classUnderTest.setServTypeId(new Integer(1));

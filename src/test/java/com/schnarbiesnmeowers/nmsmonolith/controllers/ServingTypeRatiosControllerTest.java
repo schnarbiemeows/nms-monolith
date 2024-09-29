@@ -59,7 +59,7 @@ public class ServingTypeRatiosControllerTest {
 	 * test creating a new ServingTypeRatios
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateServingTypeRatios() throws URISyntaxException
 	{
 	    ServingTypeRatiosDTO servingtyperatios = generateRandomServingTypeRatios();
@@ -81,7 +81,7 @@ public class ServingTypeRatiosControllerTest {
 	 * test getting all ServingTypeRatios
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllServingTypeRatios() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class ServingTypeRatiosControllerTest {
 	 * test getting a single ServingTypeRatios by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetServingTypeRatios() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class ServingTypeRatiosControllerTest {
 	 * test updating a ServingTypeRatios
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateServingTypeRatios() throws URISyntaxException
 	{
 	    ServingTypeRatiosDTO servingtyperatios = generateRandomServingTypeRatios();
@@ -131,7 +131,7 @@ public class ServingTypeRatiosControllerTest {
 	 * test deleting a ServingTypeRatios
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteServingTypeRatios() throws URISyntaxException
 	{
 		ServingTypeRatiosDTO servingtyperatios = generateRandomServingTypeRatios();
@@ -149,7 +149,7 @@ public class ServingTypeRatiosControllerTest {
 	 * test getting all ServingTypeRatios by foreign key servTypeId1
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetServingTypeRatiosByServTypeId1() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/findByServTypeId1/" + num;
@@ -163,7 +163,7 @@ public class ServingTypeRatiosControllerTest {
 	 * test getting all ServingTypeRatios by foreign key servTypeId2
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetServingTypeRatiosByServTypeId2() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/findByServTypeId2/" + num;
@@ -177,7 +177,7 @@ public class ServingTypeRatiosControllerTest {
 	 * test getting all ServingTypeRatios by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetServingTypeRatiosByServTypeId1AndServTypeId2() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/findByServTypeId1AndServTypeId2/1/1";

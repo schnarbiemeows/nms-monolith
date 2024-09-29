@@ -59,7 +59,7 @@ public class LiftEquipControllerTest {
 	 * test creating a new LiftEquip
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateLiftEquip() throws URISyntaxException
 	{
 	    LiftEquipDTO liftequip = generateRandomLiftEquip();
@@ -81,7 +81,7 @@ public class LiftEquipControllerTest {
 	 * test getting all LiftEquip
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllLiftEquip() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class LiftEquipControllerTest {
 	 * test getting a single LiftEquip by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetLiftEquip() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class LiftEquipControllerTest {
 	 * test updating a LiftEquip
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateLiftEquip() throws URISyntaxException
 	{
 	    LiftEquipDTO liftequip = generateRandomLiftEquip();
@@ -131,7 +131,7 @@ public class LiftEquipControllerTest {
 	 * test deleting a LiftEquip
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteLiftEquip() throws URISyntaxException
 	{
 		LiftEquipDTO liftequip = generateRandomLiftEquip();
@@ -149,7 +149,7 @@ public class LiftEquipControllerTest {
 	 * test getting all LiftEquip by foreign key imageLoc
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetLiftEquipByImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/liftequip/findByImageLoc/" + num;

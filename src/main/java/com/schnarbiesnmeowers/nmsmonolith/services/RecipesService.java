@@ -14,10 +14,7 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.SpicesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.DependencyExistsException;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ServingRatioNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyDiet;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteRecipes;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalRecipes;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Recipes;
+import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.FavoriteRecipesRepository;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.RecipesRepository;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.RecipeCalculatorUtility;
@@ -125,6 +122,33 @@ public class RecipesService {
         return recipesdto;
     }
 
+    public List<RecipesDTO> findAllRecipesRanked(String rankBy) throws Exception {
+        Iterable<Recipes> recipes = null;
+        if(rankBy.equals(MacroType.tot_protein.getValue())) {
+            recipes = globalRecipesRepository
+                    .findRecipesByProtein();
+        } else if(rankBy.equals(MacroType.tot_fat.getValue())) {
+            recipes = globalRecipesRepository
+                    .findRecipesByFats();
+        } else if(rankBy.equals(MacroType.mono_fat.getValue())) {
+            recipes = globalRecipesRepository
+                    .findRecipesByMonoFats();
+        } else if(rankBy.equals(MacroType.tot_carbs.getValue())) {
+            recipes = globalRecipesRepository
+                    .findRecipesByCarbs();
+        } else if(rankBy.equals(MacroType.tot_fiber.getValue())) {
+            recipes = globalRecipesRepository
+                    .findRecipesByFiber();
+        }
+        Iterator<Recipes> recipesItems = recipes.iterator();
+        List<RecipesDTO> recipesdto = new ArrayList();
+        while (recipesItems.hasNext()) {
+            Recipes item = recipesItems.next();
+            recipesdto.add(item.toDTO());
+        }
+        return recipesdto;
+    }
+
     public RecipeWrapper getAllRecipeDisplays(int userId) throws Exception {
         List<RecipesDTO> globals = findAllActiveRecipes();
         List<RecipeRecordDisplay> globalDisplays = new ArrayList();
@@ -140,7 +164,24 @@ public class RecipesService {
         return new RecipeWrapper(globalDisplays, localDisplays, favorites);
     }
 
-
+    public RecipeWrapper getRecipesByRanking(int userId, String rankBy) throws Exception {
+        if(MacroType.rankByInEnums(rankBy)) {
+            List<RecipesDTO> globals = findAllRecipesRanked(rankBy);
+            List<RecipeRecordDisplay> globalDisplays = new ArrayList();
+            for (RecipesDTO item : globals) {
+                globalDisplays.add(item.toDisplayObject());
+            }
+            List<LocalRecipesDTO> locals = localRecipesService.getAllLocalRecipesRanked(userId, rankBy);
+            List<RecipeRecordDisplay> localDisplays = new ArrayList();
+            for (LocalRecipesDTO item : locals) {
+                localDisplays.add(item.toDisplayObject());
+            }
+            List<FavoriteRecipesDTO> favorites = getFavoriteRecipes(userId);
+            return new RecipeWrapper(globalDisplays, localDisplays, favorites);
+        } else {
+            throw new Exception("invalid ranking type");
+        }
+    }
 
     /**
      * get all of the favorite ingredients for a user
@@ -422,9 +463,10 @@ public class RecipesService {
     }
 
     private boolean checkIfWeNeedToRecursivelyUpdate(IngredientsDTO ingredientRecord, RecipeFormDTO data) throws Exception {
-        IngredientsDTO currentRecipeRecord = ingredientsService
+        /*IngredientsDTO currentRecipeRecord = ingredientsService
                 .findIngredientsById(data.getRecipeMetaData().getIngrId());
-        return !areTheyTheSame(ingredientRecord,currentRecipeRecord);
+        return !areTheyTheSame(ingredientRecord,currentRecipeRecord);*/
+        return false;
     }
 
     private boolean areTheyTheSame(IngredientsDTO ingredientRecord, IngredientsDTO currentRecipeRecord) {

@@ -1,6 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ import com.schnarbiesnmeowers.nmsmonolith.repositories.DailyDietRepository;
 @Service
 public class DailyDietService {
 
+	public static final MathContext m = new MathContext(6);
 	//private static final Logger applicationLogger = LogManager.getLogger("FileAppender");
     public static final String ID_EQUALS = "id = ";
     public static final String NOT_FOUND = " not found";
@@ -38,8 +40,8 @@ public class DailyDietService {
 	@Autowired
 	private DailyDietRepository dailyDietRepository;
 
-	@Autowired
-	private DailyDietTotalsService dailyDietTotalsService;
+	//@Autowired
+	//private DailyDietTotalsService dailyDietTotalsService;
 
 	@Autowired
 	private RecipesService recipesService;
@@ -113,9 +115,15 @@ public class DailyDietService {
 				dailydietdtos.add(item.toDTO());
 			}
 			recalculateIngredientTotals(wrapper, dailydietdtos);
-			wrapper.setDailyTotals(
-					dailyDietTotalsService.findDailyDietTotalsByUserIdAndCalendarDate(input.getUserId(),
-							input.getDate()));
+			/**
+			 * this has to change to call the dashboard-svc OR add the shit up from the ingredients list for each
+			 * bldst
+			 */
+			wrapper.setDailyTotals(createDailyTotalsRecords(wrapper.getIngredients(),wrapper.getDaysDate(),
+					wrapper.getUserId()));
+			/**
+			 *
+			 */
 			wrapper.setNotes(
 					dailyDietaryNotesService.findDailyDietaryNotesByUserIdAndDate(input.getUserId(),input.getDate()));
 			if(unsyncedService.hasUnsyncedRecord(input.getUserId(),input.getDate())) {
@@ -182,53 +190,54 @@ public class DailyDietService {
 	}
 
 	private IngredientsDTO calculateTotalsForOneItem(IngredientsDTO ingredientDTO, DailyDietDTO dietItem) throws Exception {
-		BigDecimal m1 = calculateM1(dietItem.getServTypeId(), ingredientDTO.getServTypeId(),
+		BigDecimal multiplier = calculateM1(dietItem.getServTypeId(), ingredientDTO.getServTypeId(),
 				ingredientDTO.getIngrDesc());
-		BigDecimal ss = ingredientDTO.getServSz();
+		BigDecimal servingSize = ingredientDTO.getServSz();
 		IngredientsDTO calibratedDTO = new IngredientsDTO(ingredientDTO.getIngrId(),
 				ingredientDTO.getIngrDesc(),ingredientDTO.getIngrTypeId(),ingredientDTO.getBrandId(),
 				dietItem.getNumSrv(),dietItem.getServTypeId(),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getKcalories(),ss,m1),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getTotFat(),ss,m1),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getSatFat(),ss,m1),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getTransFat(),ss,m1),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getPolyFat(),ss,m1),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getMonoFat(),ss,m1),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getCholes(),ss,m1),
-				calibrate(dietItem.getNumSrv(),BigDecimal.valueOf(ingredientDTO.getSodium()),ss,m1).intValue(),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getTotCarbs(),ss,m1),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getTotFiber(),ss,m1),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getTotSugars(),ss,m1),
-				calibrate(dietItem.getNumSrv(),ingredientDTO.getTotProtein(),ss,m1),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getKcalories(),servingSize,multiplier),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getTotFat(),servingSize,multiplier),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getSatFat(),servingSize,multiplier),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getTransFat(),servingSize,multiplier),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getPolyFat(),servingSize,multiplier),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getMonoFat(),servingSize,multiplier),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getCholes(),servingSize,multiplier),
+				calibrate(dietItem.getNumSrv(),BigDecimal.valueOf(ingredientDTO.getSodium()),servingSize,multiplier).intValue(),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getTotCarbs(),servingSize,multiplier),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getTotFiber(),servingSize,multiplier),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getTotSugars(),servingSize,multiplier),
+				calibrate(dietItem.getNumSrv(),ingredientDTO.getTotProtein(),servingSize,multiplier),
 				null,null,"Y");
 		return calibratedDTO;
 	}
 
-	private static BigDecimal calibrate(BigDecimal recordServingSize, BigDecimal ingredientTotalPerServing,
-										BigDecimal ingrServingSz, BigDecimal multiplier) {
+	private static BigDecimal calibrate(BigDecimal dailyDietServingSize,
+										BigDecimal ingredientTotalPerServing,
+										BigDecimal ingredientServingSz, BigDecimal multiplier) {
 		/**
 		 * recordServingSize = num servings coming from the daily_diet record
 		 * ingredientTotalPerServing = kcalories, total fat, etc, from ingredients record
 		 */
-		BigDecimal i1 = recordServingSize.divide(ingrServingSz,2, RoundingMode.HALF_UP);
+		BigDecimal i1 = dailyDietServingSize.divide(ingredientServingSz,2, RoundingMode.HALF_UP);
 		BigDecimal i2 = i1.multiply(multiplier);
 		return i2.multiply(ingredientTotalPerServing);
 	}
 
-	private BigDecimal calculateM1(Integer servingUnitId, Integer ingredientServingTypeId,
+	private BigDecimal calculateM1(Integer dailyDietServingTypeId, Integer ingredientServingTypeId,
 		String ingredientDesc) {
 		BigDecimal m1;
-		if(servingUnitId==ingredientServingTypeId) {
+		if(dailyDietServingTypeId==ingredientServingTypeId) {
 			m1=BigDecimal.ONE;
-		} else if (recipeCalculatorUtility.hasRatio(servingUnitId, ingredientServingTypeId)) {
-			m1 = recipeCalculatorUtility.getRatio(servingUnitId, ingredientServingTypeId);
-		} else if (recipeCalculatorUtility.hasFittingRatios(servingUnitId, ingredientServingTypeId)) {
-			m1 = recipeCalculatorUtility.findFittingRatio(servingUnitId, ingredientServingTypeId);
+		} else if (recipeCalculatorUtility.hasRatio(dailyDietServingTypeId, ingredientServingTypeId)) {
+			m1 = recipeCalculatorUtility.getRatio(dailyDietServingTypeId, ingredientServingTypeId);
+		} else if (recipeCalculatorUtility.hasFittingRatios(dailyDietServingTypeId, ingredientServingTypeId)) {
+			m1 = recipeCalculatorUtility.findFittingRatio(dailyDietServingTypeId, ingredientServingTypeId);
 		} else {
 			ServingTypesDTO st1 = null;
 			ServingTypesDTO st2 = null;
 			try {
-				st1 = servingTypesService.findServingTypesById(servingUnitId);
+				st1 = servingTypesService.findServingTypesById(dailyDietServingTypeId);
 				st2 = servingTypesService.findServingTypesById(ingredientServingTypeId);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -373,110 +382,112 @@ public class DailyDietService {
 		List<DailyDietDisplayRecord> dinnerRecords = dailyDietRecords.stream().filter(rec -> rec.getDailyInfo()
 				.getBldstId()==bldstMap.get(BldstUtility.BLDST_DINNER)).collect(Collectors.toList());
 		List<DailyDietDisplayRecord> snackRecords = dailyDietRecords.stream().filter(rec -> rec.getDailyInfo()
-				.getBldstId()==bldstMap.get(BldstUtility.BLDST_SNACK)).collect(Collectors.toList());
+				.getBldstId()==bldstMap.get(BldstUtility.BLDST_MID_MORNING_SNACK)).collect(Collectors.toList());
 		List<DailyDietDisplayRecord> meal1Records = dailyDietRecords.stream().filter(rec -> rec.getDailyInfo()
-				.getBldstId()==bldstMap.get(BldstUtility.BLDST_MEAL1)).collect(Collectors.toList());
+				.getBldstId()==bldstMap.get(BldstUtility.BLDST_MID_AFTERNOON_SNACK)).collect(Collectors.toList());
 		List<DailyDietDisplayRecord> meal2Records = dailyDietRecords.stream().filter(rec -> rec.getDailyInfo()
-				.getBldstId()==bldstMap.get(BldstUtility.BLDST_MEAL2)).collect(Collectors.toList());
+				.getBldstId()==bldstMap.get(BldstUtility.BLDST_LATE_AFTERNOON_SNACK)).collect(Collectors.toList());
 		List<DailyDietDisplayRecord> meal3Records = dailyDietRecords.stream().filter(rec -> rec.getDailyInfo()
-				.getBldstId()==bldstMap.get(BldstUtility.BLDST_MEAL3)).collect(Collectors.toList());
+				.getBldstId()==bldstMap.get(BldstUtility.BLDST_LATE_NIGHT_SNACK)).collect(Collectors.toList());
+		List<DailyDietDisplayRecord> preWorkoutRecords = dailyDietRecords.stream().filter(rec -> rec.getDailyInfo()
+				.getBldstId()==bldstMap.get(BldstUtility.BLDST_PRE_WORKOUT)).collect(Collectors.toList());
+		List<DailyDietDisplayRecord> postWorkoutRecords = dailyDietRecords.stream().filter(rec -> rec.getDailyInfo()
+				.getBldstId()==bldstMap.get(BldstUtility.BLDST_POST_WORKOUT)).collect(Collectors.toList());
 		List<DailyDietDisplayRecord> totalRecords = dailyDietRecords;
 
 		if(coffeeRecords!=null&&coffeeRecords.size()>0) {
 			DailyDietTotalsDTO totals = createTotalsRecord(coffeeRecords,userId,
 					currentDate,bldstMap.get(BldstUtility.BLDST_COFFEE));
-			totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
 			returnRecords.add(totals);
 		} else {
 			// otherwise, let's say the person initially said they had something for breakfast, but then
 			// later deleted that breakfast item. So, we would still want to remove that record from
 			// daily_dietary_totals in these cases
-			String message = dailyDietTotalsService
-					.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,
-							currentDate,bldstMap.get(BldstUtility.BLDST_COFFEE));
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_COFFEE));
 		}
 		if(breakfastRecords!=null&&breakfastRecords.size()>0) {
 			DailyDietTotalsDTO totals = createTotalsRecord(breakfastRecords,userId,
 					currentDate,bldstMap.get(BldstUtility.BLDST_BREAKFAST));
-			totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
 			returnRecords.add(totals);
 		} else {
 			// otherwise, let's say the person initially said they had something for breakfast, but then
 			// later deleted that breakfast item. So, we would still want to remove that record from
 			// daily_dietary_totals in these cases
-			String message = dailyDietTotalsService
-					.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,
-							currentDate,bldstMap.get(BldstUtility.BLDST_BREAKFAST));
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_BREAKFAST));
 		}
 		if(lunchRecords!=null&&lunchRecords.size()>0) {
 			DailyDietTotalsDTO totals = createTotalsRecord(lunchRecords,userId,
 					currentDate,bldstMap.get(BldstUtility.BLDST_LUNCH));
-			totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
 			returnRecords.add(totals);
 		} else {
-			String message = dailyDietTotalsService
-					.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,
-							currentDate,bldstMap.get(BldstUtility.BLDST_LUNCH));
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_LUNCH));
 		}
 		if(dinnerRecords!=null&&dinnerRecords.size()>0) {
 			DailyDietTotalsDTO totals = createTotalsRecord(dinnerRecords,userId,
 					currentDate,bldstMap.get(BldstUtility.BLDST_DINNER));
-			totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
 			returnRecords.add(totals);
 		} else {
-			String message = dailyDietTotalsService
-					.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,
-							currentDate,bldstMap.get(BldstUtility.BLDST_DINNER));
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_DINNER));
 		}
 		if(snackRecords!=null&&snackRecords.size()>0) {
 			DailyDietTotalsDTO totals = createTotalsRecord(snackRecords,userId,
-					currentDate,bldstMap.get(BldstUtility.BLDST_SNACK));
-			totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+					currentDate,bldstMap.get(BldstUtility.BLDST_MID_MORNING_SNACK));
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
 			returnRecords.add(totals);
 		} else {
-			String message = dailyDietTotalsService
-					.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,
-							currentDate,bldstMap.get(BldstUtility.BLDST_SNACK));
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_MID_MORNING_SNACK));
 		}
 		if(meal1Records!=null&&meal1Records.size()>0) {
 			DailyDietTotalsDTO totals = createTotalsRecord(meal1Records,userId,
-					currentDate,bldstMap.get(BldstUtility.BLDST_MEAL1));
-			totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+					currentDate,bldstMap.get(BldstUtility.BLDST_MID_AFTERNOON_SNACK));
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
 			returnRecords.add(totals);
 		} else {
-			String message = dailyDietTotalsService
-					.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,
-							currentDate,bldstMap.get(BldstUtility.BLDST_MEAL1));
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_MID_AFTERNOON_SNACK));
 		}
 		if(meal2Records!=null&&meal2Records.size()>0) {
 			DailyDietTotalsDTO totals = createTotalsRecord(meal2Records,userId,
-					currentDate,bldstMap.get(BldstUtility.BLDST_MEAL2));
-			totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+					currentDate,bldstMap.get(BldstUtility.BLDST_LATE_AFTERNOON_SNACK));
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
 			returnRecords.add(totals);
 		} else {
-			String message = dailyDietTotalsService
-					.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,
-							currentDate,bldstMap.get(BldstUtility.BLDST_MEAL2));
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_LATE_AFTERNOON_SNACK));
 		}
 		if(meal3Records!=null&&meal3Records.size()>0) {
 			DailyDietTotalsDTO totals = createTotalsRecord(meal3Records,userId,
-					currentDate,bldstMap.get(BldstUtility.BLDST_MEAL3));
-			totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+					currentDate,bldstMap.get(BldstUtility.BLDST_LATE_NIGHT_SNACK));
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
 			returnRecords.add(totals);
 		} else {
-			String message = dailyDietTotalsService
-					.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,
-							currentDate,bldstMap.get(BldstUtility.BLDST_MEAL3));
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_LATE_NIGHT_SNACK));
+		}
+		if(preWorkoutRecords!=null&&preWorkoutRecords.size()>0) {
+			DailyDietTotalsDTO totals = createTotalsRecord(preWorkoutRecords,userId,
+					currentDate,bldstMap.get(BldstUtility.BLDST_PRE_WORKOUT));
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+			returnRecords.add(totals);
+		} else {
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_PRE_WORKOUT));
+		}
+		if(postWorkoutRecords!=null&&postWorkoutRecords.size()>0) {
+			DailyDietTotalsDTO totals = createTotalsRecord(postWorkoutRecords,userId,
+					currentDate,bldstMap.get(BldstUtility.BLDST_POST_WORKOUT));
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+			returnRecords.add(totals);
+		} else {
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_POST_WORKOUT));
 		}
 		if(totalRecords!=null&&totalRecords.size()>0) {
 			DailyDietTotalsDTO totals = createTotalsRecord(totalRecords,userId,
 					currentDate,bldstMap.get(BldstUtility.BLDST_TOTAL));
-			totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
+			//totals = dailyDietTotalsService.upsertDailyDietTotalsByUserIdAndCalendarDateAndBldstId(totals);
 			returnRecords.add(totals);
 		} else {
-			String message = dailyDietTotalsService
-					.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,
-							currentDate,bldstMap.get(BldstUtility.BLDST_TOTAL));
+			//String message = dailyDietTotalsService.deleteDailyDietTotalsByUserIdAndCalendarDateAndBldstId(userId,currentDate,bldstMap.get(BldstUtility.BLDST_TOTAL));
 		}
 		return returnRecords;
 	}

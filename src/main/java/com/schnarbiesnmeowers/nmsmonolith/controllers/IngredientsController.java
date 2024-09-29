@@ -52,6 +52,13 @@ public class IngredientsController {
 		return ResponseEntity.status(HttpStatus.OK).body(ingredients);
 	}
 
+	@GetMapping(path = "/all-displays-ranked/{id}/{rankedBy}")
+	public ResponseEntity<IngredientsWrapper> getAllIngredientDisplaysRanked(@PathVariable int id,
+		@PathVariable String rankedBy) throws Exception {
+		IngredientsWrapper ingredients = ingredientsService.getIngredientsByRanking(id, rankedBy);
+		return ResponseEntity.status(HttpStatus.OK).body(ingredients);
+	}
+
 	/**
 	 * get Ingredients by primary key
 	 * @param id

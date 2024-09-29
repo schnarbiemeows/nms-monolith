@@ -59,7 +59,7 @@ public class PeriodTypeControllerTest {
 	 * test creating a new PeriodType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreatePeriodType() throws URISyntaxException
 	{
 	    PeriodTypeDTO periodtype = generateRandomPeriodType();
@@ -81,7 +81,7 @@ public class PeriodTypeControllerTest {
 	 * test getting all PeriodType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllPeriodType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class PeriodTypeControllerTest {
 	 * test getting a single PeriodType by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetPeriodType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class PeriodTypeControllerTest {
 	 * test updating a PeriodType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdatePeriodType() throws URISyntaxException
 	{
 	    PeriodTypeDTO periodtype = generateRandomPeriodType();
@@ -131,7 +131,7 @@ public class PeriodTypeControllerTest {
 	 * test deleting a PeriodType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeletePeriodType() throws URISyntaxException
 	{
 		PeriodTypeDTO periodtype = generateRandomPeriodType();

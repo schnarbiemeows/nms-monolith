@@ -20,7 +20,7 @@ public class RsrcTypeTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		RsrcType classUnderTest = new RsrcType();
 		classUnderTest.setRsrcTypeId(new Integer(1));

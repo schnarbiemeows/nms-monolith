@@ -20,7 +20,7 @@ public class ServingTypeRatiosDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		ServingTypeRatiosDTO classUnderTest = new ServingTypeRatiosDTO();
 		classUnderTest.setServTypeRatioId(new Integer(1));

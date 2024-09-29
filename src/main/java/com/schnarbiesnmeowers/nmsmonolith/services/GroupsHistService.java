@@ -113,7 +113,7 @@ public class GroupsHistService {
 
 	/**
 	 * get List<GroupsHistDTO> by foreign key : grpId
-	 * @param grpId
+	 * @param id
 	 * @return List<GroupsHist>
 	 * @throws Exception
 	*/
@@ -130,7 +130,7 @@ public class GroupsHistService {
 
 	/**
 	 * get List<GroupsHistDTO> by foreign key : actionTypeId
-	 * @param actionTypeId
+	 * @param id
 	 * @return List<GroupsHist>
 	 * @throws Exception
 	*/
@@ -147,7 +147,7 @@ public class GroupsHistService {
 
 	/**
 	 * get List<GroupsHistDTO> by foreign key : evntOperId
-	 * @param evntOperId
+	 * @param id
 	 * @return List<GroupsHist>
 	 * @throws Exception
 	*/
@@ -164,7 +164,7 @@ public class GroupsHistService {
 
 	/**
 	 * get List<GroupsHistDTO> by foreign key : GrpIdAndActionTypeIdAndEvntOperId
-	 * @param GrpIdAndActionTypeIdAndEvntOperId
+	 * @param id0
 	 * @return List<GroupsHist>
 	 * @throws Exception
 	*/

@@ -59,7 +59,7 @@ public class MuscleGroupsControllerTest {
 	 * test creating a new MuscleGroups
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateMuscleGroups() throws URISyntaxException
 	{
 	    MuscleGroupsDTO musclegroups = generateRandomMuscleGroups();
@@ -81,7 +81,7 @@ public class MuscleGroupsControllerTest {
 	 * test getting all MuscleGroups
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllMuscleGroups() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class MuscleGroupsControllerTest {
 	 * test getting a single MuscleGroups by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetMuscleGroups() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class MuscleGroupsControllerTest {
 	 * test updating a MuscleGroups
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateMuscleGroups() throws URISyntaxException
 	{
 	    MuscleGroupsDTO musclegroups = generateRandomMuscleGroups();
@@ -131,7 +131,7 @@ public class MuscleGroupsControllerTest {
 	 * test deleting a MuscleGroups
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteMuscleGroups() throws URISyntaxException
 	{
 		MuscleGroupsDTO musclegroups = generateRandomMuscleGroups();

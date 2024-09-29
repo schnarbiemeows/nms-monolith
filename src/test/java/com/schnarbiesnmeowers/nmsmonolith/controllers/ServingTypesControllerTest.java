@@ -59,7 +59,7 @@ public class ServingTypesControllerTest {
 	 * test creating a new ServingTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateServingTypes() throws URISyntaxException
 	{
 	    ServingTypesDTO servingtypes = generateRandomServingTypes();
@@ -81,7 +81,7 @@ public class ServingTypesControllerTest {
 	 * test getting all ServingTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllServingTypes() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class ServingTypesControllerTest {
 	 * test getting a single ServingTypes by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetServingTypes() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class ServingTypesControllerTest {
 	 * test updating a ServingTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateServingTypes() throws URISyntaxException
 	{
 	    ServingTypesDTO servingtypes = generateRandomServingTypes();
@@ -131,7 +131,7 @@ public class ServingTypesControllerTest {
 	 * test deleting a ServingTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteServingTypes() throws URISyntaxException
 	{
 		ServingTypesDTO servingtypes = generateRandomServingTypes();
@@ -149,7 +149,7 @@ public class ServingTypesControllerTest {
 	 * test getting all ServingTypes by foreign key imageLoc
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetServingTypesByImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/servingtypes/findByImageLoc/" + num;

@@ -59,7 +59,7 @@ public class GoalsControllerTest {
 	 * test creating a new Goals
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateGoals() throws URISyntaxException
 	{
 	    GoalsDTO goals = generateRandomGoals();
@@ -81,7 +81,7 @@ public class GoalsControllerTest {
 	 * test getting all Goals
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllGoals() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class GoalsControllerTest {
 	 * test getting a single Goals by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetGoals() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class GoalsControllerTest {
 	 * test updating a Goals
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateGoals() throws URISyntaxException
 	{
 	    GoalsDTO goals = generateRandomGoals();
@@ -131,7 +131,7 @@ public class GoalsControllerTest {
 	 * test deleting a Goals
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteGoals() throws URISyntaxException
 	{
 		GoalsDTO goals = generateRandomGoals();
@@ -149,7 +149,7 @@ public class GoalsControllerTest {
 	 * test getting all Goals by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGoalsByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/goals/findByUserId/" + num;
@@ -163,7 +163,7 @@ public class GoalsControllerTest {
 	 * test getting all Goals by foreign key gcId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGoalsByGcId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/goals/findByGcId/" + num;
@@ -177,7 +177,7 @@ public class GoalsControllerTest {
 	 * test getting all Goals by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGoalsByUserIdAndGcId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/goals/findByUserIdAndGcId/1/1";

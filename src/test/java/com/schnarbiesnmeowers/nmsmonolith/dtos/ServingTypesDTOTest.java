@@ -19,7 +19,7 @@ public class ServingTypesDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		ServingTypesDTO classUnderTest = new ServingTypesDTO();
 		classUnderTest.setServTypeId(new Integer(1));

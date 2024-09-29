@@ -1,5 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
+import com.schnarbiesnmeowers.nmsmonolith.pojos.Ingredients;
 import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalIngredients;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +41,29 @@ public interface LocalIngredientsRepository extends JpaRepository<LocalIngredien
 			"li.brand_id=?2 and li.ingr_type_id!=?3 and li.actv='Y' order by li.ingr_desc", nativeQuery = true)
 	public Iterable<LocalIngredients> findLocalIngredientsByUserIdAndBrandId(int userId, int brandId,
 																			 int ingr_typ_for_recipe);
+
+	@Query(value = "select * from local_ingredients li where li.ingr_type_id!=?1 " +
+			"and li.user_id = ?2 and li.actv = 'Y' order by li.tot_protein/li.kcalories desc;", nativeQuery = true)
+	public Iterable<LocalIngredients> findLocalIngredientsByProtein(int ingr_typ_for_recipe,
+																	int userId);
+
+	@Query(value = "select * from local_ingredients li where li.ingr_type_id!=?1 " +
+			"and li.user_id = ?2 and li.actv = 'Y' order by li.tot_fat/li.kcalories desc;", nativeQuery = true)
+	public Iterable<LocalIngredients> findLocalIngredientsByFats(int ingr_typ_for_recipe,
+																	int userId);
+	@Query(value = "select * from local_ingredients li where li.ingr_type_id!=?1 " +
+			"and li.user_id = ?2 and li.actv = 'Y' order by li.mono_fat/li.kcalories desc;", nativeQuery = true)
+	public Iterable<LocalIngredients> findLocalIngredientsByMonoFats(int ingr_typ_for_recipe,
+																 int userId);
+
+	@Query(value = "select * from local_ingredients li where li.ingr_type_id!=?1 " +
+			"and li.user_id = ?2 and li.actv = 'Y' order by li.tot_carbs/li.kcalories desc;", nativeQuery = true)
+	public Iterable<LocalIngredients> findLocalIngredientsByCarbs(int ingr_typ_for_recipe,
+																	int userId);
+
+	@Query(value = "select * from local_ingredients li where li.ingr_type_id!=?1 " +
+			"and li.user_id = ?2 and li.actv = 'Y' order by li.tot_fiber/li.kcalories desc;", nativeQuery = true)
+	public Iterable<LocalIngredients> findLocalIngredientsByFiber(int ingr_typ_for_recipe,
+																  int userId);
+
 }

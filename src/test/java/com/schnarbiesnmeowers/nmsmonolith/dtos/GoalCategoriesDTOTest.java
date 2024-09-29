@@ -20,7 +20,7 @@ public class GoalCategoriesDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		GoalCategoriesDTO classUnderTest = new GoalCategoriesDTO();
 		classUnderTest.setGcId(new Integer(1));

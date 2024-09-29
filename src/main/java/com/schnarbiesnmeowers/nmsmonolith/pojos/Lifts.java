@@ -28,11 +28,6 @@ public class Lifts implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer liftId;
 
-	/**
-	 * "fk to the muscles.muscle_id field" 
-	 */
-	@Column(name = "muscle_id")
-	private Integer muscleId;
 
 	/**
 	 * "lift description" 
@@ -52,6 +47,8 @@ public class Lifts implements Serializable {
 	@Column(name = "actv")
 	private String actv;
 
+	@Column(name = "muscle_group_id")
+	private Integer muscleGroupId;
 	/**
 	 * default constructor
 	 */
@@ -59,13 +56,12 @@ public class Lifts implements Serializable {
 		super();
 	}
 
-	public Lifts(Integer liftId, Integer muscleId, String liftDesc, Integer imageLoc, String actv) {
-		super();
+	public Lifts(Integer liftId, String liftDesc, Integer imageLoc, String actv, Integer muscleGroupId) {
 		this.liftId = liftId;
-		this.muscleId = muscleId;
 		this.liftDesc = liftDesc;
 		this.imageLoc = imageLoc;
 		this.actv = actv;
+		this.muscleGroupId = muscleGroupId;
 	}
 
 	public Integer getLiftId() {
@@ -74,14 +70,6 @@ public class Lifts implements Serializable {
 
 	public void setLiftId(Integer liftId) {
 		this.liftId=liftId;
-	}
-
-	public Integer getMuscleId() {
-		return muscleId;
-	}
-
-	public void setMuscleId(Integer muscleId) {
-		this.muscleId=muscleId;
 	}
 
 	public String getLiftDesc() {
@@ -108,9 +96,23 @@ public class Lifts implements Serializable {
 		this.actv=actv;
 	}
 
+	public Integer getMuscleGroupId() {
+		return muscleGroupId;
+	}
+
+	public void setMuscleGroupId(Integer muscleGroupId) {
+		this.muscleGroupId = muscleGroupId;
+	}
+
 	@Override
 	public String toString() {
-		return "Lifts [liftId=" + liftId + ", muscleId=" + muscleId + ", liftDesc=" + liftDesc + ", imageLoc=" + imageLoc + ", actv=" + actv + "]";
+		return "Lifts{" +
+				"liftId=" + liftId +
+				", liftDesc='" + liftDesc + '\'' +
+				", imageLoc=" + imageLoc +
+				", actv='" + actv + '\'' +
+				", muscleGroupId=" + muscleGroupId +
+				'}';
 	}
 
 	public static Lifts fromJson(String input) {
@@ -118,6 +120,7 @@ public class Lifts implements Serializable {
 		return gson.fromJson(input, Lifts.class );
 	}
 	public LiftsDTO toDTO() {
-		return new LiftsDTO(this.getLiftId(),this.getMuscleId(),this.getLiftDesc(),this.getImageLoc(),this.getActv());
+		return new LiftsDTO(this.getLiftId(),this.getLiftDesc(),
+				this.getImageLoc(),this.getActv(),this.getMuscleGroupId());
 	}
 }

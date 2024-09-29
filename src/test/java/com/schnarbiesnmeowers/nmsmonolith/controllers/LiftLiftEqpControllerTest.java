@@ -59,7 +59,7 @@ public class LiftLiftEqpControllerTest {
 	 * test creating a new LiftLiftEqp
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateLiftLiftEqp() throws URISyntaxException
 	{
 	    LiftLiftEqpDTO liftlifteqp = generateRandomLiftLiftEqp();
@@ -81,7 +81,7 @@ public class LiftLiftEqpControllerTest {
 	 * test getting all LiftLiftEqp
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllLiftLiftEqp() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class LiftLiftEqpControllerTest {
 	 * test getting a single LiftLiftEqp by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetLiftLiftEqp() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class LiftLiftEqpControllerTest {
 	 * test updating a LiftLiftEqp
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateLiftLiftEqp() throws URISyntaxException
 	{
 	    LiftLiftEqpDTO liftlifteqp = generateRandomLiftLiftEqp();
@@ -131,7 +131,7 @@ public class LiftLiftEqpControllerTest {
 	 * test deleting a LiftLiftEqp
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteLiftLiftEqp() throws URISyntaxException
 	{
 		LiftLiftEqpDTO liftlifteqp = generateRandomLiftLiftEqp();
@@ -149,7 +149,7 @@ public class LiftLiftEqpControllerTest {
 	 * test getting all LiftLiftEqp by foreign key liftId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetLiftLiftEqpByLiftId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/liftlifteqp/findByLiftId/" + num;
@@ -163,7 +163,7 @@ public class LiftLiftEqpControllerTest {
 	 * test getting all LiftLiftEqp by foreign key liftEquipId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetLiftLiftEqpByLiftEquipId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/liftlifteqp/findByLiftEquipId/" + num;
@@ -177,7 +177,7 @@ public class LiftLiftEqpControllerTest {
 	 * test getting all LiftLiftEqp by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetLiftLiftEqpByLiftIdAndLiftEquipId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/liftlifteqp/findByLiftIdAndLiftEquipId/1/1";

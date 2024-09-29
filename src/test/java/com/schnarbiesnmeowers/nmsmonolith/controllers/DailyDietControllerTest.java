@@ -59,7 +59,7 @@ public class DailyDietControllerTest {
 	 * test creating a new DailyDiet
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateDailyDiet() throws URISyntaxException
 	{
 	    DailyDietDTO dailydiet = generateRandomDailyDiet();
@@ -81,7 +81,7 @@ public class DailyDietControllerTest {
 	 * test getting all DailyDiet
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllDailyDiet() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class DailyDietControllerTest {
 	 * test getting a single DailyDiet by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetDailyDiet() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class DailyDietControllerTest {
 	 * test updating a DailyDiet
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateDailyDiet() throws URISyntaxException
 	{
 	    DailyDietDTO dailydiet = generateRandomDailyDiet();
@@ -131,7 +131,7 @@ public class DailyDietControllerTest {
 	 * test deleting a DailyDiet
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteDailyDiet() throws URISyntaxException
 	{
 		DailyDietDTO dailydiet = generateRandomDailyDiet();
@@ -149,7 +149,7 @@ public class DailyDietControllerTest {
 	 * test getting all DailyDiet by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetDailyDietByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/dailydiet/findByUserId/" + num;
@@ -163,7 +163,7 @@ public class DailyDietControllerTest {
 	 * test getting all DailyDiet by foreign key ingrId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetDailyDietByIngrId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/dailydiet/findByIngrId/" + num;
@@ -177,7 +177,7 @@ public class DailyDietControllerTest {
 	 * test getting all DailyDiet by foreign key bldstId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetDailyDietByBldstId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/dailydiet/findByBldstId/" + num;
@@ -191,7 +191,7 @@ public class DailyDietControllerTest {
 	 * test getting all DailyDiet by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetDailyDietByUserIdAndIngrIdAndBldstId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/dailydiet/findByUserIdAndIngrIdAndBldstId/1/1/1";

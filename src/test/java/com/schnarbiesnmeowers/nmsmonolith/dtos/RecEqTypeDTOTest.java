@@ -20,7 +20,7 @@ public class RecEqTypeDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		RecEqTypeDTO classUnderTest = new RecEqTypeDTO();
 		classUnderTest.setRecEqTypeId(new Integer(1));

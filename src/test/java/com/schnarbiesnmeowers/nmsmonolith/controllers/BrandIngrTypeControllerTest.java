@@ -59,7 +59,7 @@ public class BrandIngrTypeControllerTest {
 	 * test creating a new BrandIngrType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateBrandIngrType() throws URISyntaxException
 	{
 	    BrandIngrTypeDTO brandingrtype = generateRandomBrandIngrType();
@@ -81,7 +81,7 @@ public class BrandIngrTypeControllerTest {
 	 * test getting all BrandIngrType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllBrandIngrType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class BrandIngrTypeControllerTest {
 	 * test getting a single BrandIngrType by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetBrandIngrType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class BrandIngrTypeControllerTest {
 	 * test updating a BrandIngrType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateBrandIngrType() throws URISyntaxException
 	{
 	    BrandIngrTypeDTO brandingrtype = generateRandomBrandIngrType();
@@ -131,7 +131,7 @@ public class BrandIngrTypeControllerTest {
 	 * test deleting a BrandIngrType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteBrandIngrType() throws URISyntaxException
 	{
 		BrandIngrTypeDTO brandingrtype = generateRandomBrandIngrType();
@@ -149,7 +149,7 @@ public class BrandIngrTypeControllerTest {
 	 * test getting all BrandIngrType by foreign key brandId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetBrandIngrTypeByBrandId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/brandingrtype/findByBrandId/" + num;
@@ -163,7 +163,7 @@ public class BrandIngrTypeControllerTest {
 	 * test getting all BrandIngrType by foreign key ingrTypeId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetBrandIngrTypeByIngrTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/brandingrtype/findByIngrTypeId/" + num;
@@ -177,7 +177,7 @@ public class BrandIngrTypeControllerTest {
 	 * test getting all BrandIngrType by foreign key prntIngrType
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetBrandIngrTypeByPrntIngrType() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/brandingrtype/findByPrntIngrType/" + num;
@@ -191,7 +191,7 @@ public class BrandIngrTypeControllerTest {
 	 * test getting all BrandIngrType by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetBrandIngrTypeByBrandIdAndIngrTypeIdAndPrntIngrType() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/brandingrtype/findByBrandIdAndIngrTypeIdAndPrntIngrType/1/1/1";

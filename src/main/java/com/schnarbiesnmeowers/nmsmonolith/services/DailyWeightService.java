@@ -9,9 +9,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailyweight.DailyWeightDTO;
+import com.schnarbiesnmeowers.nmsmonolith.pojos.email.InputMessage;
 import com.schnarbiesnmeowers.nmsmonolith.pojos.tuples.Tuple2;
 import com.schnarbiesnmeowers.nmsmonolith.pojos.tuples.Tuple3;
 import com.schnarbiesnmeowers.nmsmonolith.services.helpers.DailyWeightUtil;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.EmailUtility;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.excel.DailyWeightExcelUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
@@ -19,6 +21,7 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.dailyweight.DailyWeightDataPoint;
 import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyWeight;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.DailyWeightRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 /**
  * this class retrieves data from the controller class
@@ -37,6 +40,12 @@ public class DailyWeightService {
 	 */
 	@Autowired
 	private DailyWeightRepository dailyWeightRepository;
+
+	@Autowired
+	private EmailUtility emailUtility;
+
+	@Autowired
+	private MessagesService messagesService;
 
 	/**
 	 * get all DailyWeight records
@@ -79,10 +88,26 @@ public class DailyWeightService {
 		try {
 		    DailyWeight createdData = data.toEntity();
 		    createdData = dailyWeightRepository.save(createdData);
+			InputMessage inputMessage = new InputMessage("recorded daily weight for : " + data.getCalendarDate().toString(),
+					getBody(data));
+			String outputMessage = emailUtility.sendTestEmailUsingWebflux(inputMessage).block();
 		    return createdData.toDTO();
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw e;
 		}
+	}
+
+	private String getBody(DailyWeightDataPoint data) {
+		String content = "<!DOCTYPE html>";
+		content += "<h1 style=\"text-align:center;\">Hi there!</h1>";
+		content += "<p style=\"text-align:center;\">You recorded your daily weight for : " + data.getCalendarDate().toString() + " </p>";
+		content += "<p style=\"text-align:center;\">Your recorded weight was: : " + data.getWeight() + "</p>";
+		content += "<br/>";
+		content += "<p>Sincerely:</p><br/>";
+		content += "<p>The Schnarbies-n-meowers team</p>";
+		content += "</html>";
+		return content;
 	}
 
 	/**
@@ -154,7 +179,7 @@ public class DailyWeightService {
 
 	/**
 	 * returns a list of daily weights for a given user, up to a certain amount
-	 * of days back(usually 30, 90, 180, 365
+	 * of days back(usually 30, 90, 180, 365)
 	 * the weights are sorted by date asc
 	 * for a complete list of weights for all time, use the findSortedDailyWeightByUserId() method above
 	 * @param id
@@ -178,8 +203,8 @@ public class DailyWeightService {
 		BigDecimal maxWeight = (BigDecimal)minMaxWeights.getB();
 		BigDecimal averageWeight = DailyWeightUtil.findAverageWeight(resultsdto);
 		List<LocalDate> dateList = DailyWeightUtil.getDateList(resultsdto,daysBack);
-		Tuple3<List<DailyWeightDataPoint>,List<DailyWeightDataPoint>,List<LocalDate>> dataMissingDataAndMissingDates = DailyWeightUtil
-								.getDataMissingDataAndMissingDates(resultsdto,dateList);
+		Tuple3<List<DailyWeightDataPoint>,List<DailyWeightDataPoint>,List<LocalDate>> dataMissingDataAndMissingDates =
+				DailyWeightUtil.getDataMissingDataAndMissingDates(resultsdto,dateList);
 		List<DailyWeightDataPoint> validDataPoints = (List<DailyWeightDataPoint>)dataMissingDataAndMissingDates.getA();
 		List<DailyWeightDataPoint> missingData = (List<DailyWeightDataPoint>)dataMissingDataAndMissingDates.getB();
 		List<LocalDate> missingDates = (List<LocalDate>)dataMissingDataAndMissingDates.getC();

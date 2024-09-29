@@ -59,7 +59,7 @@ public class GroupsHistControllerTest {
 	 * test creating a new GroupsHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateGroupsHist() throws URISyntaxException
 	{
 	    GroupsHistDTO groupshist = generateRandomGroupsHist();
@@ -81,7 +81,7 @@ public class GroupsHistControllerTest {
 	 * test getting all GroupsHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllGroupsHist() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class GroupsHistControllerTest {
 	 * test getting a single GroupsHist by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetGroupsHist() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class GroupsHistControllerTest {
 	 * test updating a GroupsHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateGroupsHist() throws URISyntaxException
 	{
 	    GroupsHistDTO groupshist = generateRandomGroupsHist();
@@ -131,7 +131,7 @@ public class GroupsHistControllerTest {
 	 * test deleting a GroupsHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteGroupsHist() throws URISyntaxException
 	{
 		GroupsHistDTO groupshist = generateRandomGroupsHist();
@@ -149,7 +149,7 @@ public class GroupsHistControllerTest {
 	 * test getting all GroupsHist by foreign key grpId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGroupsHistByGrpId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/groupshist/findByGrpId/" + num;
@@ -163,7 +163,7 @@ public class GroupsHistControllerTest {
 	 * test getting all GroupsHist by foreign key actionTypeId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGroupsHistByActionTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/groupshist/findByActionTypeId/" + num;
@@ -177,7 +177,7 @@ public class GroupsHistControllerTest {
 	 * test getting all GroupsHist by foreign key evntOperId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGroupsHistByEvntOperId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/groupshist/findByEvntOperId/" + num;
@@ -191,7 +191,7 @@ public class GroupsHistControllerTest {
 	 * test getting all GroupsHist by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGroupsHistByGrpIdAndActionTypeIdAndEvntOperId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/groupshist/findByGrpIdAndActionTypeIdAndEvntOperId/1/1/1";

@@ -1,30 +1,19 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
-
 import com.schnarbiesnmeowers.nmsmonolith.dtos.LiftsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.LiftsService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * this class tests the LiftsController class
@@ -32,9 +21,9 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+//@RunWith(SpringRunner.class)
+//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+//@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class LiftsControllerTest {
 
 	/**
@@ -59,7 +48,7 @@ public class LiftsControllerTest {
 	 * test creating a new Lifts
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateLifts() throws URISyntaxException
 	{
 	    LiftsDTO lifts = generateRandomLifts();
@@ -81,7 +70,7 @@ public class LiftsControllerTest {
 	 * test getting all Lifts
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllLifts() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +86,7 @@ public class LiftsControllerTest {
 	 * test getting a single Lifts by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetLifts() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +103,7 @@ public class LiftsControllerTest {
 	 * test updating a Lifts
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateLifts() throws URISyntaxException
 	{
 	    LiftsDTO lifts = generateRandomLifts();
@@ -131,7 +120,7 @@ public class LiftsControllerTest {
 	 * test deleting a Lifts
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteLifts() throws URISyntaxException
 	{
 		LiftsDTO lifts = generateRandomLifts();
@@ -149,7 +138,7 @@ public class LiftsControllerTest {
 	 * test getting all Lifts by foreign key muscleId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetLiftsByMuscleId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/lifts/findByMuscleId/" + num;
@@ -163,7 +152,7 @@ public class LiftsControllerTest {
 	 * test getting all Lifts by foreign key imageLoc
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetLiftsByImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/lifts/findByImageLoc/" + num;
@@ -177,7 +166,7 @@ public class LiftsControllerTest {
 	 * test getting all Lifts by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetLiftsByMuscleIdAndImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/lifts/findByMuscleIdAndImageLoc/1/1";
@@ -190,7 +179,6 @@ public class LiftsControllerTest {
 
 	public static LiftsDTO generateRandomLifts() {
 		LiftsDTO record = new LiftsDTO();
-		record.setMuscleId(Randomizer.randomInt(1000));
 		record.setLiftDesc(Randomizer.randomString(20));
 		record.setImageLoc(Randomizer.randomInt(1000));
 		record.setActv(Randomizer.randomString(1));

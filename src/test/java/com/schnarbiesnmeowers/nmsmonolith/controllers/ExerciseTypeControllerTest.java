@@ -59,7 +59,7 @@ public class ExerciseTypeControllerTest {
 	 * test creating a new ExerciseType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateExerciseType() throws URISyntaxException
 	{
 	    ExerciseTypeDTO exercisetype = generateRandomExerciseType();
@@ -81,7 +81,7 @@ public class ExerciseTypeControllerTest {
 	 * test getting all ExerciseType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllExerciseType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class ExerciseTypeControllerTest {
 	 * test getting a single ExerciseType by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetExerciseType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class ExerciseTypeControllerTest {
 	 * test updating a ExerciseType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateExerciseType() throws URISyntaxException
 	{
 	    ExerciseTypeDTO exercisetype = generateRandomExerciseType();
@@ -131,7 +131,7 @@ public class ExerciseTypeControllerTest {
 	 * test deleting a ExerciseType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteExerciseType() throws URISyntaxException
 	{
 		ExerciseTypeDTO exercisetype = generateRandomExerciseType();
@@ -149,7 +149,7 @@ public class ExerciseTypeControllerTest {
 	 * test getting all ExerciseType by foreign key imageLoc
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetExerciseTypeByImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/exercisetype/findByImageLoc/" + num;

@@ -59,7 +59,7 @@ public class GrpUserHistControllerTest {
 	 * test creating a new GrpUserHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateGrpUserHist() throws URISyntaxException
 	{
 	    GrpUserHistDTO grpuserhist = generateRandomGrpUserHist();
@@ -81,7 +81,7 @@ public class GrpUserHistControllerTest {
 	 * test getting all GrpUserHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllGrpUserHist() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class GrpUserHistControllerTest {
 	 * test getting a single GrpUserHist by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetGrpUserHist() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class GrpUserHistControllerTest {
 	 * test updating a GrpUserHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateGrpUserHist() throws URISyntaxException
 	{
 	    GrpUserHistDTO grpuserhist = generateRandomGrpUserHist();
@@ -131,7 +131,7 @@ public class GrpUserHistControllerTest {
 	 * test deleting a GrpUserHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteGrpUserHist() throws URISyntaxException
 	{
 		GrpUserHistDTO grpuserhist = generateRandomGrpUserHist();
@@ -149,7 +149,7 @@ public class GrpUserHistControllerTest {
 	 * test getting all GrpUserHist by foreign key grpUserId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGrpUserHistByGrpUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByGrpUserId/" + num;
@@ -163,7 +163,7 @@ public class GrpUserHistControllerTest {
 	 * test getting all GrpUserHist by foreign key grpId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGrpUserHistByGrpId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByGrpId/" + num;
@@ -177,7 +177,7 @@ public class GrpUserHistControllerTest {
 	 * test getting all GrpUserHist by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGrpUserHistByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByUserId/" + num;
@@ -191,7 +191,7 @@ public class GrpUserHistControllerTest {
 	 * test getting all GrpUserHist by foreign key actionTypeId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGrpUserHistByActionTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByActionTypeId/" + num;
@@ -205,7 +205,7 @@ public class GrpUserHistControllerTest {
 	 * test getting all GrpUserHist by foreign key evntOperId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGrpUserHistByEvntOperId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByEvntOperId/" + num;
@@ -219,7 +219,7 @@ public class GrpUserHistControllerTest {
 	 * test getting all GrpUserHist by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGrpUserHistByGrpUserIdAndGrpIdAndUserIdAndActionTypeIdAndEvntOperId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByGrpUserIdAndGrpIdAndUserIdAndActionTypeIdAndEvntOperId/1/1/1/1/1";

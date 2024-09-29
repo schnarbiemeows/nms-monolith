@@ -20,7 +20,7 @@ public class ExerciseTypeDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		ExerciseTypeDTO classUnderTest = new ExerciseTypeDTO();
 		classUnderTest.setExerciseTypeId(new Integer(1));

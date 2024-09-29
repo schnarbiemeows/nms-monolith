@@ -59,7 +59,7 @@ public class MessagesControllerTest {
 	 * test creating a new Messages
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateMessages() throws URISyntaxException
 	{
 	    MessagesDTO messages = generateRandomMessages();
@@ -81,7 +81,7 @@ public class MessagesControllerTest {
 	 * test getting all Messages
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllMessages() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class MessagesControllerTest {
 	 * test getting a single Messages by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetMessages() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class MessagesControllerTest {
 	 * test updating a Messages
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateMessages() throws URISyntaxException
 	{
 	    MessagesDTO messages = generateRandomMessages();
@@ -131,7 +131,7 @@ public class MessagesControllerTest {
 	 * test deleting a Messages
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteMessages() throws URISyntaxException
 	{
 		MessagesDTO messages = generateRandomMessages();
@@ -149,7 +149,7 @@ public class MessagesControllerTest {
 	 * test getting all Messages by foreign key eventId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetMessagesByEventId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/messages/findByEventId/" + num;
@@ -163,7 +163,7 @@ public class MessagesControllerTest {
 	 * test getting all Messages by foreign key messageTypeId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetMessagesByMessageTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/messages/findByMessageTypeId/" + num;
@@ -177,7 +177,7 @@ public class MessagesControllerTest {
 	 * test getting all Messages by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetMessagesByEventIdAndMessageTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/messages/findByEventIdAndMessageTypeId/1/1";

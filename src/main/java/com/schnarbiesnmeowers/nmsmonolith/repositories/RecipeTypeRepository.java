@@ -17,4 +17,5 @@ public interface RecipeTypeRepository extends JpaRepository<RecipeType, Integer>
 
     @Query(value = "select * from recipe_type rt where rt.actv = 'Y'", nativeQuery = true)
     public List<RecipeType> getAllActiveRecipeTypes();
+
 }

@@ -6,6 +6,7 @@ import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Section;
+import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.IngredientsWrapper;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,13 @@ public class RecipesController {
 	@GetMapping(path = "/all-displays/{id}")
 	public ResponseEntity<RecipeWrapper> getAllRecipeDisplays(@PathVariable int id) throws Exception {
 		RecipeWrapper recipes = recipesService.getAllRecipeDisplays(id);
+		return ResponseEntity.status(HttpStatus.OK).body(recipes);
+	}
+
+	@GetMapping(path = "/all-displays-ranked/{id}/{rankedBy}")
+	public ResponseEntity<RecipeWrapper> getRecipesByRanking(@PathVariable int id,
+		@PathVariable String rankedBy) throws Exception {
+		RecipeWrapper recipes = recipesService.getRecipesByRanking(id, rankedBy);
 		return ResponseEntity.status(HttpStatus.OK).body(recipes);
 	}
 

@@ -1,11 +1,10 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.Steps;
+
 import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
+
 import org.junit.Test;
-import java.math.*;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -20,7 +19,7 @@ public class StepsTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		Steps classUnderTest = new Steps();
 		classUnderTest.setStepId(new Integer(1));

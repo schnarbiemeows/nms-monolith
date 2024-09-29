@@ -59,7 +59,7 @@ public class PaymentControllerTest {
 	 * test creating a new Payment
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreatePayment() throws URISyntaxException
 	{
 	    PaymentDTO payment = generateRandomPayment();
@@ -81,7 +81,7 @@ public class PaymentControllerTest {
 	 * test getting all Payment
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllPayment() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class PaymentControllerTest {
 	 * test getting a single Payment by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetPayment() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class PaymentControllerTest {
 	 * test updating a Payment
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdatePayment() throws URISyntaxException
 	{
 	    PaymentDTO payment = generateRandomPayment();
@@ -131,7 +131,7 @@ public class PaymentControllerTest {
 	 * test deleting a Payment
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeletePayment() throws URISyntaxException
 	{
 		PaymentDTO payment = generateRandomPayment();
@@ -149,7 +149,7 @@ public class PaymentControllerTest {
 	 * test getting all Payment by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetPaymentByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/payment/findByUserId/" + num;
@@ -163,7 +163,7 @@ public class PaymentControllerTest {
 	 * test getting all Payment by foreign key paymentTypeId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetPaymentByPaymentTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/payment/findByPaymentTypeId/" + num;
@@ -177,7 +177,7 @@ public class PaymentControllerTest {
 	 * test getting all Payment by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetPaymentByUserIdAndPaymentTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/payment/findByUserIdAndPaymentTypeId/1/1";

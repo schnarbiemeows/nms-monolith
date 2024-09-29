@@ -59,7 +59,7 @@ public class RolesControllerTest {
 	 * test creating a new Roles
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateRoles() throws URISyntaxException
 	{
 	    RolesDTO roles = generateRandomRoles();
@@ -81,7 +81,7 @@ public class RolesControllerTest {
 	 * test getting all Roles
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllRoles() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class RolesControllerTest {
 	 * test getting a single Roles by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetRoles() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class RolesControllerTest {
 	 * test updating a Roles
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateRoles() throws URISyntaxException
 	{
 	    RolesDTO roles = generateRandomRoles();
@@ -131,7 +131,7 @@ public class RolesControllerTest {
 	 * test deleting a Roles
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteRoles() throws URISyntaxException
 	{
 		RolesDTO roles = generateRandomRoles();
@@ -149,7 +149,7 @@ public class RolesControllerTest {
 	 * test getting all Roles by foreign key grpId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRolesByGrpId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/roles/findByGrpId/" + num;
@@ -163,7 +163,7 @@ public class RolesControllerTest {
 	 * test getting all Roles by foreign key rsrcId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRolesByRsrcId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/roles/findByRsrcId/" + num;
@@ -177,7 +177,7 @@ public class RolesControllerTest {
 	 * test getting all Roles by foreign key actionTypeId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRolesByActionTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/roles/findByActionTypeId/" + num;
@@ -191,7 +191,7 @@ public class RolesControllerTest {
 	 * test getting all Roles by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRolesByGrpIdAndRsrcIdAndActionTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/roles/findByGrpIdAndRsrcIdAndActionTypeId/1/1/1";

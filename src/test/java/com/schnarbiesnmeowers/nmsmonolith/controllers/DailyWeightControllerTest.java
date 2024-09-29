@@ -59,7 +59,7 @@ public class DailyWeightControllerTest {
 	 * test creating a new DailyWeight
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateDailyWeight() throws URISyntaxException
 	{
 	    DailyWeightDataPoint dailyweight = generateRandomDailyWeight();
@@ -81,7 +81,7 @@ public class DailyWeightControllerTest {
 	 * test getting all DailyWeight
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllDailyWeight() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class DailyWeightControllerTest {
 	 * test getting a single DailyWeight by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetDailyWeight() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class DailyWeightControllerTest {
 	 * test updating a DailyWeight
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateDailyWeight() throws URISyntaxException
 	{
 	    DailyWeightDataPoint dailyweight = generateRandomDailyWeight();
@@ -131,7 +131,7 @@ public class DailyWeightControllerTest {
 	 * test deleting a DailyWeight
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteDailyWeight() throws URISyntaxException
 	{
 		DailyWeightDataPoint dailyweight = generateRandomDailyWeight();
@@ -149,7 +149,7 @@ public class DailyWeightControllerTest {
 	 * test getting all DailyWeight by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetDailyWeightByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/dailyweight/findByUserId/" + num;

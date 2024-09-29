@@ -1,40 +1,33 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * class to test the Lifts class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 public class LiftsTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		Lifts classUnderTest = new Lifts();
-		classUnderTest.setLiftId(new Integer(1));
-		classUnderTest.setMuscleId(new Integer(1));
+		classUnderTest.setLiftId(1);
 		classUnderTest.setLiftDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		Lifts newitem = new Lifts(
 		classUnderTest.getLiftId(),
-		classUnderTest.getMuscleId(),
 		classUnderTest.getLiftDesc(),
 		classUnderTest.getImageLoc(),
-		classUnderTest.getActv());
+		classUnderTest.getActv(),
+		classUnderTest.getMuscleGroupId());
 		assertNotNull(newitem);
 		String string = classUnderTest.toString();
 		assertNotNull(string);

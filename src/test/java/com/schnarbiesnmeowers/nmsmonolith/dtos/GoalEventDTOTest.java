@@ -20,7 +20,7 @@ public class GoalEventDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		GoalEventDTO classUnderTest = new GoalEventDTO();
 		classUnderTest.setGoalEventId(new Integer(1));

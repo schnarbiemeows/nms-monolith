@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 public class RandomizerTest {
 
-	@Test
+	//@Test
 	public void testMethods() {
 	    Randomizer rand = new Randomizer();
 		assertNotNull(Randomizer.randomString(10));

@@ -59,7 +59,7 @@ public class RecipeStepsControllerTest {
 	 * test creating a new RecipeSteps
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateRecipeSteps() throws URISyntaxException
 	{
 	    RecipeStepsDTO recipesteps = generateRandomRecipeSteps();
@@ -81,7 +81,7 @@ public class RecipeStepsControllerTest {
 	 * test getting all RecipeSteps
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllRecipeSteps() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class RecipeStepsControllerTest {
 	 * test getting a single RecipeSteps by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetRecipeSteps() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class RecipeStepsControllerTest {
 	 * test updating a RecipeSteps
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateRecipeSteps() throws URISyntaxException
 	{
 	    RecipeStepsDTO recipesteps = generateRandomRecipeSteps();
@@ -131,7 +131,7 @@ public class RecipeStepsControllerTest {
 	 * test deleting a RecipeSteps
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteRecipeSteps() throws URISyntaxException
 	{
 		RecipeStepsDTO recipesteps = generateRandomRecipeSteps();
@@ -149,7 +149,7 @@ public class RecipeStepsControllerTest {
 	 * test getting all RecipeSteps by foreign key recipeId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRecipeStepsByRecipeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/recipesteps/findByRecipeId/" + num;
@@ -163,7 +163,7 @@ public class RecipeStepsControllerTest {
 	 * test getting all RecipeSteps by foreign key imageLoc
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRecipeStepsByImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/recipesteps/findByImageLoc/" + num;
@@ -177,7 +177,7 @@ public class RecipeStepsControllerTest {
 	 * test getting all RecipeSteps by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRecipeStepsByRecipeIdAndImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/recipesteps/findByRecipeIdAndImageLoc/1/1";

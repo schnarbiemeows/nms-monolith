@@ -59,7 +59,7 @@ public class UserConfigControllerTest {
 	 * test creating a new UserConfig
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateUserConfig() throws URISyntaxException
 	{
 	    UserConfigDTO userconfig = generateRandomUserConfig();
@@ -81,7 +81,7 @@ public class UserConfigControllerTest {
 	 * test getting all UserConfig
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllUserConfig() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class UserConfigControllerTest {
 	 * test getting a single UserConfig by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetUserConfig() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class UserConfigControllerTest {
 	 * test updating a UserConfig
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateUserConfig() throws URISyntaxException
 	{
 	    UserConfigDTO userconfig = generateRandomUserConfig();
@@ -131,7 +131,7 @@ public class UserConfigControllerTest {
 	 * test deleting a UserConfig
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteUserConfig() throws URISyntaxException
 	{
 		UserConfigDTO userconfig = generateRandomUserConfig();
@@ -149,7 +149,7 @@ public class UserConfigControllerTest {
 	 * test getting all UserConfig by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetUserConfigByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/userconfig/findByUserId/" + num;

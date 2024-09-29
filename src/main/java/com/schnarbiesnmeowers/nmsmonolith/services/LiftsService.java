@@ -6,9 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.LiftsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.pojos.Lifts;
@@ -30,7 +28,7 @@ public class LiftsService {
 	 * JPA Repository handle
 	 */
 	@Autowired
-	private LiftsRepository service;
+	private LiftsRepository liftsRepository;
 
 	/**
 	 * get all Lifts records
@@ -38,7 +36,18 @@ public class LiftsService {
 	 * @throws Exception
 	 */
 	public List<LiftsDTO> getAllLifts() throws Exception {
-		Iterable<Lifts> lifts = service.findAll();
+		Iterable<Lifts> lifts = liftsRepository.findAll();
+		Iterator<Lifts> liftss = lifts.iterator();
+		List<LiftsDTO> liftsdto = new ArrayList();
+		while(liftss.hasNext()) {
+			Lifts item = liftss.next();
+			liftsdto.add(item.toDTO());
+		}
+		return liftsdto;
+	}
+
+	public List<LiftsDTO> getAllLiftsOrdered() throws Exception {
+		Iterable<Lifts> lifts = liftsRepository.getAllLiftsOrdered();
 		Iterator<Lifts> liftss = lifts.iterator();
 		List<LiftsDTO> liftsdto = new ArrayList();
 		while(liftss.hasNext()) {
@@ -55,7 +64,7 @@ public class LiftsService {
 	 * @throws Exception
 	 */
 	public LiftsDTO findLiftsById(int id) throws Exception {
-		Optional<Lifts> liftsOptional = service.findById(id);
+		Optional<Lifts> liftsOptional = liftsRepository.findById(id);
 		if(liftsOptional.isPresent()) {
 			Lifts results = liftsOptional.get();
 			return results.toDTO();
@@ -72,7 +81,7 @@ public class LiftsService {
 	public LiftsDTO createLifts(LiftsDTO data) {
 		try {
 		    Lifts createdData = data.toEntity();
-		    createdData = service.save(createdData);
+		    createdData = liftsRepository.save(createdData);
 		    return createdData.toDTO();
 		} catch (Exception e) {
 			throw e;
@@ -86,10 +95,10 @@ public class LiftsService {
 	 * @throws Exception
 	 */
 	public LiftsDTO updateLifts(LiftsDTO data) throws Exception {
-		Optional<Lifts> liftsOptional = service.findById(data.getLiftId());
+		Optional<Lifts> liftsOptional = liftsRepository.findById(data.getLiftId());
 		if(liftsOptional.isPresent()) {
 		    Lifts updatedData = data.toEntity();
-			updatedData = service.save(updatedData);
+			updatedData = liftsRepository.save(updatedData);
 			return updatedData.toDTO();
 		} else {
 			throw new ResourceNotFoundException(ID_EQUALS + data.getLiftId() + NOT_FOUND);
@@ -103,31 +112,15 @@ public class LiftsService {
 	 * @throws Exception
 	 */
 	public String deleteLifts(int id) throws Exception {
-		Optional<Lifts> liftsOptional = service.findById(id);
+		Optional<Lifts> liftsOptional = liftsRepository.findById(id);
 		if(liftsOptional.isPresent()) {
-			service.deleteById(id);
+			liftsRepository.deleteById(id);
 			return "Successfully Deleted";
 		} else {
 			throw new ResourceNotFoundException(ID_EQUALS + id + NOT_FOUND);
 		}
 	}
 
-	/**
-	 * get List<LiftsDTO> by foreign key : muscleId
-	 * @param muscleId
-	 * @return List<Lifts>
-	 * @throws Exception
-	*/
-	public List<LiftsDTO> findLiftsByMuscleId(int id) throws Exception {
-		Iterable<Lifts> results = service.findLiftsByMuscleId(id);
-		Iterator<Lifts> iter = results.iterator();
-		List<LiftsDTO> resultsdto = new ArrayList();
-		while(iter.hasNext()) {
-			Lifts item = iter.next();
-			resultsdto.add(item.toDTO());
-		}
-		return resultsdto;
-	}
 
 	/**
 	 * get List<LiftsDTO> by foreign key : imageLoc
@@ -136,7 +129,7 @@ public class LiftsService {
 	 * @throws Exception
 	*/
 	public List<LiftsDTO> findLiftsByImageLoc(int id) throws Exception {
-		Iterable<Lifts> results = service.findLiftsByImageLoc(id);
+		Iterable<Lifts> results = liftsRepository.findLiftsByImageLoc(id);
 		Iterator<Lifts> iter = results.iterator();
 		List<LiftsDTO> resultsdto = new ArrayList();
 		while(iter.hasNext()) {
@@ -146,21 +139,5 @@ public class LiftsService {
 		return resultsdto;
 	}
 
-	/**
-	 * get List<LiftsDTO> by foreign key : MuscleIdAndImageLoc
-	 * @param MuscleIdAndImageLoc
-	 * @return List<Lifts>
-	 * @throws Exception
-	*/
-	public List<LiftsDTO> findLiftsByMuscleIdAndImageLoc(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		Iterable<Lifts> results = service.findLiftsByMuscleIdAndImageLoc(id0, id1);
-		Iterator<Lifts> iter = results.iterator();
-		List<LiftsDTO> resultsdto = new ArrayList();
-		while(iter.hasNext()) {
-			Lifts item = iter.next();
-			resultsdto.add(item.toDTO());
-		}
-		return resultsdto;
-	}
 
 }

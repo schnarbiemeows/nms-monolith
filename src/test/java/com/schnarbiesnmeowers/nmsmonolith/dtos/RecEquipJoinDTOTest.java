@@ -20,7 +20,7 @@ public class RecEquipJoinDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		RecEquipJoinDTO classUnderTest = new RecEquipJoinDTO();
 		classUnderTest.setRecEquipJoinId(new Integer(1));

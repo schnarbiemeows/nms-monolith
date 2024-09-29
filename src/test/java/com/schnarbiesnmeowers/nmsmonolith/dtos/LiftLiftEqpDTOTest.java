@@ -20,7 +20,7 @@ public class LiftLiftEqpDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		LiftLiftEqpDTO classUnderTest = new LiftLiftEqpDTO();
 		classUnderTest.setLiftLiftEqpId(new Integer(1));

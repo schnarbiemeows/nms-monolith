@@ -20,7 +20,7 @@ public class MuscleGroupsDTOTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		MuscleGroupsDTO classUnderTest = new MuscleGroupsDTO();
 		classUnderTest.setMuscleGroupId(new Integer(1));

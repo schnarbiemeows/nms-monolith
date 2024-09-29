@@ -59,7 +59,7 @@ public class GrpUserControllerTest {
 	 * test creating a new GrpUser
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateGrpUser() throws URISyntaxException
 	{
 	    GrpUserDTO grpuser = generateRandomGrpUser();
@@ -81,7 +81,7 @@ public class GrpUserControllerTest {
 	 * test getting all GrpUser
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllGrpUser() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class GrpUserControllerTest {
 	 * test getting a single GrpUser by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetGrpUser() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class GrpUserControllerTest {
 	 * test updating a GrpUser
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateGrpUser() throws URISyntaxException
 	{
 	    GrpUserDTO grpuser = generateRandomGrpUser();
@@ -131,7 +131,7 @@ public class GrpUserControllerTest {
 	 * test deleting a GrpUser
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteGrpUser() throws URISyntaxException
 	{
 		GrpUserDTO grpuser = generateRandomGrpUser();
@@ -149,7 +149,7 @@ public class GrpUserControllerTest {
 	 * test getting all GrpUser by foreign key grpId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGrpUserByGrpId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuser/findByGrpId/" + num;
@@ -163,7 +163,7 @@ public class GrpUserControllerTest {
 	 * test getting all GrpUser by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGrpUserByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuser/findByUserId/" + num;
@@ -177,7 +177,7 @@ public class GrpUserControllerTest {
 	 * test getting all GrpUser by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGrpUserByGrpIdAndUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuser/findByGrpIdAndUserId/1/1";

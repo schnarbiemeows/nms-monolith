@@ -4,8 +4,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GraphRelationsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.dtos.RecipeTypeMappingsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipetypes.RecipeDisplayType;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipetypes.RecipeTypeHierachy;
+import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeTypeMappings;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RecipeTypeMappingsRepository;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.RecipeTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
@@ -33,6 +36,12 @@ public class RecipeTypeService {
 
 	@Autowired
 	private GraphRelationsService graphRelationsService;
+
+	/**
+	 * JPA Repository handle
+	 */
+	@Autowired
+	private RecipeTypeMappingsRepository recipeTypeMappingsRepository;
 
 	/**
 	 * get all RecipeType records
@@ -122,6 +131,17 @@ public class RecipeTypeService {
 		} else {
 			throw new ResourceNotFoundException(ID_EQUALS + id + NOT_FOUND);
 		}
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public List<RecipeTypeMappingsDTO> getRecipeTypeMappings() {
+		List<RecipeTypeMappings> recipeTypeMappings = recipeTypeMappingsRepository.getRecipeTypeMappings();
+		List<RecipeTypeMappingsDTO> results = recipeTypeMappings.stream().map(rec ->
+				rec.toDTO()).collect(Collectors.toList());
+		return results;
 	}
 
 	/**

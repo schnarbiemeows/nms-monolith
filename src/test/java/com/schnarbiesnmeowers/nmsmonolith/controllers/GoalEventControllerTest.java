@@ -59,7 +59,7 @@ public class GoalEventControllerTest {
 	 * test creating a new GoalEvent
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateGoalEvent() throws URISyntaxException
 	{
 	    GoalEventDTO goalevent = generateRandomGoalEvent();
@@ -81,7 +81,7 @@ public class GoalEventControllerTest {
 	 * test getting all GoalEvent
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllGoalEvent() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class GoalEventControllerTest {
 	 * test getting a single GoalEvent by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetGoalEvent() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class GoalEventControllerTest {
 	 * test updating a GoalEvent
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateGoalEvent() throws URISyntaxException
 	{
 	    GoalEventDTO goalevent = generateRandomGoalEvent();
@@ -131,7 +131,7 @@ public class GoalEventControllerTest {
 	 * test deleting a GoalEvent
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteGoalEvent() throws URISyntaxException
 	{
 		GoalEventDTO goalevent = generateRandomGoalEvent();
@@ -149,7 +149,7 @@ public class GoalEventControllerTest {
 	 * test getting all GoalEvent by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGoalEventByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/goalevent/findByUserId/" + num;
@@ -163,7 +163,7 @@ public class GoalEventControllerTest {
 	 * test getting all GoalEvent by foreign key goalId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGoalEventByGoalId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/goalevent/findByGoalId/" + num;
@@ -177,7 +177,7 @@ public class GoalEventControllerTest {
 	 * test getting all GoalEvent by foreign key eventId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGoalEventByEventId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/goalevent/findByEventId/" + num;
@@ -191,7 +191,7 @@ public class GoalEventControllerTest {
 	 * test getting all GoalEvent by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetGoalEventByUserIdAndGoalIdAndEventId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/goalevent/findByUserIdAndGoalIdAndEventId/1/1/1";

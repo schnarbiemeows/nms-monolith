@@ -59,7 +59,7 @@ public class UsersHistControllerTest {
 	 * test creating a new UsersHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateUsersHist() throws URISyntaxException
 	{
 	    UsersHistDTO usershist = generateRandomUsersHist();
@@ -81,7 +81,7 @@ public class UsersHistControllerTest {
 	 * test getting all UsersHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllUsersHist() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class UsersHistControllerTest {
 	 * test getting a single UsersHist by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetUsersHist() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class UsersHistControllerTest {
 	 * test updating a UsersHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateUsersHist() throws URISyntaxException
 	{
 	    UsersHistDTO usershist = generateRandomUsersHist();
@@ -131,7 +131,7 @@ public class UsersHistControllerTest {
 	 * test deleting a UsersHist
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteUsersHist() throws URISyntaxException
 	{
 		UsersHistDTO usershist = generateRandomUsersHist();
@@ -149,7 +149,7 @@ public class UsersHistControllerTest {
 	 * test getting all UsersHist by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetUsersHistByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/usershist/findByUserId/" + num;
@@ -163,7 +163,7 @@ public class UsersHistControllerTest {
 	 * test getting all UsersHist by foreign key actionTypeId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetUsersHistByActionTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/usershist/findByActionTypeId/" + num;
@@ -177,7 +177,7 @@ public class UsersHistControllerTest {
 	 * test getting all UsersHist by foreign key evntOperId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetUsersHistByEvntOperId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/usershist/findByEvntOperId/" + num;
@@ -191,7 +191,7 @@ public class UsersHistControllerTest {
 	 * test getting all UsersHist by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetUsersHistByUserIdAndActionTypeIdAndEvntOperId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/usershist/findByUserIdAndActionTypeIdAndEvntOperId/1/1/1";

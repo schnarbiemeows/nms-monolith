@@ -35,8 +35,10 @@ public interface DailyDietTotalsRepository extends JpaRepository<DailyDietTotals
 	*/
 	public Iterable<DailyDietTotals> findDailyDietTotalsByUserIdAndBldstId(int userId,int bldstId);
 
-	@Query(value = "select * from daily_diet_totals ddt where ddt.user_id=?1 " +
-			"and ddt.calendar_date = ?2 order by ddt.bldst_id", nativeQuery = true)
+	@Query(value = "select ddt.* from daily_diet_totals ddt, bldst_table b " +
+			"where ddt.user_id=?1 " +
+			"and ddt.bldst_id = b.bldst_table_id " +
+			"and ddt.calendar_date = ?2 order by b.order_by", nativeQuery = true)
 	public Iterable<DailyDietTotals> findDailyDietTotalsByUserIdAndCalendarDate(int userId, Date calendarDate);
 
 	@Query(value = "select * from daily_diet_totals ddt where ddt.user_id=?1 " +

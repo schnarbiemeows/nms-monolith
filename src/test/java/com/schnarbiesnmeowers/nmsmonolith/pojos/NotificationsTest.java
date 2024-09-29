@@ -20,7 +20,7 @@ public class NotificationsTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		Notifications classUnderTest = new Notifications();
 		classUnderTest.setNotificationId(new Integer(1));

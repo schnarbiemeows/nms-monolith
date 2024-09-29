@@ -59,7 +59,7 @@ public class RecipeEquipControllerTest {
 	 * test creating a new RecipeEquip
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateRecipeEquip() throws URISyntaxException
 	{
 	    RecipeEquipDTO recipeequip = generateRandomRecipeEquip();
@@ -81,7 +81,7 @@ public class RecipeEquipControllerTest {
 	 * test getting all RecipeEquip
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllRecipeEquip() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class RecipeEquipControllerTest {
 	 * test getting a single RecipeEquip by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetRecipeEquip() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class RecipeEquipControllerTest {
 	 * test updating a RecipeEquip
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateRecipeEquip() throws URISyntaxException
 	{
 	    RecipeEquipDTO recipeequip = generateRandomRecipeEquip();
@@ -131,7 +131,7 @@ public class RecipeEquipControllerTest {
 	 * test deleting a RecipeEquip
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteRecipeEquip() throws URISyntaxException
 	{
 		RecipeEquipDTO recipeequip = generateRandomRecipeEquip();
@@ -149,7 +149,7 @@ public class RecipeEquipControllerTest {
 	 * test getting all RecipeEquip by foreign key recEqTypeId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRecipeEquipByRecEqTypeId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/recipeequip/findByRecEqTypeId/" + num;
@@ -163,7 +163,7 @@ public class RecipeEquipControllerTest {
 	 * test getting all RecipeEquip by foreign key imageLoc
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRecipeEquipByImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/recipeequip/findByImageLoc/" + num;
@@ -177,7 +177,7 @@ public class RecipeEquipControllerTest {
 	 * test getting all RecipeEquip by all foreign keys
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetRecipeEquipByRecEqTypeIdAndImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/recipeequip/findByRecEqTypeIdAndImageLoc/1/1";

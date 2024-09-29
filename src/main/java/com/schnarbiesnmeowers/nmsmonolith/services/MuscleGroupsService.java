@@ -46,6 +46,17 @@ public class MuscleGroupsService {
 		return musclegroupsdto;
 	}
 
+	public List<MuscleGroupsDTO> getWeightWorkoutTypes() throws Exception {
+		Iterable<MuscleGroups> musclegroups = muscleGroupsRepository.getWeightWorkoutTypes();
+		Iterator<MuscleGroups> musclegroupss = musclegroups.iterator();
+		List<MuscleGroupsDTO> musclegroupsdto = new ArrayList();
+		while(musclegroupss.hasNext()) {
+			MuscleGroups item = musclegroupss.next();
+			musclegroupsdto.add(item.toDTO());
+		}
+		return musclegroupsdto;
+	}
+
 	/**
 	 * get MuscleGroups by primary key
 	 * @param id

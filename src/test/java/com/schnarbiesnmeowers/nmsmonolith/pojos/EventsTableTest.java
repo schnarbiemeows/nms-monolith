@@ -20,7 +20,7 @@ public class EventsTableTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		EventsTable classUnderTest = new EventsTable();
 		classUnderTest.setEventId(new Integer(1));

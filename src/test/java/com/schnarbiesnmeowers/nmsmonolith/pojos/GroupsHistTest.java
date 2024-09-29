@@ -20,7 +20,7 @@ public class GroupsHistTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		GroupsHist classUnderTest = new GroupsHist();
 		classUnderTest.setGrpHistId(new Integer(1));

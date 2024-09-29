@@ -52,7 +52,7 @@ public class RolesController {
 
 	/**
 	 * create a new Roles
-	 * @param RolesDTO
+	 * @param data
 	 * @return Roles
 	 */
 	@PostMapping(path = "/create")
@@ -67,7 +67,7 @@ public class RolesController {
 
 	/**
 	 * update a Roles
-	 * @param RolesDTO
+	 * @param data
 	 * @return Roles
 	 */
 	@PostMapping(path = "/update")
@@ -89,7 +89,7 @@ public class RolesController {
 
 	/**
 	 * get List<RolesDTO> by foreign key : grpId
-	 * @param grpId
+	 * @param id
 	 * @return List<Roles>
 	 * @throws Exception
 	*/
@@ -101,7 +101,7 @@ public class RolesController {
 
 	/**
 	 * get List<RolesDTO> by foreign key : rsrcId
-	 * @param rsrcId
+	 * @param id
 	 * @return List<Roles>
 	 * @throws Exception
 	*/
@@ -113,7 +113,7 @@ public class RolesController {
 
 	/**
 	 * get List<RolesDTO> by foreign key : actionTypeId
-	 * @param actionTypeId
+	 * @param id
 	 * @return List<Roles>
 	 * @throws Exception
 	*/
@@ -125,7 +125,7 @@ public class RolesController {
 
 	/**
 	 * get List<RolesDTO> by foreign key : GrpIdAndRsrcIdAndActionTypeId
-	 * @param GrpIdAndRsrcIdAndActionTypeId
+	 * @param id0
 	 * @return List<Roles>
 	 * @throws Exception
 	*/

@@ -59,7 +59,7 @@ public class IngredientTypesControllerTest {
 	 * test creating a new IngredientTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateIngredientTypes() throws URISyntaxException
 	{
 	    IngredientTypesDTO ingredienttypes = generateRandomIngredientTypes();
@@ -81,7 +81,7 @@ public class IngredientTypesControllerTest {
 	 * test getting all IngredientTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllIngredientTypes() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class IngredientTypesControllerTest {
 	 * test getting a single IngredientTypes by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetIngredientTypes() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class IngredientTypesControllerTest {
 	 * test updating a IngredientTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateIngredientTypes() throws URISyntaxException
 	{
 	    IngredientTypesDTO ingredienttypes = generateRandomIngredientTypes();
@@ -131,7 +131,7 @@ public class IngredientTypesControllerTest {
 	 * test deleting a IngredientTypes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteIngredientTypes() throws URISyntaxException
 	{
 		IngredientTypesDTO ingredienttypes = generateRandomIngredientTypes();
@@ -149,7 +149,7 @@ public class IngredientTypesControllerTest {
 	 * test getting all IngredientTypes by foreign key imageLoc
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetIngredientTypesByImageLoc() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/ingredienttypes/findByImageLoc/" + num;

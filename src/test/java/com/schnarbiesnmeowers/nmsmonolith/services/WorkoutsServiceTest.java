@@ -2,11 +2,10 @@ package com.schnarbiesnmeowers.nmsmonolith.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.schnarbiesnmeowers.nmsmonolith.dtos.WorkoutsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.WorkoutsDTO;
 
 /**
  * this class retrieves data from the controller class

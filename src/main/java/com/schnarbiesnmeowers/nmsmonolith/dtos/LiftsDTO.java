@@ -23,10 +23,6 @@ public class LiftsDTO implements Serializable {
 	 */
 	private Integer liftId;
 
-	/**
-	 * "fk to the muscles.muscle_id field" 
-	 */
-	private Integer muscleId;
 
 	/**
 	 * "lift description" 
@@ -43,6 +39,7 @@ public class LiftsDTO implements Serializable {
 	 */
 	private String actv;
 
+	private Integer muscleGroupId;
 	/**
 	 * default constructor
 	 */
@@ -50,13 +47,12 @@ public class LiftsDTO implements Serializable {
 		super();
 	}
 
-	public LiftsDTO(Integer liftId, Integer muscleId, String liftDesc, Integer imageLoc, String actv) {
-		super();
+	public LiftsDTO(Integer liftId, String liftDesc, Integer imageLoc, String actv, Integer muscleGroupId) {
 		this.liftId = liftId;
-		this.muscleId = muscleId;
 		this.liftDesc = liftDesc;
 		this.imageLoc = imageLoc;
 		this.actv = actv;
+		this.muscleGroupId = muscleGroupId;
 	}
 
 	public Integer getLiftId() {
@@ -65,14 +61,6 @@ public class LiftsDTO implements Serializable {
 
 	public void setLiftId(Integer liftId) {
 		this.liftId=liftId;
-	}
-
-	public Integer getMuscleId() {
-		return muscleId;
-	}
-
-	public void setMuscleId(Integer muscleId) {
-		this.muscleId=muscleId;
 	}
 
 	public String getLiftDesc() {
@@ -99,9 +87,23 @@ public class LiftsDTO implements Serializable {
 		this.actv=actv;
 	}
 
+	public Integer getMuscleGroupId() {
+		return muscleGroupId;
+	}
+
+	public void setMuscleGroupId(Integer muscleGroupId) {
+		this.muscleGroupId = muscleGroupId;
+	}
+
 	@Override
 	public String toString() {
-		return "LiftsDTO [liftId=" + liftId + ", muscleId=" + muscleId + ", liftDesc=" + liftDesc + ", imageLoc=" + imageLoc + ", actv=" + actv + "]";
+		return "LiftsDTO{" +
+				"liftId=" + liftId +
+				", liftDesc='" + liftDesc + '\'' +
+				", imageLoc=" + imageLoc +
+				", actv='" + actv + '\'' +
+				", muscleGroupId=" + muscleGroupId +
+				'}';
 	}
 
 	public static LiftsDTO fromJson(String input) {
@@ -109,6 +111,7 @@ public class LiftsDTO implements Serializable {
 		return gson.fromJson(input, LiftsDTO.class );
 	}
 	public Lifts toEntity() {
-		return new Lifts(this.getLiftId(),this.getMuscleId(),this.getLiftDesc(),this.getImageLoc(),this.getActv());
+		return new Lifts(this.getLiftId(),this.getLiftDesc(),this.getImageLoc(),this.getActv(),
+				this.muscleGroupId);
 	}
 }

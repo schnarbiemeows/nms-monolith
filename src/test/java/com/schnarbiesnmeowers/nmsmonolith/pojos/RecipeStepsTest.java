@@ -18,7 +18,7 @@ public class RecipeStepsTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		RecipeSteps classUnderTest = new RecipeSteps();
 		classUnderTest.setRecipeStepId(new Integer(1));

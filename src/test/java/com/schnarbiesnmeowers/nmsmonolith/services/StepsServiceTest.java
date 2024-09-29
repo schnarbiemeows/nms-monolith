@@ -1,10 +1,8 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
-import com.schnarbiesnmeowers.nmsmonolith.dtos.StepsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.StepsDTO;
 import org.springframework.stereotype.Service;
 
 /**

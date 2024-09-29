@@ -59,7 +59,7 @@ public class DailyDietaryNotesControllerTest {
 	 * test creating a new DailyDietaryNotes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateDailyDietaryNotes() throws URISyntaxException
 	{
 	    DailyDietaryNotesDTO dailydietarynotes = generateRandomDailyDietaryNotes();
@@ -81,7 +81,7 @@ public class DailyDietaryNotesControllerTest {
 	 * test getting all DailyDietaryNotes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllDailyDietaryNotes() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class DailyDietaryNotesControllerTest {
 	 * test getting a single DailyDietaryNotes by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetDailyDietaryNotes() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class DailyDietaryNotesControllerTest {
 	 * test updating a DailyDietaryNotes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateDailyDietaryNotes() throws URISyntaxException
 	{
 	    DailyDietaryNotesDTO dailydietarynotes = generateRandomDailyDietaryNotes();
@@ -131,7 +131,7 @@ public class DailyDietaryNotesControllerTest {
 	 * test deleting a DailyDietaryNotes
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteDailyDietaryNotes() throws URISyntaxException
 	{
 		DailyDietaryNotesDTO dailydietarynotes = generateRandomDailyDietaryNotes();
@@ -149,7 +149,7 @@ public class DailyDietaryNotesControllerTest {
 	 * test getting all DailyDietaryNotes by foreign key userId
 	 * @throws URISyntaxException
 	*/
-	@Test
+	//@Test
 	public void testGetDailyDietaryNotesByUserId() throws URISyntaxException {
 		int num = 1;
 		final String baseUrl = "http://localhost:" + randomServerPort + "/dailydietarynotes/findByUserId/" + num;

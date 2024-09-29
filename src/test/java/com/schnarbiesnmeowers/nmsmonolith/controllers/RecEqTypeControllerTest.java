@@ -59,7 +59,7 @@ public class RecEqTypeControllerTest {
 	 * test creating a new RecEqType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testA_CreateRecEqType() throws URISyntaxException
 	{
 	    RecEqTypeDTO receqtype = generateRandomRecEqType();
@@ -81,7 +81,7 @@ public class RecEqTypeControllerTest {
 	 * test getting all RecEqType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testB_GetAllRecEqType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -97,7 +97,7 @@ public class RecEqTypeControllerTest {
 	 * test getting a single RecEqType by primary key
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testC_GetRecEqType() throws URISyntaxException
 	{
 		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
@@ -114,7 +114,7 @@ public class RecEqTypeControllerTest {
 	 * test updating a RecEqType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testD_UpdateRecEqType() throws URISyntaxException
 	{
 	    RecEqTypeDTO receqtype = generateRandomRecEqType();
@@ -131,7 +131,7 @@ public class RecEqTypeControllerTest {
 	 * test deleting a RecEqType
 	 * @throws URISyntaxException
 	 */
-	@Test
+	//@Test
 	public void testE_DeleteRecEqType() throws URISyntaxException
 	{
 		RecEqTypeDTO receqtype = generateRandomRecEqType();

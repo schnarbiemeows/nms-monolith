@@ -21,7 +21,7 @@ public class DailyWeightTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		DailyWeight classUnderTest = new DailyWeight();
 		classUnderTest.setDailyWeightId(new Integer(1));

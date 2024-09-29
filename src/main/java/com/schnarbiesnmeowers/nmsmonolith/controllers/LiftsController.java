@@ -27,7 +27,7 @@ public class LiftsController {
 	 * JPA Repository handle
 	 */
 	@Autowired
-	private LiftsService businessService;
+	private LiftsService liftsService;
 
 	/**
 	 * get all Lifts records
@@ -35,7 +35,13 @@ public class LiftsController {
 	 */
 	@GetMapping(path = "/all")
 	public ResponseEntity<List<LiftsDTO>> getAllLifts() throws Exception {
-		List<LiftsDTO> lifts = businessService.getAllLifts();
+		List<LiftsDTO> lifts = liftsService.getAllLifts();
+		return ResponseEntity.status(HttpStatus.OK).body(lifts);
+	}
+
+	@GetMapping(path = "/allordered")
+	public ResponseEntity<List<LiftsDTO>> getAllLiftsOrdered() throws Exception {
+		List<LiftsDTO> lifts = liftsService.getAllLiftsOrdered();
 		return ResponseEntity.status(HttpStatus.OK).body(lifts);
 	}
 
@@ -46,19 +52,19 @@ public class LiftsController {
 	 */
 	@GetMapping(path = "/findById/{id}")
 	public ResponseEntity<LiftsDTO> findLiftsById(@PathVariable int id) throws Exception {
-		LiftsDTO results = businessService.findLiftsById(id);
+		LiftsDTO results = liftsService.findLiftsById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 
 	/**
 	 * create a new Lifts
-	 * @param LiftsDTO
+	 * @param data
 	 * @return Lifts
 	 */
 	@PostMapping(path = "/create")
 	public ResponseEntity<LiftsDTO> createLifts(@Valid @RequestBody LiftsDTO data) throws Exception {
 		try {
-		    LiftsDTO createdData = businessService.createLifts(data);
+		    LiftsDTO createdData = liftsService.createLifts(data);
 		    return ResponseEntity.status(HttpStatus.CREATED).body(createdData);
 		} catch (Exception e) {
 			throw e;
@@ -67,12 +73,12 @@ public class LiftsController {
 
 	/**
 	 * update a Lifts
-	 * @param LiftsDTO
+	 * @param data
 	 * @return Lifts
 	 */
 	@PostMapping(path = "/update")
 	public ResponseEntity<LiftsDTO> updateLifts(@Valid @RequestBody LiftsDTO data) throws Exception {
-		LiftsDTO updatedData = businessService.updateLifts(data);
+		LiftsDTO updatedData = liftsService.updateLifts(data);
 		return ResponseEntity.status(HttpStatus.OK).body(updatedData);
 	}
 
@@ -82,45 +88,23 @@ public class LiftsController {
 	 */
 	@DeleteMapping(path = "/delete/{id}")
 	public ResponseEntity<ResponseMessage> deleteLifts(@PathVariable int id) throws Exception {
-		businessService.deleteLifts(id);
+		liftsService.deleteLifts(id);
 		ResponseMessage rb = new ResponseMessage("successfully deleted");
 		return ResponseEntity.status(HttpStatus.OK).body(rb);
 	}
 
-	/**
-	 * get List<LiftsDTO> by foreign key : muscleId
-	 * @param muscleId
-	 * @return List<Lifts>
-	 * @throws Exception
-	*/
-	@GetMapping(path = "/findByMuscleId/{id}")
-	public ResponseEntity<List<LiftsDTO>> findLiftsByMuscleId(@PathVariable int id) throws Exception {
-		List<LiftsDTO> results = businessService.findLiftsByMuscleId(id);
-		return ResponseEntity.status(HttpStatus.OK).body(results);
-	}
 
 	/**
 	 * get List<LiftsDTO> by foreign key : imageLoc
-	 * @param imageLoc
+	 * @param id
 	 * @return List<Lifts>
 	 * @throws Exception
 	*/
 	@GetMapping(path = "/findByImageLoc/{id}")
 	public ResponseEntity<List<LiftsDTO>> findLiftsByImageLoc(@PathVariable int id) throws Exception {
-		List<LiftsDTO> results = businessService.findLiftsByImageLoc(id);
+		List<LiftsDTO> results = liftsService.findLiftsByImageLoc(id);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 
-	/**
-	 * get List<LiftsDTO> by foreign key : MuscleIdAndImageLoc
-	 * @param MuscleIdAndImageLoc
-	 * @return List<Lifts>
-	 * @throws Exception
-	*/
-	@GetMapping(path = "/findByMuscleIdAndImageLoc/{id0}/{id1}")
-	public ResponseEntity<List<LiftsDTO>> findLiftsByMuscleIdAndImageLoc(@PathVariable int id0, @PathVariable int id1) throws Exception {
-		List<LiftsDTO> results = businessService.findLiftsByMuscleIdAndImageLoc(id0, id1);
-		return ResponseEntity.status(HttpStatus.OK).body(results);
-	}
 
 }

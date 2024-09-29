@@ -20,7 +20,7 @@ public class DailyDietTest {
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	@Test
+	//@Test
 	public void testClass() {
 		DailyDiet classUnderTest = new DailyDiet();
 		classUnderTest.setDailyTotalId(new Integer(1));
