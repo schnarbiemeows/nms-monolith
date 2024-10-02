@@ -1,6 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.StepsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
 import com.schnarbiesnmeowers.nmsmonolith.services.workouts.StepsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import javax.validation.Valid;
 import java.util.*;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller

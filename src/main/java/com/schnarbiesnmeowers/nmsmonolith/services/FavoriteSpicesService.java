@@ -6,12 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.FavoriteSpicesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteSpices;
+import com.schnarbiesnmeowers.nmsmonolith.entities.FavoriteSpices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.FavoriteSpicesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteSpices;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.FavoriteSpicesRepository;
 
 /**

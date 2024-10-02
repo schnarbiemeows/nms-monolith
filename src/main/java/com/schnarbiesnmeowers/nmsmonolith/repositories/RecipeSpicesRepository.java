@@ -1,8 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeSpices;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeSpices;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeSpices;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 

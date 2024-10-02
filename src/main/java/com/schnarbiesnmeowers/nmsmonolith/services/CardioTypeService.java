@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.services;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.CardioTypeDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.CardioType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.CardioType;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.CardioTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.Workouts;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.Workouts;
 
 import java.math.BigDecimal;
 
@@ -12,7 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Dylan I. Kessler
  *
  */
-//@RunWith(SpringRunner.class)
+//import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class WorkoutsTest {
 
 	/**

@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.PeriodTypeDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.PeriodType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.PeriodType;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.PeriodTypeRepository;
 import org.springframework.stereotype.Service;
 

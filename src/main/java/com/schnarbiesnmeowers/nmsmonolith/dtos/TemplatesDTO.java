@@ -1,11 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Templates;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Templates;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.io.Serializable;
 
 public class TemplatesDTO implements Serializable {

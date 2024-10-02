@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.services;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.DailyJournalDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyJournal;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyJournal;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.DailyJournalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

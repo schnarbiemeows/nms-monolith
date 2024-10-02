@@ -2,17 +2,20 @@ package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the LiftsDTO class
  * @author Dylan I. Kessler
  *
  */
-//@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class LiftsDTOTest {
 
 	/**

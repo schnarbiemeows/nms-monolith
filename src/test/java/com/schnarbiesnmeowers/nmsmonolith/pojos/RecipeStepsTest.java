@@ -1,18 +1,18 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeSteps;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * class to test the RecipeSteps class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class RecipeStepsTest {
 
 	/**
@@ -21,11 +21,11 @@ public class RecipeStepsTest {
 	//@Test
 	public void testClass() {
 		RecipeSteps classUnderTest = new RecipeSteps();
-		classUnderTest.setRecipeStepId(new Integer(1));
-		classUnderTest.setRecipeId(new Integer(1));
-		classUnderTest.setStepNum(new Integer(1));
+		classUnderTest.setRecipeStepId(1);
+		classUnderTest.setRecipeId(1);
+		classUnderTest.setStepNum(1);
 		classUnderTest.setStepDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("Y");
 		assertTrue(true);
 		RecipeSteps newitem = new RecipeSteps(

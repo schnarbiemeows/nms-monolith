@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LiftSteps;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LiftSteps;
 /**
  *
  * @author Dylan I. Kessler

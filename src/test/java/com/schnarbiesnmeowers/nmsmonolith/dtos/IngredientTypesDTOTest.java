@@ -2,18 +2,21 @@ package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredienttype.IngredientTypesDTO;
 
-import static org.junit.Assert.*;
+import java.math.BigDecimal;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+
+
 
 /**
  * class to test the IngredientTypesDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.*;
+@ExtendWith(MockitoExtension.class)
 public class IngredientTypesDTOTest {
 
 	/**
@@ -22,10 +25,10 @@ public class IngredientTypesDTOTest {
 	//@Test
 	public void testClass() {
 		IngredientTypesDTO classUnderTest = new IngredientTypesDTO();
-		classUnderTest.setIngrTypeId(new Integer(1));
-		classUnderTest.setPrntIngrType(new Integer(1));
+		classUnderTest.setIngrTypeId(1);
+		classUnderTest.setPrntIngrType(1);
 		classUnderTest.setIngrTypeDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		IngredientTypesDTO newitem = new IngredientTypesDTO(

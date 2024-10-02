@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the ExerciseTypeDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class ExerciseTypeDTOTest {
 
 	/**
@@ -23,10 +26,10 @@ public class ExerciseTypeDTOTest {
 	//@Test
 	public void testClass() {
 		ExerciseTypeDTO classUnderTest = new ExerciseTypeDTO();
-		classUnderTest.setExerciseTypeId(new Integer(1));
-		classUnderTest.setPrntExerciseType(new Integer(1));
+		classUnderTest.setExerciseTypeId(1);
+		classUnderTest.setPrntExerciseType(1);
 		classUnderTest.setExerciseTypeDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		ExerciseTypeDTO newitem = new ExerciseTypeDTO(

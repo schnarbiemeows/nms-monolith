@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the PaymentTypeDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class PaymentTypeDTOTest {
 
 	/**
@@ -23,10 +26,10 @@ public class PaymentTypeDTOTest {
 	//@Test
 	public void testClass() {
 		PaymentTypeDTO classUnderTest = new PaymentTypeDTO();
-		classUnderTest.setPaymentTypeId(new Integer(1));
+		classUnderTest.setPaymentTypeId(1);
 		classUnderTest.setPaymentTypeCde("a");
 		classUnderTest.setPaymentTypeDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		PaymentTypeDTO newitem = new PaymentTypeDTO(

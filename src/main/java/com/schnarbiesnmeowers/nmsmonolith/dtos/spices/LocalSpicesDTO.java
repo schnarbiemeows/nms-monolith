@@ -1,11 +1,10 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.spices;
 
-import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.IngredientRecordDisplay;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalSpices;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalSpices;
 
 import java.io.Serializable;
 import com.google.gson.Gson;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Spices;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Spices;
 
 /**
  *

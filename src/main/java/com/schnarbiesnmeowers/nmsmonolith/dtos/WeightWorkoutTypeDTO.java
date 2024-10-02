@@ -1,8 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.WeightWorkoutType;
-
-import javax.persistence.Column;
+import com.schnarbiesnmeowers.nmsmonolith.entities.WeightWorkoutType;
 
 public class WeightWorkoutTypeDTO {
 

@@ -1,10 +1,9 @@
 package com.schnarbiesnmeowers.nmsmonolith.utilities;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.ServingTypeRatios;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ServingTypeRatios;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.ServingTypeRatiosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

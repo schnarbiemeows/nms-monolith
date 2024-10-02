@@ -6,18 +6,17 @@ import java.util.stream.Collectors;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.utility.GraphWrapperDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.WeightWorkoutType;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutCardioVw;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutSteps;
+import com.schnarbiesnmeowers.nmsmonolith.entities.WeightWorkoutType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutCardioVw;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutSteps;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.WeightWorkoutTypeRepository;
-import com.schnarbiesnmeowers.nmsmonolith.repositories.workouts.WorkoutCardioRepository;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.workouts.WorkoutCardioVwRepository;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.workouts.WorkoutStepsRepository;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.Workouts;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.Workouts;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.workouts.WorkoutsRepository;
 
 /**

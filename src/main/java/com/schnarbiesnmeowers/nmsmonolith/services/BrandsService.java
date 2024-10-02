@@ -6,8 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.brands.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Brands;
+import com.schnarbiesnmeowers.nmsmonolith.entities.FavoriteBrands;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalBrands;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.DependencyExistsException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;

@@ -1,20 +1,25 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.UserCalendar;
+
+
 import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+
+
+
 
 /**
  * class to test the UserCalendar class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class UserCalendarTest {
 
 	/**
@@ -23,11 +28,11 @@ public class UserCalendarTest {
 	//@Test
 	public void testClass() {
 		UserCalendar classUnderTest = new UserCalendar();
-		classUnderTest.setUserCalendarId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setUserCalendarId(1);
+		classUnderTest.setUserId(1);
 		classUnderTest.setCalendarDate(new Date());
 		classUnderTest.setCalendarTime(new java.sql.Time(1000));
-		classUnderTest.setEventId(new Integer(1));
+		classUnderTest.setEventId(1);
 		assertTrue(true);
 		UserCalendar newitem = new UserCalendar(
 		classUnderTest.getUserCalendarId(),

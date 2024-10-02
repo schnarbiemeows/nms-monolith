@@ -7,15 +7,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.IngredientTypeMappingsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.dtos.RecipeTypeMappingsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredienttype.IngredientTypeMinDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.IngredientTypeMappings;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeTypeMappings;
+import com.schnarbiesnmeowers.nmsmonolith.entities.IngredientTypeMappings;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.IngredientTypeMappingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredienttype.IngredientTypesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.IngredientTypes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.IngredientTypes;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.IngredientTypesRepository;
 import org.springframework.stereotype.Service;
 

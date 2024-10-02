@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LiftEquip;
+
+
+
+
+
+
 
 /**
  * class to test the LiftEquip class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class LiftEquipTest {
 
 	/**
@@ -23,10 +27,10 @@ public class LiftEquipTest {
 	//@Test
 	public void testClass() {
 		LiftEquip classUnderTest = new LiftEquip();
-		classUnderTest.setLiftEquipId(new Integer(1));
+		classUnderTest.setLiftEquipId(1);
 		classUnderTest.setEquipDesc("a");
 		classUnderTest.setEquipLongDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		LiftEquip newitem = new LiftEquip(

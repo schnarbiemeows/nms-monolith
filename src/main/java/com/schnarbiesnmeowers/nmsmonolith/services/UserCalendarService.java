@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.UserCalendarDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.UserCalendar;
+import com.schnarbiesnmeowers.nmsmonolith.entities.UserCalendar;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.UserCalendarRepository;
 
 /**

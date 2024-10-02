@@ -9,19 +9,18 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailyweight.DailyWeightDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.email.InputMessage;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.tuples.Tuple2;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.tuples.Tuple3;
+import com.schnarbiesnmeowers.nmsmonolith.entities.email.InputMessage;
+import com.schnarbiesnmeowers.nmsmonolith.entities.tuples.Tuple2;
+import com.schnarbiesnmeowers.nmsmonolith.entities.tuples.Tuple3;
 import com.schnarbiesnmeowers.nmsmonolith.services.helpers.DailyWeightUtil;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.EmailUtility;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.excel.DailyWeightExcelUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailyweight.DailyWeightDataPoint;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyWeight;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyWeight;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.DailyWeightRepository;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 /**
  * this class retrieves data from the controller class

@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.TemplateItemsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.ResponseMessage;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
 import com.schnarbiesnmeowers.nmsmonolith.services.TemplateItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

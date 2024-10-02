@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the LiftStepsDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class LiftStepsDTOTest {
 
 	/**
@@ -23,11 +26,11 @@ public class LiftStepsDTOTest {
 	//@Test
 	public void testClass() {
 		LiftStepsDTO classUnderTest = new LiftStepsDTO();
-		classUnderTest.setLiftStepId(new Integer(1));
-		classUnderTest.setLiftId(new Integer(1));
-		classUnderTest.setStepNum(new Integer(1));
+		classUnderTest.setLiftStepId(1);
+		classUnderTest.setLiftId(1);
+		classUnderTest.setStepNum(1);
 		classUnderTest.setStepDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		assertTrue(true);
 		LiftStepsDTO newitem = new LiftStepsDTO(
 		classUnderTest.getLiftStepId(),

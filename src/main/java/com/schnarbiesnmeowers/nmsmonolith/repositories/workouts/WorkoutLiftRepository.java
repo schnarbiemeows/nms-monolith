@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories.workouts;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutLift;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutLift;
 /**
  *
  * @author Dylan I. Kessler

@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.schnarbiesnmeowers.nmsmonolith.entities.UserConfig;
+
+
+
+
+
+
 
 /**
  * class to test the UserConfig class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class UserConfigTest {
 
 	/**
@@ -23,8 +27,8 @@ public class UserConfigTest {
 	//@Test
 	public void testClass() {
 		UserConfig classUnderTest = new UserConfig();
-		classUnderTest.setUsersConfigId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setUsersConfigId(1);
+		classUnderTest.setUserId(1);
 		classUnderTest.setPropertyKey("a");
 		classUnderTest.setPropertyValue("a");
 		assertTrue(true);

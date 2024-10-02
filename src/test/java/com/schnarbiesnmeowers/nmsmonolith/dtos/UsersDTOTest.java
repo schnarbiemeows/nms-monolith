@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the UsersDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class UsersDTOTest {
 
 	/**
@@ -23,13 +26,13 @@ public class UsersDTOTest {
 	//@Test
 	public void testClass() {
 		UsersDTO classUnderTest = new UsersDTO();
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setUserId(1);
 		classUnderTest.setUsername("a");
 		classUnderTest.setEmail("a");
 		classUnderTest.setPhone("a");
 		classUnderTest.setPassword("a");
-		classUnderTest.setAge(new Integer(1));
-		classUnderTest.setLstLogdIn(new Date());
+		classUnderTest.setAge(1);
+		classUnderTest.setLstLogdIn(LocalDate.now());
 		assertTrue(true);
 		UsersDTO newitem = new UsersDTO(
 		classUnderTest.getUserId(),

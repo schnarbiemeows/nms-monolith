@@ -9,7 +9,7 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypeMinDataDT
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.ServingTypes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ServingTypes;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.ServingTypesRepository;
 import org.springframework.stereotype.Service;
 

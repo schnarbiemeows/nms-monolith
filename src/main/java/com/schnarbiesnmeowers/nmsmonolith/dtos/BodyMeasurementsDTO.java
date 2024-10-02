@@ -1,8 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.BodyMeasurements;
+import com.schnarbiesnmeowers.nmsmonolith.entities.BodyMeasurements;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 

@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.GoalGroups;
+import com.schnarbiesnmeowers.nmsmonolith.entities.GoalGroups;
 /**
  *
  * @author Dylan I. Kessler

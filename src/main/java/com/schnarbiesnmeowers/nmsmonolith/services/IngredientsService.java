@@ -10,9 +10,10 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.RecipeIngredientsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.*;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.RecipeIngredientDisplay;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypesDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.DependencyExistsException;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ServingRatioNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.IngredientTypesRepository;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LocalIngredientsRepository;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.RecipeCalculatorUtility;
@@ -23,7 +24,7 @@ import com.schnarbiesnmeowers.nmsmonolith.repositories.IngredientsRepository;
 
 import static com.schnarbiesnmeowers.nmsmonolith.utilities.Constants.INGREDIENT_TYPE_ID_FOR_RECIPE;
 import static com.schnarbiesnmeowers.nmsmonolith.utilities.Constants.NO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.MacroType;
+
 /**
  * this class retrieves data from the controller class
  * most business logic should be put in this class

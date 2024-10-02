@@ -2,8 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.services.workouts;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.WorkoutCardioDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.Steps;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutCardio;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutCardio;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.workouts.WorkoutCardioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

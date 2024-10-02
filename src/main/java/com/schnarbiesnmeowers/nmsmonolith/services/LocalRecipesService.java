@@ -18,14 +18,14 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.LocalSpicesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.SpicesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.DependencyExistsException;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ServingRatioNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyDiet;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.MacroType;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Recipes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDiet;
+import com.schnarbiesnmeowers.nmsmonolith.entities.MacroType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Recipes;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.RecipeCalculatorUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalRecipes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalRecipes;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LocalRecipesRepository;
 
 import static com.schnarbiesnmeowers.nmsmonolith.utilities.Constants.*;

@@ -1,20 +1,25 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeIngredients;
+
+
+
+
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+
 
 /**
  * class to test the RecipeIngredients class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class RecipeIngredientsTest {
 
 	/**
@@ -23,9 +28,9 @@ public class RecipeIngredientsTest {
 	//@Test
 	public void testClass() {
 		RecipeIngredients classUnderTest = new RecipeIngredients();
-		classUnderTest.setRecipeIngrId(new Integer(1));
-		classUnderTest.setRecipeId(new Integer(1));
-		classUnderTest.setRecOrIngrId(new Integer(1));
+		classUnderTest.setRecipeIngrId(1);
+		classUnderTest.setRecipeId(1);
+		classUnderTest.setRecOrIngrId(1);
 		classUnderTest.setRecipeFlg("a");
 		assertTrue(true);
 		RecipeIngredients newitem = new RecipeIngredients(
@@ -34,7 +39,7 @@ public class RecipeIngredientsTest {
 		classUnderTest.getRecOrIngrId(),
 		classUnderTest.getRecipeFlg(),
 				BigDecimal.ZERO,
-				new Integer(1), "Y");
+				1, "Y");
 		assertNotNull(newitem);
 		String string = classUnderTest.toString();
 		assertNotNull(string);

@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.workout;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutLift;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutLift;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

@@ -2,22 +2,24 @@ package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailyweight.DailyWeightDataPoint;
 
-import static org.junit.Assert.*;
+
 
 import java.time.LocalDate;
-import java.util.*;
+import java.math.BigDecimal;
 
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the DailyWeightDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class DailyWeightDTOTest {
 
 	/**
@@ -26,10 +28,10 @@ public class DailyWeightDTOTest {
 	//@Test
 	public void testClass() {
 		DailyWeightDataPoint classUnderTest = new DailyWeightDataPoint();
-		classUnderTest.setDailyWeightId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setDailyWeightId(1);
+		classUnderTest.setUserId(1);
 		classUnderTest.setCalendarDate(LocalDate.now());
-		classUnderTest.setWeight(new BigDecimal(1.00));
+		classUnderTest.setWeight(BigDecimal.ONE);
 		assertTrue(true);
 		DailyWeightDataPoint newitem = new DailyWeightDataPoint(
 		classUnderTest.getDailyWeightId(),

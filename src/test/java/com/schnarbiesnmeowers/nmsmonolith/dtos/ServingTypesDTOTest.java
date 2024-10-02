@@ -2,18 +2,21 @@ package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypesDTO;
 
-import static org.junit.Assert.*;
+import java.math.BigDecimal;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+
+
 
 /**
  * class to test the ServingTypesDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.*;
+@ExtendWith(MockitoExtension.class)
 public class ServingTypesDTOTest {
 
 	/**
@@ -22,10 +25,10 @@ public class ServingTypesDTOTest {
 	//@Test
 	public void testClass() {
 		ServingTypesDTO classUnderTest = new ServingTypesDTO();
-		classUnderTest.setServTypeId(new Integer(1));
+		classUnderTest.setServTypeId(1);
 		classUnderTest.setServTypeCde("a");
 		classUnderTest.setServTypeDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		ServingTypesDTO newitem = new ServingTypesDTO(

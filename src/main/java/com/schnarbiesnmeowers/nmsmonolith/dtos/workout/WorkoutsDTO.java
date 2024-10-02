@@ -1,12 +1,11 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.workout;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.Workouts;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.Workouts;
 
 import java.io.Serializable;
 import com.google.gson.Gson;
 import java.math.*;
 import java.time.LocalDate;
-import java.util.*;
 
 /**
  *

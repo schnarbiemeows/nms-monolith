@@ -1,7 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyJournal;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyJournal;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyJournal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

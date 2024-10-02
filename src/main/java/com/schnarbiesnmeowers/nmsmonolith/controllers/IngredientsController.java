@@ -3,6 +3,7 @@ package com.schnarbiesnmeowers.nmsmonolith.controllers;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.IngredientsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.IngredientsWrapper;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.RecipeIngredientDisplay;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller

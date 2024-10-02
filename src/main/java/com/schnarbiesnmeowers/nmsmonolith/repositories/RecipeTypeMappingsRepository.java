@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeTypeMappings;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeTypeMappings;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

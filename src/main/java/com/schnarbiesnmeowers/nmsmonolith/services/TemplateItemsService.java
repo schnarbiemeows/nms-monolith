@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.services;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.TemplateItemsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.TemplateItems;
+import com.schnarbiesnmeowers.nmsmonolith.entities.TemplateItems;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.TemplateItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -5,7 +5,7 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailydiet.DailyDietaryNotesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyDietaryNotes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDietaryNotes;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.DailyDietaryNotesRepository;
 import org.springframework.stereotype.Service;
 

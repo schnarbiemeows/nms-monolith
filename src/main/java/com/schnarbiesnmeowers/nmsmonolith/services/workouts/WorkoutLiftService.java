@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutLift;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutLift;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;

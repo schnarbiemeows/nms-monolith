@@ -2,19 +2,22 @@ package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypeRatiosDTO;
 
-import static org.junit.Assert.*;
+import java.math.BigDecimal;
 
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the ServingTypeRatiosDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class ServingTypeRatiosDTOTest {
 
 	/**
@@ -23,10 +26,10 @@ public class ServingTypeRatiosDTOTest {
 	//@Test
 	public void testClass() {
 		ServingTypeRatiosDTO classUnderTest = new ServingTypeRatiosDTO();
-		classUnderTest.setServTypeRatioId(new Integer(1));
-		classUnderTest.setServTypeId1(new Integer(1));
-		classUnderTest.setServTypeId2(new Integer(1));
-		classUnderTest.setRatio(new BigDecimal(1.00));
+		classUnderTest.setServTypeRatioId(1);
+		classUnderTest.setServTypeId1(1);
+		classUnderTest.setServTypeId2(1);
+		classUnderTest.setRatio(BigDecimal.ONE);
 		assertTrue(true);
 		ServingTypeRatiosDTO newitem = new ServingTypeRatiosDTO(
 		classUnderTest.getServTypeRatioId(),

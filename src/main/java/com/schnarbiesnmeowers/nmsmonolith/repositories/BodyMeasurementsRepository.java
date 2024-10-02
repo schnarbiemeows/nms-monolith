@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.BodyMeasurements;
+import com.schnarbiesnmeowers.nmsmonolith.entities.BodyMeasurements;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

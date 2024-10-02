@@ -2,18 +2,23 @@ package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.brands.BrandsDTO;
 
-import static org.junit.Assert.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+
+
+
 
 /**
  * class to test the BrandsDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class BrandsDTOTest {
 
 	/**
@@ -22,10 +27,10 @@ public class BrandsDTOTest {
 	//@Test
 	public void testClass() {
 		BrandsDTO classUnderTest = new BrandsDTO();
-		classUnderTest.setBrandId(new Integer(1));
+		classUnderTest.setBrandId(1);
 		classUnderTest.setBrandType("a");
 		classUnderTest.setBrandName("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		BrandsDTO newitem = new BrandsDTO(

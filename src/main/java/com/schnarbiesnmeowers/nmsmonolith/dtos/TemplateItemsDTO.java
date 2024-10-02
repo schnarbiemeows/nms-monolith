@@ -1,8 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.TemplateItems;
+import com.schnarbiesnmeowers.nmsmonolith.entities.TemplateItems;
 
-import javax.persistence.Column;
 import java.io.Serializable;
 import java.math.BigDecimal;
 

@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteIngredients;
+import com.schnarbiesnmeowers.nmsmonolith.entities.FavoriteIngredients;
 
 import java.io.Serializable;
 import com.google.gson.Gson;

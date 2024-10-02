@@ -1,8 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories.workouts;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyWeight;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutCardio;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutCardio;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutCardio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

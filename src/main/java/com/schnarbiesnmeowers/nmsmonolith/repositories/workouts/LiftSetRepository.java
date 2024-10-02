@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories.workouts;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.LiftSet;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.LiftSet;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LiftSetRepository extends JpaRepository<LiftSet, Integer> {

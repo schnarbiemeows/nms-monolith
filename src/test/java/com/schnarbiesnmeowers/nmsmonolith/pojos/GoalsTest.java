@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Goals;
+
+
+
+
+
+
 
 /**
  * class to test the Goals class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class GoalsTest {
 
 	/**
@@ -23,14 +27,14 @@ public class GoalsTest {
 	//@Test
 	public void testClass() {
 		Goals classUnderTest = new Goals();
-		classUnderTest.setGoalId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setGoalId(1);
+		classUnderTest.setUserId(1);
 		classUnderTest.setGoalName("a");
-		classUnderTest.setGcId(new Integer(1));
+		classUnderTest.setGcId(1);
 		classUnderTest.setComparator("a");
 		classUnderTest.setCompFld("a");
-		classUnderTest.setNumTimes(new Integer(1));
-		classUnderTest.setTimesMet(new Integer(1));
+		classUnderTest.setNumTimes(1);
+		classUnderTest.setTimesMet(1);
 		classUnderTest.setConseq("a");
 		classUnderTest.setRenew("a");
 		classUnderTest.setAchieved("a");

@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeEquip;
+
+
+
+
+
+
 
 /**
  * class to test the RecipeEquip class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class RecipeEquipTest {
 
 	/**
@@ -23,11 +27,11 @@ public class RecipeEquipTest {
 	//@Test
 	public void testClass() {
 		RecipeEquip classUnderTest = new RecipeEquip();
-		classUnderTest.setRecipeEquipId(new Integer(1));
-		classUnderTest.setRecEqTypeId(new Integer(1));
+		classUnderTest.setRecipeEquipId(1);
+		classUnderTest.setRecEqTypeId(1);
 		classUnderTest.setEquipDesc("a");
 		classUnderTest.setEquipLongDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		RecipeEquip newitem = new RecipeEquip(

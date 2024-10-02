@@ -6,13 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.RecipeSpicesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeSpices;
-import org.springframework.web.bind.annotation.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeSpices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.RecipeSpicesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeSpices;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.RecipeSpicesRepository;
 
 /**

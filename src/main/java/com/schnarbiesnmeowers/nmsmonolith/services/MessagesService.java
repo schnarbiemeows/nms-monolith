@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.email.InputMessage;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.email.OutputMessage;
+import com.schnarbiesnmeowers.nmsmonolith.entities.email.InputMessage;
+import com.schnarbiesnmeowers.nmsmonolith.entities.email.OutputMessage;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.EmailUtility;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.OldEmailUtility;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.MessagesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Messages;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Messages;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.MessagesRepository;
 import reactor.core.publisher.Mono;
 

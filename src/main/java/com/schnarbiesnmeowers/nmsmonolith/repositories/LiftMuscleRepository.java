@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LiftMuscle;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LiftMuscle;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LiftMuscleRepository extends JpaRepository<LiftMuscle, Integer> {

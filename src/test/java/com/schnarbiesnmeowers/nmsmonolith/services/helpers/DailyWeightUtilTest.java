@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.services.helpers;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailyweight.DailyWeightDataPoint;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.tuples.Tuple3;
+import com.schnarbiesnmeowers.nmsmonolith.entities.tuples.Tuple3;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//@RunWith(SpringRunner.class)
+//@ExtendWith(MockitoExtension.class)
 public class DailyWeightUtilTest {
 
     //@Test

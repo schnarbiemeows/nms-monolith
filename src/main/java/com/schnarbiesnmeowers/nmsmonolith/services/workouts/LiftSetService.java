@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.services.workouts;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.LiftSetDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.LiftSet;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.LiftSet;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.workouts.LiftSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

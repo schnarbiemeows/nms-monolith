@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.schnarbiesnmeowers.nmsmonolith.entities.PaymentType;
+
+
+
+
+
+
 
 /**
  * class to test the PaymentType class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class PaymentTypeTest {
 
 	/**
@@ -23,10 +27,10 @@ public class PaymentTypeTest {
 	//@Test
 	public void testClass() {
 		PaymentType classUnderTest = new PaymentType();
-		classUnderTest.setPaymentTypeId(new Integer(1));
+		classUnderTest.setPaymentTypeId(1);
 		classUnderTest.setPaymentTypeCde("a");
 		classUnderTest.setPaymentTypeDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		PaymentType newitem = new PaymentType(

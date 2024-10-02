@@ -1,10 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.google.gson.Gson;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LiftMuscle;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Lifts;
-
-import javax.persistence.Column;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LiftMuscle;
 
 public class LiftMuscleDTO {
 

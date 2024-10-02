@@ -2,18 +2,21 @@ package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.RecipeIngredientsDTO;
 
-import static org.junit.Assert.*;
+import java.math.BigDecimal;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+
+
 
 /**
  * class to test the RecipeIngredientsDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.*;
+@ExtendWith(MockitoExtension.class)
 public class RecipeIngredientsDTOTest {
 
 	/**
@@ -22,9 +25,9 @@ public class RecipeIngredientsDTOTest {
 	//@Test
 	public void testClass() {
 		RecipeIngredientsDTO classUnderTest = new RecipeIngredientsDTO();
-		classUnderTest.setRecipeIngrId(new Integer(1));
-		classUnderTest.setRecipeId(new Integer(1));
-		classUnderTest.setRecOrIngrId(new Integer(1));
+		classUnderTest.setRecipeIngrId(1);
+		classUnderTest.setRecipeId(1);
+		classUnderTest.setRecOrIngrId(1);
 		classUnderTest.setRecipeFlg("a");
 		assertTrue(true);
 		RecipeIngredientsDTO newitem = new RecipeIngredientsDTO(

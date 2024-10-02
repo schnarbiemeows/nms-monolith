@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.LiftsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Lifts;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Lifts;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LiftsRepository;
 
 /**

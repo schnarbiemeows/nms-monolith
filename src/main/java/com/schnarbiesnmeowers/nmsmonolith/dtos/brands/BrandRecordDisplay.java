@@ -1,7 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.brands;
 
 import com.google.gson.Gson;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Brands;
 
 import java.io.Serializable;
 

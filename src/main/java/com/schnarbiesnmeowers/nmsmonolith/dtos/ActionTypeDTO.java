@@ -1,11 +1,9 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.ActionType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ActionType;
 import java.io.Serializable;
 import com.google.gson.Gson;
-import java.math.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 /**
  *
  * @author Dylan I. Kessler

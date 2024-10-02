@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories.workouts;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.Workouts;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.Workouts;
 import org.springframework.data.jpa.repository.Query;
 
 /**

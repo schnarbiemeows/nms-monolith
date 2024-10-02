@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.schnarbiesnmeowers.nmsmonolith.entities.EventsTable;
+
+
+
+
+
+
 
 /**
  * class to test the EventsTable class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class EventsTableTest {
 
 	/**
@@ -23,11 +27,11 @@ public class EventsTableTest {
 	//@Test
 	public void testClass() {
 		EventsTable classUnderTest = new EventsTable();
-		classUnderTest.setEventId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setEventId(1);
+		classUnderTest.setUserId(1);
 		classUnderTest.setEventName("a");
 		classUnderTest.setEventDesc("a");
-		classUnderTest.setPeriodId(new Integer(1));
+		classUnderTest.setPeriodId(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		EventsTable newitem = new EventsTable(

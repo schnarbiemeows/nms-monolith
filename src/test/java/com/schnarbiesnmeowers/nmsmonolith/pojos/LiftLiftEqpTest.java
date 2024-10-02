@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LiftLiftEqp;
+
+
+
+
+
+
 
 /**
  * class to test the LiftLiftEqp class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class LiftLiftEqpTest {
 
 	/**
@@ -23,9 +27,9 @@ public class LiftLiftEqpTest {
 	//@Test
 	public void testClass() {
 		LiftLiftEqp classUnderTest = new LiftLiftEqp();
-		classUnderTest.setLiftLiftEqpId(new Integer(1));
-		classUnderTest.setLiftId(new Integer(1));
-		classUnderTest.setLiftEquipId(new Integer(1));
+		classUnderTest.setLiftLiftEqpId(1);
+		classUnderTest.setLiftId(1);
+		classUnderTest.setLiftEquipId(1);
 		assertTrue(true);
 		LiftLiftEqp newitem = new LiftLiftEqp(
 		classUnderTest.getLiftLiftEqpId(),

@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.utilities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.BldstTableDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.BldstTable;
+import com.schnarbiesnmeowers.nmsmonolith.entities.BldstTable;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.BldstTableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

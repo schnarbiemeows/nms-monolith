@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Resources;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Resources;
 /**
  *
  * @author Dylan I. Kessler

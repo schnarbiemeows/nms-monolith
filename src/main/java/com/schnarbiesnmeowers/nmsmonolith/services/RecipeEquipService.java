@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RecipeEquipDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeEquip;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeEquip;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.RecipeEquipRepository;
 
 /**

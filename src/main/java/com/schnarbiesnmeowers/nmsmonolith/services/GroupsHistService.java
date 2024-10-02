@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GroupsHistDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.GroupsHist;
+import com.schnarbiesnmeowers.nmsmonolith.entities.GroupsHist;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.GroupsHistRepository;
 
 /**

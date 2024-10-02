@@ -1,8 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyJournal;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyJournal;
 
-import javax.persistence.Column;
 import java.util.Date;
 
 public class DailyJournalDTO {

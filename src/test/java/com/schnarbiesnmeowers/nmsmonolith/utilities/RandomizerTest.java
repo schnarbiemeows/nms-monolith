@@ -1,14 +1,10 @@
 package com.schnarbiesnmeowers.nmsmonolith.utilities;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Time;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 
 /**
@@ -16,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RandomizerTest {
 
 	//@Test

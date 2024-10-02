@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ImageLocDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.ImageLoc;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ImageLoc;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.ImageLocRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the PeriodExtDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class PeriodExtDTOTest {
 
 	/**
@@ -23,8 +26,8 @@ public class PeriodExtDTOTest {
 	//@Test
 	public void testClass() {
 		PeriodExtDTO classUnderTest = new PeriodExtDTO();
-		classUnderTest.setPeriodExtId(new Integer(1));
-		classUnderTest.setPeriodId(new Integer(1));
+		classUnderTest.setPeriodExtId(1);
+		classUnderTest.setPeriodId(1);
 		classUnderTest.setSpecificDate(new Date());
 		classUnderTest.setSpecificTime(new java.sql.Time(1000));
 		assertTrue(true);

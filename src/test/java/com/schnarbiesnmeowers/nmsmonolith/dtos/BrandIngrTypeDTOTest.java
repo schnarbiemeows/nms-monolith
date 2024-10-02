@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the BrandIngrTypeDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class BrandIngrTypeDTOTest {
 
 	/**
@@ -23,10 +26,10 @@ public class BrandIngrTypeDTOTest {
 	//@Test
 	public void testClass() {
 		BrandIngrTypeDTO classUnderTest = new BrandIngrTypeDTO();
-		classUnderTest.setBrandIngrTypeId(new Integer(1));
-		classUnderTest.setBrandId(new Integer(1));
-		classUnderTest.setIngrTypeId(new Integer(1));
-		classUnderTest.setPrntIngrType(new Integer(1));
+		classUnderTest.setBrandIngrTypeId(1);
+		classUnderTest.setBrandId(1);
+		classUnderTest.setIngrTypeId(1);
+		classUnderTest.setPrntIngrType(1);
 		assertTrue(true);
 		BrandIngrTypeDTO newitem = new BrandIngrTypeDTO(
 		classUnderTest.getBrandIngrTypeId(),

@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.RecipesDTO;
+import java.math.BigDecimal;
 
-import static org.junit.Assert.*;
 
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the RecipesDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class RecipesDTOTest {
 
 	/**
@@ -23,12 +26,12 @@ public class RecipesDTOTest {
 	//@Test
 	public void testClass() {
 		RecipesDTO classUnderTest = new RecipesDTO();
-		classUnderTest.setRecipeId(new Integer(1));
+		classUnderTest.setRecipeId(1);
 		classUnderTest.setRecipeName("a");
-		classUnderTest.setIngrId(new Integer(1));
+		classUnderTest.setIngrId(1);
 		classUnderTest.setRecipeDesc("a");
 		classUnderTest.setRecipeLink("a");
-		classUnderTest.setNumSrv(new BigDecimal(1.00));
+		classUnderTest.setNumSrv(BigDecimal.ONE);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		RecipesDTO newitem = new RecipesDTO(

@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the MessagesDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class MessagesDTOTest {
 
 	/**
@@ -23,9 +26,9 @@ public class MessagesDTOTest {
 	//@Test
 	public void testClass() {
 		MessagesDTO classUnderTest = new MessagesDTO();
-		classUnderTest.setMessageId(new Integer(1));
-		classUnderTest.setEventId(new Integer(1));
-		classUnderTest.setMessageTypeId(new Integer(1));
+		classUnderTest.setMessageId(1);
+		classUnderTest.setEventId(1);
+		classUnderTest.setMessageTypeId(1);
 		classUnderTest.setMessageTxt("a");
 		assertTrue(true);
 		MessagesDTO newitem = new MessagesDTO(

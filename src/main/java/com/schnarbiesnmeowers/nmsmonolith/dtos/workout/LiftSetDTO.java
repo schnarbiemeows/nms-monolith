@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.workout;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.LiftSet;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.LiftSet;
 
 import java.math.BigDecimal;
 

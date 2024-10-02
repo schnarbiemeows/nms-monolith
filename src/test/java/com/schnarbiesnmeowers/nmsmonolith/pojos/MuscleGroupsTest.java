@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
-import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.schnarbiesnmeowers.nmsmonolith.entities.MuscleGroups;
+
+
+
+
+
+
 
 /**
  * class to test the MuscleGroups class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class MuscleGroupsTest {
 
 	/**
@@ -23,7 +27,7 @@ public class MuscleGroupsTest {
 	//@Test
 	public void testClass() {
 		MuscleGroups classUnderTest = new MuscleGroups();
-		classUnderTest.setMuscleGroupId(new Integer(1));
+		classUnderTest.setMuscleGroupId(1);
 		classUnderTest.setMuscleGrpName("a");
 		classUnderTest.setActv("a");
 		assertTrue(true);

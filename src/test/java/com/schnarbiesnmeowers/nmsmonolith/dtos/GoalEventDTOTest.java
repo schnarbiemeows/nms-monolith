@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the GoalEventDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class GoalEventDTOTest {
 
 	/**
@@ -23,10 +26,10 @@ public class GoalEventDTOTest {
 	//@Test
 	public void testClass() {
 		GoalEventDTO classUnderTest = new GoalEventDTO();
-		classUnderTest.setGoalEventId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
-		classUnderTest.setGoalId(new Integer(1));
-		classUnderTest.setEventId(new Integer(1));
+		classUnderTest.setGoalEventId(1);
+		classUnderTest.setUserId(1);
+		classUnderTest.setGoalId(1);
+		classUnderTest.setEventId(1);
 		assertTrue(true);
 		GoalEventDTO newitem = new GoalEventDTO(
 		classUnderTest.getGoalEventId(),

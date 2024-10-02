@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyWeight;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyWeight;
 /**
  *
  * @author Dylan I. Kessler

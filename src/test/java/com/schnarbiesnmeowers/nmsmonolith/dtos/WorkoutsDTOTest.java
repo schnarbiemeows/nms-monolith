@@ -1,21 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.WorkoutsDTO;
+import java.math.BigDecimal;
 
-import static org.junit.Assert.*;
-import java.util.*;
+import java.time.LocalDate;
 
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the WorkoutsDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class WorkoutsDTOTest {
 
 	/**
@@ -24,13 +27,14 @@ public class WorkoutsDTOTest {
 	//@Test
 	public void testClass() {
 		WorkoutsDTO classUnderTest = new WorkoutsDTO();
-		classUnderTest.setWorkoutId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
-		classUnderTest.setCalendarDate(new Date());
-		classUnderTest.setExerciseTypeId(new Integer(1));
-		classUnderTest.setDuration(new Integer(1));
-		classUnderTest.setRating(new BigDecimal(1.00));
+		classUnderTest.setWorkoutId(1);
+		classUnderTest.setUserId(1);
+		classUnderTest.setCalendarDate(LocalDate.now());
+		classUnderTest.setExerciseTypeId(1);
+		classUnderTest.setDuration(1);
+		classUnderTest.setRating(BigDecimal.ONE);
 		classUnderTest.setActv("a");
+		classUnderTest.setNotes("notes");
 		assertTrue(true);
 		WorkoutsDTO newitem = new WorkoutsDTO(
 		classUnderTest.getWorkoutId(),
@@ -39,7 +43,8 @@ public class WorkoutsDTOTest {
 		classUnderTest.getExerciseTypeId(),
 		classUnderTest.getDuration(),
 		classUnderTest.getRating(),
-		classUnderTest.getActv());
+		classUnderTest.getActv(),
+		classUnderTest.getNotes());
 		assertNotNull(newitem);
 		String string = classUnderTest.toString();
 		assertNotNull(string);

@@ -1,11 +1,8 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Ingredients;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.QuickIngredientsList;
+import com.schnarbiesnmeowers.nmsmonolith.entities.QuickIngredientsList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 public interface QuickIngredientsListRepository extends JpaRepository<QuickIngredientsList,Integer> {
 

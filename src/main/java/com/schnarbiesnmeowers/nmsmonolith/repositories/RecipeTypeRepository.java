@@ -2,9 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeType;
-import org.springframework.data.repository.Repository;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeType;
 
 import java.util.List;
 

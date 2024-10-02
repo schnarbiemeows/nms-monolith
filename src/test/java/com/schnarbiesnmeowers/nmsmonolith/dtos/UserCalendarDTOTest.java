@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
+import java.time.LocalDate;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the UserCalendarDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class UserCalendarDTOTest {
 
 	/**
@@ -23,11 +27,11 @@ public class UserCalendarDTOTest {
 	//@Test
 	public void testClass() {
 		UserCalendarDTO classUnderTest = new UserCalendarDTO();
-		classUnderTest.setUserCalendarId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setUserCalendarId(1);
+		classUnderTest.setUserId(1);
 		classUnderTest.setCalendarDate(new Date());
 		classUnderTest.setCalendarTime(new java.sql.Time(1000));
-		classUnderTest.setEventId(new Integer(1));
+		classUnderTest.setEventId(1);
 		assertTrue(true);
 		UserCalendarDTO newitem = new UserCalendarDTO(
 		classUnderTest.getUserCalendarId(),

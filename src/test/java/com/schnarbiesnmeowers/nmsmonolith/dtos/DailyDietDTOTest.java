@@ -2,20 +2,24 @@ package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailydiet.DailyDietDTO;
 
-import static org.junit.Assert.*;
+
+import java.math.BigDecimal;
 import java.util.*;
 
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the DailyDietDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class DailyDietDTOTest {
 
 	/**
@@ -24,15 +28,15 @@ public class DailyDietDTOTest {
 	//@Test
 	public void testClass() {
 		DailyDietDTO classUnderTest = new DailyDietDTO();
-		classUnderTest.setDailyTotalId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setDailyTotalId(1);
+		classUnderTest.setUserId(1);
 		classUnderTest.setCalendarDate(new Date());
-		classUnderTest.setIngrId(new Integer(1));
+		classUnderTest.setIngrId(1);
 		classUnderTest.setIsRecipe(true);
 		classUnderTest.setIsLocal(true);
-		classUnderTest.setBldstId(new Integer(1));
-		classUnderTest.setServTypeId(new Integer(1));
-		classUnderTest.setNumSrv(new BigDecimal(1.00));
+		classUnderTest.setBldstId(1);
+		classUnderTest.setServTypeId(1);
+		classUnderTest.setNumSrv(BigDecimal.ONE);
 		classUnderTest.setTimeEaten("1000");
 		assertTrue(true);
 		DailyDietDTO newitem = new DailyDietDTO(

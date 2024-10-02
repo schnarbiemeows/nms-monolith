@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.workout;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.Steps;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.Steps;
 
 import java.io.Serializable;
 import com.google.gson.Gson;

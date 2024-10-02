@@ -1,20 +1,25 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Periods;
+
+
 import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+
+
+
 
 /**
  * class to test the Periods class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class PeriodsTest {
 
 	/**
@@ -23,8 +28,8 @@ public class PeriodsTest {
 	//@Test
 	public void testClass() {
 		Periods classUnderTest = new Periods();
-		classUnderTest.setPeriodId(new Integer(1));
-		classUnderTest.setPeriodTypeId(new Integer(1));
+		classUnderTest.setPeriodId(1);
+		classUnderTest.setPeriodTypeId(1);
 		classUnderTest.setOneTimeDate(new Date());
 		classUnderTest.setDayOfWeek("a");
 		classUnderTest.setActv("a");

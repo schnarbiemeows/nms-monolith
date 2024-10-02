@@ -1,11 +1,9 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.QuickIngredientsListDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Ingredients;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.QuickIngredientsList;
+import com.schnarbiesnmeowers.nmsmonolith.entities.QuickIngredientsList;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.QuickIngredientsListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

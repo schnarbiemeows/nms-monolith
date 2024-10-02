@@ -9,16 +9,13 @@ import java.util.List;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.LocalSpicesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.RecipeSpiceDisplay;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.DependencyExistsException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalSpices;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalSpices;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.RecipeCalculatorUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.LocalSpicesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalSpices;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LocalSpicesRepository;
 
-import static com.schnarbiesnmeowers.nmsmonolith.utilities.Constants.INGREDIENT_TYPE_ID_FOR_RECIPE;
 import static com.schnarbiesnmeowers.nmsmonolith.utilities.Constants.NO;
 
 /**

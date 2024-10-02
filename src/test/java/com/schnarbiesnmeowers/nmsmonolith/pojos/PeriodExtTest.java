@@ -1,20 +1,25 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.PeriodExt;
+
+
 import java.util.*;
-import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+
+
+
 
 /**
  * class to test the PeriodExt class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class PeriodExtTest {
 
 	/**
@@ -23,8 +28,8 @@ public class PeriodExtTest {
 	//@Test
 	public void testClass() {
 		PeriodExt classUnderTest = new PeriodExt();
-		classUnderTest.setPeriodExtId(new Integer(1));
-		classUnderTest.setPeriodId(new Integer(1));
+		classUnderTest.setPeriodExtId(1);
+		classUnderTest.setPeriodId(1);
 		classUnderTest.setSpecificDate(new Date());
 		classUnderTest.setSpecificTime(new java.sql.Time(1000));
 		assertTrue(true);

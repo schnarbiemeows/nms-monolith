@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.FavoriteRecipesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteRecipes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.FavoriteRecipes;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.FavoriteRecipesRepository;
 
 /**

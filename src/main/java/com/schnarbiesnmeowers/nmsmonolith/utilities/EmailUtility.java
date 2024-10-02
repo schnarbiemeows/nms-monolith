@@ -1,8 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.utilities;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.email.InputMessage;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.email.OutputMessage;
-import org.springframework.web.client.RestTemplate;
+import com.schnarbiesnmeowers.nmsmonolith.entities.email.InputMessage;
+import com.schnarbiesnmeowers.nmsmonolith.entities.email.OutputMessage;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import org.springframework.stereotype.Service;

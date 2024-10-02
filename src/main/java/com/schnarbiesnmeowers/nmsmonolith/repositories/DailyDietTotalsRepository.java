@@ -1,11 +1,9 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyDietTotals;
-import org.springframework.data.jpa.repository.Modifying;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDietTotals;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Optional;
 

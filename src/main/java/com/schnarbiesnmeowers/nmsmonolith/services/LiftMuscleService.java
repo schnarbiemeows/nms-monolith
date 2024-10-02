@@ -2,8 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.services;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.LiftMuscleDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LiftMuscle;
-import com.schnarbiesnmeowers.nmsmonolith.repositories.LiftMuscleRepository;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LiftMuscle;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LiftMuscleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

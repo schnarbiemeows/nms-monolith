@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.CardioType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.CardioType;
 
 public class CardioTypeDTO {
 

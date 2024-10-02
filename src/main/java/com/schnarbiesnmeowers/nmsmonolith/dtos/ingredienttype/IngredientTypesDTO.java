@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.ingredienttype;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.IngredientTypes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.IngredientTypes;
 
 import java.io.Serializable;
 import com.google.gson.Gson;

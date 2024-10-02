@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GoalCategoriesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.GoalCategories;
+import com.schnarbiesnmeowers.nmsmonolith.entities.GoalCategories;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.GoalCategoriesRepository;
 import org.springframework.stereotype.Service;
 

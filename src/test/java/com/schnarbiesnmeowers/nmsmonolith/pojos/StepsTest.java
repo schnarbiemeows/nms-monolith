@@ -1,19 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.Steps;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.Steps;
 
-import static org.junit.Assert.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+
+
+
 
 /**
  * class to test the Steps class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class StepsTest {
 
 	/**
@@ -22,9 +27,9 @@ public class StepsTest {
 	//@Test
 	public void testClass() {
 		Steps classUnderTest = new Steps();
-		classUnderTest.setStepId(new Integer(1));
-		classUnderTest.setWorkoutId(new Integer(1));
-		classUnderTest.setSteps(new Integer(1));
+		classUnderTest.setStepId(1);
+		classUnderTest.setWorkoutId(1);
+		classUnderTest.setSteps(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		Steps newitem = new Steps(

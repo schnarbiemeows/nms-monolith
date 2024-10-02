@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the GoalGroupsDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class GoalGroupsDTOTest {
 
 	/**
@@ -23,9 +26,9 @@ public class GoalGroupsDTOTest {
 	//@Test
 	public void testClass() {
 		GoalGroupsDTO classUnderTest = new GoalGroupsDTO();
-		classUnderTest.setGoalGroupId(new Integer(1));
-		classUnderTest.setGoalId1(new Integer(1));
-		classUnderTest.setGoalId2(new Integer(1));
+		classUnderTest.setGoalGroupId(1);
+		classUnderTest.setGoalId1(1);
+		classUnderTest.setGoalId2(1);
 		classUnderTest.setRelation("a");
 		assertTrue(true);
 		GoalGroupsDTO newitem = new GoalGroupsDTO(

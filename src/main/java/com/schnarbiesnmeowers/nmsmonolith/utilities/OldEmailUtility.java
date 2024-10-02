@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.utilities;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.email.InputMessage;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.email.OutputMessage;
+import com.schnarbiesnmeowers.nmsmonolith.entities.email.InputMessage;
+import com.schnarbiesnmeowers.nmsmonolith.entities.email.OutputMessage;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

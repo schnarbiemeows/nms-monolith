@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the RecipeEquipDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class RecipeEquipDTOTest {
 
 	/**
@@ -23,11 +26,11 @@ public class RecipeEquipDTOTest {
 	//@Test
 	public void testClass() {
 		RecipeEquipDTO classUnderTest = new RecipeEquipDTO();
-		classUnderTest.setRecipeEquipId(new Integer(1));
-		classUnderTest.setRecEqTypeId(new Integer(1));
+		classUnderTest.setRecipeEquipId(1);
+		classUnderTest.setRecEqTypeId(1);
 		classUnderTest.setEquipDesc("a");
 		classUnderTest.setEquipLongDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(1);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		RecipeEquipDTO newitem = new RecipeEquipDTO(

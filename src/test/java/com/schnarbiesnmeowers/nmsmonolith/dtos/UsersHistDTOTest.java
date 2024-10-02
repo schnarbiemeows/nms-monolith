@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the UsersHistDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class UsersHistDTOTest {
 
 	/**
@@ -23,16 +26,16 @@ public class UsersHistDTOTest {
 	//@Test
 	public void testClass() {
 		UsersHistDTO classUnderTest = new UsersHistDTO();
-		classUnderTest.setUsersHistId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setUsersHistId(1);
+		classUnderTest.setUserId(1);
 		classUnderTest.setUsername("a");
 		classUnderTest.setEmail("a");
 		classUnderTest.setPassword("a");
-		classUnderTest.setAge(new Integer(1));
-		classUnderTest.setLstLogdIn(new Date());
-		classUnderTest.setActionTypeId(new Integer(1));
-		classUnderTest.setEvntTmestmp(new Date());
-		classUnderTest.setEvntOperId(new Integer(1));
+		classUnderTest.setAge(1);
+		classUnderTest.setLstLogdIn(LocalDate.now());
+		classUnderTest.setActionTypeId(1);
+		classUnderTest.setEvntTmestmp(LocalDate.now());
+		classUnderTest.setEvntOperId(1);
 		assertTrue(true);
 		UsersHistDTO newitem = new UsersHistDTO(
 		classUnderTest.getUsersHistId(),

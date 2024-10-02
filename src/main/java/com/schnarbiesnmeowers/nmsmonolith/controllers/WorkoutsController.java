@@ -3,6 +3,7 @@ package com.schnarbiesnmeowers.nmsmonolith.controllers;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.utility.GraphWrapperDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.WorkoutWrapperDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.WorkoutsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
 import com.schnarbiesnmeowers.nmsmonolith.services.workouts.WorkoutsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller

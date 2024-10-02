@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.services;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.BodyMeasurementsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.BodyMeasurements;
+import com.schnarbiesnmeowers.nmsmonolith.entities.BodyMeasurements;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.BodyMeasurementsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

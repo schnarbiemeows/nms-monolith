@@ -1,12 +1,10 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LiftEquip;
-import javax.validation.constraints.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LiftEquip;
+
 import java.io.Serializable;
 import com.google.gson.Gson;
-import java.math.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 /**
  *
  * @author Dylan I. Kessler

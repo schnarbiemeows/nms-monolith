@@ -1,9 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.workout;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutCardioVw;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutCardioVw;
 
-import javax.persistence.Column;
-import java.sql.Date;
 import java.time.LocalDate;
 
 public class WorkoutCardioVwDTO {

@@ -1,6 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.email.OutputMessage;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
+import com.schnarbiesnmeowers.nmsmonolith.entities.email.OutputMessage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +11,7 @@ import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
-import reactor.core.publisher.Mono;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller

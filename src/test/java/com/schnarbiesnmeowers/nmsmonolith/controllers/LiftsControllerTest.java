@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Dylan I. Kessler
  *
  */
-//@RunWith(SpringRunner.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+//@ExtendWith(MockitoExtension.class)
+////@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 //@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class LiftsControllerTest {
 

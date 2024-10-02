@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GoalEventDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.GoalEvent;
+import com.schnarbiesnmeowers.nmsmonolith.entities.GoalEvent;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.GoalEventRepository;
 
 /**

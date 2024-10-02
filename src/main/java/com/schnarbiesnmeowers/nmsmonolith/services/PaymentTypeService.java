@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.PaymentTypeDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.PaymentType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.PaymentType;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.PaymentTypeRepository;
 import org.springframework.stereotype.Service;
 

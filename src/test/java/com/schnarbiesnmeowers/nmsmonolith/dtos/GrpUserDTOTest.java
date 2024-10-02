@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
-import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * class to test the GrpUserDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class GrpUserDTOTest {
 
 	/**
@@ -23,9 +26,9 @@ public class GrpUserDTOTest {
 	//@Test
 	public void testClass() {
 		GrpUserDTO classUnderTest = new GrpUserDTO();
-		classUnderTest.setGrpUserId(new Integer(1));
-		classUnderTest.setGrpId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setGrpUserId(1);
+		classUnderTest.setGrpId(1);
+		classUnderTest.setUserId(1);
 		assertTrue(true);
 		GrpUserDTO newitem = new GrpUserDTO(
 		classUnderTest.getGrpUserId(),

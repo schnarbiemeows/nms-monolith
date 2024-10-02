@@ -1,9 +1,8 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.workout;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutSteps;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutSteps;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class WorkoutStepsDTO {
 

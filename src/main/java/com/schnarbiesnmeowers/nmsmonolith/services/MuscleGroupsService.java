@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.MuscleGroupsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.MuscleGroups;
+import com.schnarbiesnmeowers.nmsmonolith.entities.MuscleGroups;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.MuscleGroupsRepository;
 import org.springframework.stereotype.Service;
 

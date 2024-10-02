@@ -1,8 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.workout;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.workout.WorkoutCardio;
-
-import javax.persistence.Column;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutCardio;
 
 public class WorkoutCardioDTO {
 
