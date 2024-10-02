@@ -32,9 +32,9 @@ public class UsersHistDTOTest {
 		classUnderTest.setEmail("a");
 		classUnderTest.setPassword("a");
 		classUnderTest.setAge(1);
-		classUnderTest.setLstLogdIn(LocalDate.now());
+		classUnderTest.setLstLogdIn(new Date());
 		classUnderTest.setActionTypeId(1);
-		classUnderTest.setEvntTmestmp(LocalDate.now());
+		classUnderTest.setEvntTmestmp(new Date());
 		classUnderTest.setEvntOperId(1);
 		assertTrue(true);
 		UsersHistDTO newitem = new UsersHistDTO(

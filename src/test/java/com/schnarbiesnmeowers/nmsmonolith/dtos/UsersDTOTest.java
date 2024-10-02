@@ -32,7 +32,7 @@ public class UsersDTOTest {
 		classUnderTest.setPhone("a");
 		classUnderTest.setPassword("a");
 		classUnderTest.setAge(1);
-		classUnderTest.setLstLogdIn(LocalDate.now());
+		classUnderTest.setLstLogdIn(new Date());
 		assertTrue(true);
 		UsersDTO newitem = new UsersDTO(
 		classUnderTest.getUserId(),
