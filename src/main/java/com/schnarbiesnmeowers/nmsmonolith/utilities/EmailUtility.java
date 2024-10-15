@@ -12,7 +12,7 @@ public class EmailUtility {
     private final WebClient webClient;
 
     public EmailUtility(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8081").build();
+        this.webClient = webClientBuilder.baseUrl("http://localhost:8083").build();
     }
 
     public Mono<String> createPost(InputMessage postRequest) {

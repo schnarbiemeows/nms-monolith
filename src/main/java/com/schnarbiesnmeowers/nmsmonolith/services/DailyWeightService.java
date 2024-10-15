@@ -86,7 +86,16 @@ public class DailyWeightService {
 	public DailyWeightDataPoint createDailyWeight(DailyWeightDataPoint data) {
 		try {
 		    DailyWeight createdData = data.toEntity();
-		    createdData = dailyWeightRepository.save(createdData);
+			Optional<DailyWeight> presentDailyWeight = dailyWeightRepository
+					.findSingleDailyWeightByUserIdAndDate(data.getUserId(),data.getCalendarDate().toString());
+			if(!presentDailyWeight.isPresent()) {
+				createdData = dailyWeightRepository.save(createdData);
+			}
+		    else {
+				DailyWeight currentWeight = presentDailyWeight.get();
+				currentWeight.setWeight(data.getWeight());
+				createdData = dailyWeightRepository.save(currentWeight);
+			}
 			InputMessage inputMessage = new InputMessage("recorded daily weight for : " + data.getCalendarDate().toString(),
 					getBody(data));
 			String outputMessage = emailUtility.sendTestEmailUsingWebflux(inputMessage).block();
