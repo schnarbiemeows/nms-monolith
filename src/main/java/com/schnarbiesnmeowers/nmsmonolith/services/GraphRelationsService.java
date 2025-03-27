@@ -5,17 +5,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.schnarbiesnmeowers.nmsmonolith.dtos.recipetypes.RecipeTypeHierachy;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GraphRelationsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.GraphRelations;
+import com.schnarbiesnmeowers.nmsmonolith.entities.GraphRelations;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.GraphRelationsRepository;
-import java.util.List;
+
 /**
  * this class retrieves data from the controller class
  * most business logic should be put in this class

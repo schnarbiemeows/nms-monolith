@@ -1,17 +1,15 @@
 package com.schnarbiesnmeowers.nmsmonolith.exceptions;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 import java.util.Date;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * class to test the ExceptionResponse class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
+
 public class ExceptionResponseTest {
 
 	/**

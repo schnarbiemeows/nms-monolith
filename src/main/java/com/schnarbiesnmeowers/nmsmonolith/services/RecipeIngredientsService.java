@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.RecipeIngredientsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeIngredients;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeIngredients;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.RecipeIngredientsRepository;
 import org.springframework.stereotype.Service;
 

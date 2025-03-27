@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.UsersRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.UsersDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.UsersService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,128 +31,131 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class UsersControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private UsersController usersController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private UsersService usersService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private UsersRepository usersRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(usersController).build();
+    }
 
 	/**
 	 * test creating a new Users
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateUsers() throws URISyntaxException
+	public void testA_CreateUsers() throws Exception
 	{
 	    UsersDTO users = generateRandomUsers();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(users.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/users/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<UsersDTO> request = new HttpEntity<>(users,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(usersService.createUsers(any(UsersDTO.class))).thenReturn(users);
+
+        mockMvc.perform(post("/users/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(users)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all Users
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllUsers() throws URISyntaxException
+	public void testB_GetAllUsers() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/users/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<UsersDTO> userss = Arrays.asList(generateRandomUsers(), generateRandomUsers());
+        when(usersService.getAllUsers()).thenReturn(userss);
+
+        mockMvc.perform(get("/users/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single Users by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetUsers() throws URISyntaxException
+	public void testC_GetUsers() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/users/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		UsersDTO users = generateRandomUsers();
+        when(usersService.findUsersById(anyInt())).thenReturn(users);
+
+        mockMvc.perform(get("/users/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a Users
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateUsers() throws URISyntaxException
+	public void testD_UpdateUsers() throws Exception
 	{
 	    UsersDTO users = generateRandomUsers();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/users/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<UsersDTO> request = new HttpEntity<>(users);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(usersService.updateUsers(any(UsersDTO.class))).thenReturn(users);
+
+        mockMvc.perform(post("/users/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(users)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a Users
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteUsers() throws URISyntaxException
+	public void testE_DeleteUsers() throws Exception
 	{
-		UsersDTO users = generateRandomUsers();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/users/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<UsersDTO> request = new HttpEntity<>(users);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(usersService.deleteUsers(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/users/delete/2"))
+                .andExpect(status().isOk());
 	}
+
 
 
 	public static UsersDTO generateRandomUsers() {
 		UsersDTO record = new UsersDTO();
 		record.setUsername(Randomizer.randomString(20));
 		record.setEmail(Randomizer.randomString(20));
-		record.setPhone(Randomizer.randomString(10));
 		record.setPassword(Randomizer.randomString(20));
 		record.setAge(Randomizer.randomInt(1000));
 		record.setLstLogdIn(Randomizer.randomDate());
+		record.setPhone(Randomizer.randomString(10));
+		record.setActv(Randomizer.randomBoolean());
+		String[] stringarray = new String[1];
+		stringarray[0] = Randomizer.randomString(3);
+		record.setAuthorizations(stringarray);
+		record.setFirstName(Randomizer.randomString(20));
+		record.setLastName(Randomizer.randomString(20));
+		record.setUserNotLocked(Randomizer.randomBoolean());
+		record.setJoinDate(Randomizer.randomDate());
+		record.setLastLoginDateDisplay(Randomizer.randomDate());
+		record.setProfileImage(Randomizer.randomString(20));
+		record.setRoles(Randomizer.randomString(20));
+		record.setUserIdentifier(Randomizer.randomString(20));
 		return record;
 	}
 }

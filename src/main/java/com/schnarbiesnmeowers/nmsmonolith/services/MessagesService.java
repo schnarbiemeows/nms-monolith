@@ -5,13 +5,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.schnarbiesnmeowers.nmsmonolith.entities.email.InputMessage;
+import com.schnarbiesnmeowers.nmsmonolith.entities.email.OutputMessage;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.EmailUtility;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.OldEmailUtility;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.MessagesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Messages;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Messages;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.MessagesRepository;
+import reactor.core.publisher.Mono;
 
 /**
  * this class retrieves data from the controller class
@@ -30,6 +35,12 @@ public class MessagesService {
 	 */
 	@Autowired
 	private MessagesRepository messagesRepository;
+
+	@Autowired
+	private EmailUtility emailUtility;
+
+	@Autowired
+	private OldEmailUtility oldEmailUtility;
 
 	/**
 	 * get all Messages records
@@ -113,7 +124,7 @@ public class MessagesService {
 
 	/**
 	 * get List<MessagesDTO> by foreign key : eventId
-	 * @param eventId
+	 * @param id
 	 * @return List<Messages>
 	 * @throws Exception
 	*/
@@ -130,7 +141,7 @@ public class MessagesService {
 
 	/**
 	 * get List<MessagesDTO> by foreign key : messageTypeId
-	 * @param messageTypeId
+	 * @param id
 	 * @return List<Messages>
 	 * @throws Exception
 	*/
@@ -147,7 +158,7 @@ public class MessagesService {
 
 	/**
 	 * get List<MessagesDTO> by foreign key : EventIdAndMessageTypeId
-	 * @param EventIdAndMessageTypeId
+	 * @param id0
 	 * @return List<Messages>
 	 * @throws Exception
 	*/
@@ -162,4 +173,15 @@ public class MessagesService {
 		return resultsdto;
 	}
 
+	public String testEmailMessage() {
+		InputMessage message = new InputMessage("Hx","Hx there!");
+		Mono<String> outputMessage = emailUtility.sendTestEmailUsingWebflux(message);
+		return outputMessage.block();
+	}
+
+	public OutputMessage testEmailUsingRestTemplate() {
+		InputMessage message = new InputMessage("Hx","Hx there!");
+		OutputMessage outputMessage = oldEmailUtility.createPost(message);
+		return outputMessage;
+	}
 }

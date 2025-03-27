@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+import com.schnarbiesnmeowers.nmsmonolith.entities.IngredientTypes;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the IngredientTypes class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class IngredientTypesTest {
 
 	/**
@@ -23,10 +26,10 @@ public class IngredientTypesTest {
 	@Test
 	public void testClass() {
 		IngredientTypes classUnderTest = new IngredientTypes();
-		classUnderTest.setIngrTypeId(new Integer(1));
-		classUnderTest.setPrntIngrType(new Integer(1));
+		classUnderTest.setIngrTypeId(2);
+		classUnderTest.setPrntIngrType(2);
 		classUnderTest.setIngrTypeDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		IngredientTypes newitem = new IngredientTypes(

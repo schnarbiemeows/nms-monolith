@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RsrcTypeDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RsrcType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RsrcType;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.RsrcTypeRepository;
 import org.springframework.stereotype.Service;
 

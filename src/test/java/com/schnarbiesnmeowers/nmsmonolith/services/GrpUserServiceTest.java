@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GrpUserDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.GrpUser;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.GrpUserRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,92 +22,116 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.GrpUserDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class GrpUserServiceTest {
+@ExtendWith(MockitoExtension.class)
+class GrpUserServiceTest {
 
+    @Mock
+    private GrpUserRepository grpuserRepository;
 
-	/**
-	 * get all GrpUser records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<GrpUserDTO> getAllGrpUser() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<GrpUserDTO> grpuserDTO = new ArrayList<GrpUserDTO>();
-		return grpuserDTO;
+    @InjectMocks
+    private GrpUserService grpuserService;
+
+    private GrpUser grpuser;
+    private GrpUserDTO grpuserDTO;
+
+    @BeforeEach
+    void setUp() {
+        grpuser = generateRandomGrpUserEntity();
+        grpuserDTO = generateRandomGrpUser();
+    }
+
+    @Test
+    void testGetAllGrpUser() throws Exception {
+        when(grpuserRepository.findAll()).thenReturn(Collections.singletonList(grpuser));
+
+        List<GrpUserDTO> result = grpuserService.getAllGrpUser();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindGrpUserById_Found() throws Exception {
+        when(grpuserRepository.findById(anyInt())).thenReturn(Optional.of(grpuser));
+
+        GrpUserDTO result = grpuserService.findGrpUserById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindGrpUserById_NotFound() {
+        when(grpuserRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            grpuserService.findGrpUserById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateGrpUser() {
+        when(grpuserRepository.save(any(GrpUser.class))).thenReturn(grpuser);
+
+        GrpUserDTO result = grpuserService.createGrpUser(grpuserDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateGrpUser_Found() throws Exception {
+        when(grpuserRepository.findById(anyInt())).thenReturn(Optional.of(grpuser));
+        when(grpuserRepository.save(any(GrpUser.class))).thenReturn(grpuser);
+
+        GrpUserDTO result = grpuserService.updateGrpUser(grpuserDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateGrpUser_NotFound() {
+        when(grpuserRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            grpuserService.updateGrpUser(grpuserDTO);
+        });
+
+        assertEquals("id = " + grpuserDTO.getGrpUserId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteGrpUser_Found() throws Exception {
+        when(grpuserRepository.findById(anyInt())).thenReturn(Optional.of(grpuser));
+        doNothing().when(grpuserRepository).deleteById(anyInt());
+
+        String result = grpuserService.deleteGrpUser(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteGrpUser_NotFound() {
+        when(grpuserRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            grpuserService.deleteGrpUser(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static GrpUserDTO generateRandomGrpUser() {
+		GrpUserDTO record = new GrpUserDTO();
+		record.setGrpUserId(2);
+		record.setGrpId(Randomizer.randomInt(1000));
+		record.setUserId(Randomizer.randomInt(1000));
+		return record;
 	}
-
-	/**
-	 * get GrpUser by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public GrpUserDTO findGrpUserById(int id) throws Exception {
-		return new GrpUserDTO();
+    public static GrpUser generateRandomGrpUserEntity() {
+		GrpUser record = new GrpUser();
+		record.setGrpUserId(2);
+		record.setGrpId(Randomizer.randomInt(1000));
+		record.setUserId(Randomizer.randomInt(1000));
+		return record;
 	}
-
-	/**
-	 * create a new GrpUser
-	 * @param data
-	 * @return
-	 */
-	public GrpUserDTO createGrpUser(GrpUserDTO data) {
-        data.setGrpUserId(1);
-        return data;
-	}
-
-	/**
-	 * update a GrpUser
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public GrpUserDTO updateGrpUser(GrpUserDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a GrpUser by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteGrpUser(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<GrpUserDTO> by foreign key : grpId
-	 * @param grpId
-	 * @return List<GrpUser>
-	 * @throws Exception
-	*/
-	public List<GrpUserDTO> findGrpUserByGrpId(int id) throws Exception {
-		List<GrpUserDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<GrpUserDTO> by foreign key : userId
-	 * @param userId
-	 * @return List<GrpUser>
-	 * @throws Exception
-	*/
-	public List<GrpUserDTO> findGrpUserByUserId(int id) throws Exception {
-		List<GrpUserDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<GrpUserDTO> by foreign key : GrpIdAndUserId
-	 * @param GrpIdAndUserId
-	 * @return List<GrpUser>
-	 * @throws Exception
-	*/
-	public List<GrpUserDTO> findGrpUserByGrpIdAndUserId(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<GrpUserDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

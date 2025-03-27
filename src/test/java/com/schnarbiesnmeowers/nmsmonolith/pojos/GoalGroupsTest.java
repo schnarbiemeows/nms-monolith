@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+import com.schnarbiesnmeowers.nmsmonolith.entities.GoalGroups;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the GoalGroups class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class GoalGroupsTest {
 
 	/**
@@ -23,9 +26,9 @@ public class GoalGroupsTest {
 	@Test
 	public void testClass() {
 		GoalGroups classUnderTest = new GoalGroups();
-		classUnderTest.setGoalGroupId(new Integer(1));
-		classUnderTest.setGoalId1(new Integer(1));
-		classUnderTest.setGoalId2(new Integer(1));
+		classUnderTest.setGoalGroupId(2);
+		classUnderTest.setGoalId1(2);
+		classUnderTest.setGoalId2(2);
 		classUnderTest.setRelation("a");
 		assertTrue(true);
 		GoalGroups newitem = new GoalGroups(

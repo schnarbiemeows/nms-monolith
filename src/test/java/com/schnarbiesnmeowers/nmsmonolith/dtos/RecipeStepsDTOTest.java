@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the RecipeStepsDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class RecipeStepsDTOTest {
 
 	/**
@@ -23,12 +26,12 @@ public class RecipeStepsDTOTest {
 	@Test
 	public void testClass() {
 		RecipeStepsDTO classUnderTest = new RecipeStepsDTO();
-		classUnderTest.setRecipeStepId(new Integer(1));
-		classUnderTest.setRecipeId(new Integer(1));
-		classUnderTest.setStepNum(new Integer(1));
+		classUnderTest.setRecipeStepId(2);
+		classUnderTest.setRecipeId(2);
+		classUnderTest.setStepNum(2);
 		classUnderTest.setStepDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
-		classUnderTest.setActv("Y");
+		classUnderTest.setImageLoc(2);
+		classUnderTest.setActv("a");
 		assertTrue(true);
 		RecipeStepsDTO newitem = new RecipeStepsDTO(
 		classUnderTest.getRecipeStepId(),

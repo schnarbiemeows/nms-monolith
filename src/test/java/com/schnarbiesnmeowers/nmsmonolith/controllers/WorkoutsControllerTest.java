@@ -1,29 +1,28 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.schnarbiesnmeowers.nmsmonolith.dtos.WorkoutsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.services.WorkoutsService;
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.workouts.WorkoutsRepository;
+import com.schnarbiesnmeowers.nmsmonolith.services.workouts.WorkoutsService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
@@ -32,170 +31,140 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class WorkoutsControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private WorkoutsController workoutsController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private WorkoutsService workoutsService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private WorkoutsRepository workoutsRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(workoutsController).build();
+    }
 
 	/**
 	 * test creating a new Workouts
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateWorkouts() throws URISyntaxException
+	public void testA_CreateWorkouts() throws Exception
 	{
 	    WorkoutsDTO workouts = generateRandomWorkouts();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(workouts.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/workouts/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<WorkoutsDTO> request = new HttpEntity<>(workouts,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(workoutsService.createWorkouts(any(WorkoutsDTO.class))).thenReturn(workouts);
+
+        mockMvc.perform(post("/workouts/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(workouts)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all Workouts
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllWorkouts() throws URISyntaxException
+	public void testB_GetAllWorkouts() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/workouts/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<WorkoutsDTO> workoutss = Arrays.asList(generateRandomWorkouts(), generateRandomWorkouts());
+        when(workoutsService.getAllWorkouts()).thenReturn(workoutss);
+
+        mockMvc.perform(get("/workouts/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single Workouts by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetWorkouts() throws URISyntaxException
+	public void testC_GetWorkouts() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/workouts/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		WorkoutWrapperDTO workouts = generateRandomWorkoutWrapper();
+        when(workoutsService.findWorkoutsById(anyInt())).thenReturn(workouts);
+
+        mockMvc.perform(get("/workouts/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a Workouts
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateWorkouts() throws URISyntaxException
+	public void testD_UpdateWorkouts() throws Exception
 	{
 	    WorkoutsDTO workouts = generateRandomWorkouts();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/workouts/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<WorkoutsDTO> request = new HttpEntity<>(workouts);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(workoutsService.updateWorkouts(any(WorkoutsDTO.class))).thenReturn(workouts);
+
+        mockMvc.perform(post("/workouts/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(workouts)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a Workouts
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteWorkouts() throws URISyntaxException
+	public void testE_DeleteWorkouts() throws Exception
 	{
-		WorkoutsDTO workouts = generateRandomWorkouts();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/workouts/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<WorkoutsDTO> request = new HttpEntity<>(workouts);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(workoutsService.deleteWorkouts(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/workouts/delete/2"))
+                .andExpect(status().isOk());
 	}
 
 	/**
-	 * test getting all Workouts by foreign key userId
-	 * @throws URISyntaxException
-	*/
+	 * test getting a single Workouts by field UserId
+	 * @throws
+	 */
 	@Test
-	public void testGetWorkoutsByUserId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/workouts/findByUserId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
+	public void testC_findByUserId() throws Exception
+	{
+		List<WorkoutsDTO> workouts = Arrays.asList(generateRandomWorkouts());
+		when(workoutsService.findWorkoutsByUserId(anyInt())).thenReturn(workouts);
+
+		mockMvc.perform(get("/workouts/findByUserId/2"))
+				.andExpect(status().isOk());
 	}
-
-	/**
-	 * test getting all Workouts by foreign key exerciseTypeId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetWorkoutsByExerciseTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/workouts/findByExerciseTypeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
-	/**
-	 * test getting all Workouts by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetWorkoutsByUserIdAndExerciseTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/workouts/findByUserIdAndExerciseTypeId/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
-
 	public static WorkoutsDTO generateRandomWorkouts() {
 		WorkoutsDTO record = new WorkoutsDTO();
 		record.setUserId(Randomizer.randomInt(1000));
-		record.setCalendarDate(Randomizer.randomDate());
+		record.setCalendarDate(Randomizer.randomLocalDate());
 		record.setExerciseTypeId(Randomizer.randomInt(1000));
 		record.setDuration(Randomizer.randomInt(1000));
 		record.setRating(Randomizer.randomBigDecimal("1000"));
-		record.setActv(Randomizer.randomString(1));
+		record.setNotes(Randomizer.randomString(20));
+		record.setActv(Randomizer.randomString(2));
 		return record;
+	}
+
+	private static WorkoutWrapperDTO generateRandomWorkoutWrapper() {
+		WorkoutWrapperDTO wrapper = new WorkoutWrapperDTO();
+		wrapper.setWorkoutType(Randomizer.randomInt(2));
+		wrapper.setWorkoutCardioFormDTO(new WorkoutCardioFormDTO());
+		wrapper.setWorkoutStepsFormDTO(new WorkoutStepsFormDTO());
+		wrapper.setWorkoutWeightsFormDTO(new WorkoutWeightsFormDTO());
+		return wrapper;
 	}
 }

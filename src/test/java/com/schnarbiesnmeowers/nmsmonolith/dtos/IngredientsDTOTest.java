@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.IngredientsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-import static org.junit.Assert.*;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 
-import org.junit.Test;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the IngredientsDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class IngredientsDTOTest {
 
 	/**
@@ -23,12 +27,12 @@ public class IngredientsDTOTest {
 	@Test
 	public void testClass() {
 		IngredientsDTO classUnderTest = new IngredientsDTO();
-		classUnderTest.setIngrId(new Integer(1));
+		classUnderTest.setIngrId(2);
 		classUnderTest.setIngrDesc("a");
-		classUnderTest.setIngrTypeId(new Integer(1));
-		classUnderTest.setBrandId(new Integer(1));
+		classUnderTest.setIngrTypeId(2);
+		classUnderTest.setBrandId(2);
 		classUnderTest.setServSz(new BigDecimal(1.00));
-		classUnderTest.setServTypeId(new Integer(1));
+		classUnderTest.setServTypeId(2);
 		classUnderTest.setKcalories(new BigDecimal(1.00));
 		classUnderTest.setTotFat(new BigDecimal(1.00));
 		classUnderTest.setSatFat(new BigDecimal(1.00));
@@ -36,13 +40,13 @@ public class IngredientsDTOTest {
 		classUnderTest.setPolyFat(new BigDecimal(1.00));
 		classUnderTest.setMonoFat(new BigDecimal(1.00));
 		classUnderTest.setCholes(new BigDecimal(1.00));
-		classUnderTest.setSodium(new Integer(1));
+		classUnderTest.setSodium(2);
 		classUnderTest.setTotCarbs(new BigDecimal(1.00));
 		classUnderTest.setTotFiber(new BigDecimal(1.00));
 		classUnderTest.setTotSugars(new BigDecimal(1.00));
 		classUnderTest.setTotProtein(new BigDecimal(1.00));
 		classUnderTest.setGlycIndx(new BigDecimal(1.00));
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		IngredientsDTO newitem = new IngredientsDTO(

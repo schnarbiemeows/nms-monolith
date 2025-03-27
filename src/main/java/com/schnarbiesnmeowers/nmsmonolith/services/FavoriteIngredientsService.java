@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteBrands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.FavoriteIngredientsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteIngredients;
+import com.schnarbiesnmeowers.nmsmonolith.entities.FavoriteIngredients;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.FavoriteIngredientsRepository;
 
 /**

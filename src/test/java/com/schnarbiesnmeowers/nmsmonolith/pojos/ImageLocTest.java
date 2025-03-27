@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ImageLoc;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the ImageLoc class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class ImageLocTest {
 
 	/**
@@ -23,7 +26,7 @@ public class ImageLocTest {
 	@Test
 	public void testClass() {
 		ImageLoc classUnderTest = new ImageLoc();
-		classUnderTest.setImageLocId(new Integer(1));
+		classUnderTest.setImageLocId(2);
 		classUnderTest.setImgDesc("a");
 		classUnderTest.setImgPath("a");
 		assertTrue(true);

@@ -1,15 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller
@@ -52,7 +53,7 @@ public class DailyDietTotalsController {
 
 	/**
 	 * create a new DailyDietTotals
-	 * @param DailyDietTotalsDTO
+	 * @param data
 	 * @return DailyDietTotals
 	 */
 	@PostMapping(path = "/create")
@@ -67,7 +68,7 @@ public class DailyDietTotalsController {
 
 	/**
 	 * update a DailyDietTotals
-	 * @param DailyDietTotalsDTO
+	 * @param data
 	 * @return DailyDietTotals
 	 */
 	@PostMapping(path = "/update")
@@ -89,7 +90,7 @@ public class DailyDietTotalsController {
 
 	/**
 	 * get List<DailyDietTotalsDTO> by foreign key : userId
-	 * @param userId
+	 * @param id
 	 * @return List<DailyDietTotals>
 	 * @throws Exception
 	*/
@@ -101,7 +102,7 @@ public class DailyDietTotalsController {
 
 	/**
 	 * get List<DailyDietTotalsDTO> by foreign key : bldstId
-	 * @param bldstId
+	 * @param id
 	 * @return List<DailyDietTotals>
 	 * @throws Exception
 	*/
@@ -113,7 +114,7 @@ public class DailyDietTotalsController {
 
 	/**
 	 * get List<DailyDietTotalsDTO> by foreign key : UserIdAndBldstId
-	 * @param UserIdAndBldstId
+	 * @param id0
 	 * @return List<DailyDietTotals>
 	 * @throws Exception
 	*/

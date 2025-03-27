@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.UnsyncedDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Unsynced;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Unsynced;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.UnsyncedRepository;
 import java.util.List;
 /**

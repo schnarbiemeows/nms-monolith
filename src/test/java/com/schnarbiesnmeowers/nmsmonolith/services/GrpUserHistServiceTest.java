@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GrpUserHistDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.GrpUserHist;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.GrpUserHistRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,125 +22,124 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.GrpUserHistDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class GrpUserHistServiceTest {
+@ExtendWith(MockitoExtension.class)
+class GrpUserHistServiceTest {
 
+    @Mock
+    private GrpUserHistRepository grpuserhistRepository;
 
-	/**
-	 * get all GrpUserHist records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<GrpUserHistDTO> getAllGrpUserHist() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<GrpUserHistDTO> grpuserhistDTO = new ArrayList<GrpUserHistDTO>();
-		return grpuserhistDTO;
+    @InjectMocks
+    private GrpUserHistService grpuserhistService;
+
+    private GrpUserHist grpuserhist;
+    private GrpUserHistDTO grpuserhistDTO;
+
+    @BeforeEach
+    void setUp() {
+        grpuserhist = generateRandomGrpUserHistEntity();
+        grpuserhistDTO = generateRandomGrpUserHist();
+    }
+
+    @Test
+    void testGetAllGrpUserHist() throws Exception {
+        when(grpuserhistRepository.findAll()).thenReturn(Collections.singletonList(grpuserhist));
+
+        List<GrpUserHistDTO> result = grpuserhistService.getAllGrpUserHist();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindGrpUserHistById_Found() throws Exception {
+        when(grpuserhistRepository.findById(anyInt())).thenReturn(Optional.of(grpuserhist));
+
+        GrpUserHistDTO result = grpuserhistService.findGrpUserHistById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindGrpUserHistById_NotFound() {
+        when(grpuserhistRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            grpuserhistService.findGrpUserHistById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateGrpUserHist() {
+        when(grpuserhistRepository.save(any(GrpUserHist.class))).thenReturn(grpuserhist);
+
+        GrpUserHistDTO result = grpuserhistService.createGrpUserHist(grpuserhistDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateGrpUserHist_Found() throws Exception {
+        when(grpuserhistRepository.findById(anyInt())).thenReturn(Optional.of(grpuserhist));
+        when(grpuserhistRepository.save(any(GrpUserHist.class))).thenReturn(grpuserhist);
+
+        GrpUserHistDTO result = grpuserhistService.updateGrpUserHist(grpuserhistDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateGrpUserHist_NotFound() {
+        when(grpuserhistRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            grpuserhistService.updateGrpUserHist(grpuserhistDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteGrpUserHist_Found() throws Exception {
+        when(grpuserhistRepository.findById(anyInt())).thenReturn(Optional.of(grpuserhist));
+        doNothing().when(grpuserhistRepository).deleteById(anyInt());
+
+        String result = grpuserhistService.deleteGrpUserHist(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteGrpUserHist_NotFound() {
+        when(grpuserhistRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            grpuserhistService.deleteGrpUserHist(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static GrpUserHistDTO generateRandomGrpUserHist() {
+		GrpUserHistDTO record = new GrpUserHistDTO();
+		record.setGrpUserHistId(2);
+		record.setGrpUserId(Randomizer.randomInt(1000));
+		record.setGrpId(Randomizer.randomInt(1000));
+		record.setUserId(Randomizer.randomInt(1000));
+		record.setActionTypeId(Randomizer.randomInt(1000));
+		record.setEvntTmestmp(Randomizer.randomDate());
+		record.setEvntOperId(Randomizer.randomInt(1000));
+		return record;
 	}
-
-	/**
-	 * get GrpUserHist by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public GrpUserHistDTO findGrpUserHistById(int id) throws Exception {
-		return new GrpUserHistDTO();
+    public static GrpUserHist generateRandomGrpUserHistEntity() {
+		GrpUserHist record = new GrpUserHist();
+		record.setGrpUserHistId(2);
+		record.setGrpUserId(Randomizer.randomInt(1000));
+		record.setGrpId(Randomizer.randomInt(1000));
+		record.setUserId(Randomizer.randomInt(1000));
+		record.setActionTypeId(Randomizer.randomInt(1000));
+		record.setEvntTmestmp(Randomizer.randomDate());
+		record.setEvntOperId(Randomizer.randomInt(1000));
+		return record;
 	}
-
-	/**
-	 * create a new GrpUserHist
-	 * @param data
-	 * @return
-	 */
-	public GrpUserHistDTO createGrpUserHist(GrpUserHistDTO data) {
-        data.setGrpUserHistId(1);
-        return data;
-	}
-
-	/**
-	 * update a GrpUserHist
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public GrpUserHistDTO updateGrpUserHist(GrpUserHistDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a GrpUserHist by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteGrpUserHist(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<GrpUserHistDTO> by foreign key : grpUserId
-	 * @param grpUserId
-	 * @return List<GrpUserHist>
-	 * @throws Exception
-	*/
-	public List<GrpUserHistDTO> findGrpUserHistByGrpUserId(int id) throws Exception {
-		List<GrpUserHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<GrpUserHistDTO> by foreign key : grpId
-	 * @param grpId
-	 * @return List<GrpUserHist>
-	 * @throws Exception
-	*/
-	public List<GrpUserHistDTO> findGrpUserHistByGrpId(int id) throws Exception {
-		List<GrpUserHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<GrpUserHistDTO> by foreign key : userId
-	 * @param userId
-	 * @return List<GrpUserHist>
-	 * @throws Exception
-	*/
-	public List<GrpUserHistDTO> findGrpUserHistByUserId(int id) throws Exception {
-		List<GrpUserHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<GrpUserHistDTO> by foreign key : actionTypeId
-	 * @param actionTypeId
-	 * @return List<GrpUserHist>
-	 * @throws Exception
-	*/
-	public List<GrpUserHistDTO> findGrpUserHistByActionTypeId(int id) throws Exception {
-		List<GrpUserHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<GrpUserHistDTO> by foreign key : evntOperId
-	 * @param evntOperId
-	 * @return List<GrpUserHist>
-	 * @throws Exception
-	*/
-	public List<GrpUserHistDTO> findGrpUserHistByEvntOperId(int id) throws Exception {
-		List<GrpUserHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<GrpUserHistDTO> by foreign key : GrpUserIdAndGrpIdAndUserIdAndActionTypeIdAndEvntOperId
-	 * @param GrpUserIdAndGrpIdAndUserIdAndActionTypeIdAndEvntOperId
-	 * @return List<GrpUserHist>
-	 * @throws Exception
-	*/
-	public List<GrpUserHistDTO> findGrpUserHistByGrpUserIdAndGrpIdAndUserIdAndActionTypeIdAndEvntOperId(@PathVariable int id0,@PathVariable int id1,@PathVariable int id2,@PathVariable int id3,@PathVariable int id4) throws Exception {
-		List<GrpUserHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

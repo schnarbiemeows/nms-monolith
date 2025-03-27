@@ -1,15 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.StepsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
+import com.schnarbiesnmeowers.nmsmonolith.services.workouts.StepsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
-import com.schnarbiesnmeowers.nmsmonolith.services.*;
-import com.schnarbiesnmeowers.nmsmonolith.dtos.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller
@@ -52,7 +53,7 @@ public class StepsController {
 
 	/**
 	 * create a new Steps
-	 * @param StepsDTO
+	 * @param data
 	 * @return Steps
 	 */
 	@PostMapping(path = "/create")
@@ -67,7 +68,7 @@ public class StepsController {
 
 	/**
 	 * update a Steps
-	 * @param StepsDTO
+	 * @param data
 	 * @return Steps
 	 */
 	@PostMapping(path = "/update")
@@ -89,13 +90,13 @@ public class StepsController {
 
 	/**
 	 * get List<StepsDTO> by foreign key : workoutId
-	 * @param workoutId
+	 * @param id
 	 * @return List<Steps>
 	 * @throws Exception
 	*/
 	@GetMapping(path = "/findByWorkoutId/{id}")
-	public ResponseEntity<List<StepsDTO>> findStepsByWorkoutId(@PathVariable int id) throws Exception {
-		List<StepsDTO> results = businessService.findStepsByWorkoutId(id);
+	public ResponseEntity<StepsDTO> findStepsByWorkoutId(@PathVariable int id) throws Exception {
+		StepsDTO results = businessService.findStepsByWorkoutId(id);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 

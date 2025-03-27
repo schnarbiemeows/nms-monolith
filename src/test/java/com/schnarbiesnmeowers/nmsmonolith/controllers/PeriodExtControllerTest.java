@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.PeriodExtRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.PeriodExtDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.PeriodExtService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,133 +31,122 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class PeriodExtControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private PeriodExtController periodextController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private PeriodExtService periodextService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private PeriodExtRepository periodextRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(periodextController).build();
+    }
 
 	/**
 	 * test creating a new PeriodExt
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreatePeriodExt() throws URISyntaxException
+	public void testA_CreatePeriodExt() throws Exception
 	{
 	    PeriodExtDTO periodext = generateRandomPeriodExt();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(periodext.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/periodext/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<PeriodExtDTO> request = new HttpEntity<>(periodext,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(periodextService.createPeriodExt(any(PeriodExtDTO.class))).thenReturn(periodext);
+
+        mockMvc.perform(post("/periodext/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(periodext)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all PeriodExt
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllPeriodExt() throws URISyntaxException
+	public void testB_GetAllPeriodExt() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/periodext/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<PeriodExtDTO> periodexts = Arrays.asList(generateRandomPeriodExt(), generateRandomPeriodExt());
+        when(periodextService.getAllPeriodExt()).thenReturn(periodexts);
+
+        mockMvc.perform(get("/periodext/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single PeriodExt by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetPeriodExt() throws URISyntaxException
+	public void testC_GetPeriodExt() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/periodext/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		PeriodExtDTO periodext = generateRandomPeriodExt();
+        when(periodextService.findPeriodExtById(anyInt())).thenReturn(periodext);
+
+        mockMvc.perform(get("/periodext/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a PeriodExt
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdatePeriodExt() throws URISyntaxException
+	public void testD_UpdatePeriodExt() throws Exception
 	{
 	    PeriodExtDTO periodext = generateRandomPeriodExt();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/periodext/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<PeriodExtDTO> request = new HttpEntity<>(periodext);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(periodextService.updatePeriodExt(any(PeriodExtDTO.class))).thenReturn(periodext);
+
+        mockMvc.perform(post("/periodext/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(periodext)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a PeriodExt
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeletePeriodExt() throws URISyntaxException
+	public void testE_DeletePeriodExt() throws Exception
 	{
-		PeriodExtDTO periodext = generateRandomPeriodExt();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/periodext/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<PeriodExtDTO> request = new HttpEntity<>(periodext);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(periodextService.deletePeriodExt(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/periodext/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all PeriodExt by foreign key periodId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetPeriodExtByPeriodId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/periodext/findByPeriodId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single PeriodExt by field PeriodId
+ * @throws
+ */
+@Test
+public void testC_findByPeriodId() throws Exception
+{
+    List<PeriodExtDTO> periodext = Arrays.asList(generateRandomPeriodExt());
+    when(periodextService.findPeriodExtByPeriodId(anyInt())).thenReturn(periodext);
 
+    mockMvc.perform(get("/periodext/findByPeriodId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static PeriodExtDTO generateRandomPeriodExt() {
 		PeriodExtDTO record = new PeriodExtDTO();

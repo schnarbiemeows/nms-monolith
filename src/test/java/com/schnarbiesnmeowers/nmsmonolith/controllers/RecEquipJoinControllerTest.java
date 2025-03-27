@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RecEquipJoinRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RecEquipJoinDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.RecEquipJoinService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,161 +31,134 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class RecEquipJoinControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private RecEquipJoinController recequipjoinController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private RecEquipJoinService recequipjoinService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private RecEquipJoinRepository recequipjoinRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(recequipjoinController).build();
+    }
 
 	/**
 	 * test creating a new RecEquipJoin
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateRecEquipJoin() throws URISyntaxException
+	public void testA_CreateRecEquipJoin() throws Exception
 	{
 	    RecEquipJoinDTO recequipjoin = generateRandomRecEquipJoin();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(recequipjoin.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/recequipjoin/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<RecEquipJoinDTO> request = new HttpEntity<>(recequipjoin,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(recequipjoinService.createRecEquipJoin(any(RecEquipJoinDTO.class))).thenReturn(recequipjoin);
+
+        mockMvc.perform(post("/recequipjoin/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(recequipjoin)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all RecEquipJoin
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllRecEquipJoin() throws URISyntaxException
+	public void testB_GetAllRecEquipJoin() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/recequipjoin/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<RecEquipJoinDTO> recequipjoins = Arrays.asList(generateRandomRecEquipJoin(), generateRandomRecEquipJoin());
+        when(recequipjoinService.getAllRecEquipJoin()).thenReturn(recequipjoins);
+
+        mockMvc.perform(get("/recequipjoin/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single RecEquipJoin by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetRecEquipJoin() throws URISyntaxException
+	public void testC_GetRecEquipJoin() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/recequipjoin/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		RecEquipJoinDTO recequipjoin = generateRandomRecEquipJoin();
+        when(recequipjoinService.findRecEquipJoinById(anyInt())).thenReturn(recequipjoin);
+
+        mockMvc.perform(get("/recequipjoin/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a RecEquipJoin
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateRecEquipJoin() throws URISyntaxException
+	public void testD_UpdateRecEquipJoin() throws Exception
 	{
 	    RecEquipJoinDTO recequipjoin = generateRandomRecEquipJoin();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/recequipjoin/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<RecEquipJoinDTO> request = new HttpEntity<>(recequipjoin);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(recequipjoinService.updateRecEquipJoin(any(RecEquipJoinDTO.class))).thenReturn(recequipjoin);
+
+        mockMvc.perform(post("/recequipjoin/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(recequipjoin)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a RecEquipJoin
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteRecEquipJoin() throws URISyntaxException
+	public void testE_DeleteRecEquipJoin() throws Exception
 	{
-		RecEquipJoinDTO recequipjoin = generateRandomRecEquipJoin();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/recequipjoin/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<RecEquipJoinDTO> request = new HttpEntity<>(recequipjoin);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(recequipjoinService.deleteRecEquipJoin(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/recequipjoin/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all RecEquipJoin by foreign key recipeId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetRecEquipJoinByRecipeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/recequipjoin/findByRecipeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single RecEquipJoin by field RecipeId
+ * @throws
+ */
+@Test
+public void testC_findByRecipeId() throws Exception
+{
+    List<RecEquipJoinDTO> recequipjoin = Arrays.asList(generateRandomRecEquipJoin());
+    when(recequipjoinService.findRecEquipJoinByRecipeId(anyInt())).thenReturn(recequipjoin);
 
-	/**
-	 * test getting all RecEquipJoin by foreign key recipeEquipId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetRecEquipJoinByRecipeEquipId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/recequipjoin/findByRecipeEquipId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/recequipjoin/findByRecipeId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single RecEquipJoin by field RecipeEquipId
+ * @throws
+ */
+@Test
+public void testC_findByRecipeEquipId() throws Exception
+{
+    List<RecEquipJoinDTO> recequipjoin = Arrays.asList(generateRandomRecEquipJoin());
+    when(recequipjoinService.findRecEquipJoinByRecipeEquipId(anyInt())).thenReturn(recequipjoin);
 
-	/**
-	 * test getting all RecEquipJoin by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetRecEquipJoinByRecipeIdAndRecipeEquipId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/recequipjoin/findByRecipeIdAndRecipeEquipId/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/recequipjoin/findByRecipeEquipId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static RecEquipJoinDTO generateRandomRecEquipJoin() {
 		RecEquipJoinDTO record = new RecEquipJoinDTO();

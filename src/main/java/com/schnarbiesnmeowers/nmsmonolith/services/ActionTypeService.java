@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ActionTypeDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.ActionType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ActionType;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.ActionTypeRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.PeriodTypeRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.PeriodTypeDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.PeriodTypeService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,123 +31,114 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class PeriodTypeControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private PeriodTypeController periodtypeController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private PeriodTypeService periodtypeService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private PeriodTypeRepository periodtypeRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(periodtypeController).build();
+    }
 
 	/**
 	 * test creating a new PeriodType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreatePeriodType() throws URISyntaxException
+	public void testA_CreatePeriodType() throws Exception
 	{
 	    PeriodTypeDTO periodtype = generateRandomPeriodType();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(periodtype.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/periodtype/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<PeriodTypeDTO> request = new HttpEntity<>(periodtype,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(periodtypeService.createPeriodType(any(PeriodTypeDTO.class))).thenReturn(periodtype);
+
+        mockMvc.perform(post("/periodtype/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(periodtype)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all PeriodType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllPeriodType() throws URISyntaxException
+	public void testB_GetAllPeriodType() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/periodtype/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<PeriodTypeDTO> periodtypes = Arrays.asList(generateRandomPeriodType(), generateRandomPeriodType());
+        when(periodtypeService.getAllPeriodType()).thenReturn(periodtypes);
+
+        mockMvc.perform(get("/periodtype/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single PeriodType by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetPeriodType() throws URISyntaxException
+	public void testC_GetPeriodType() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/periodtype/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		PeriodTypeDTO periodtype = generateRandomPeriodType();
+        when(periodtypeService.findPeriodTypeById(anyInt())).thenReturn(periodtype);
+
+        mockMvc.perform(get("/periodtype/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a PeriodType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdatePeriodType() throws URISyntaxException
+	public void testD_UpdatePeriodType() throws Exception
 	{
 	    PeriodTypeDTO periodtype = generateRandomPeriodType();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/periodtype/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<PeriodTypeDTO> request = new HttpEntity<>(periodtype);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(periodtypeService.updatePeriodType(any(PeriodTypeDTO.class))).thenReturn(periodtype);
+
+        mockMvc.perform(post("/periodtype/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(periodtype)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a PeriodType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeletePeriodType() throws URISyntaxException
+	public void testE_DeletePeriodType() throws Exception
 	{
-		PeriodTypeDTO periodtype = generateRandomPeriodType();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/periodtype/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<PeriodTypeDTO> request = new HttpEntity<>(periodtype);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(periodtypeService.deletePeriodType(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/periodtype/delete/2"))
+                .andExpect(status().isOk());
 	}
+
 
 
 	public static PeriodTypeDTO generateRandomPeriodType() {
 		PeriodTypeDTO record = new PeriodTypeDTO();
-		record.setPeriodTypeCde(Randomizer.randomString(1));
+		record.setPeriodTypeCde(Randomizer.randomString(2));
 		record.setPeriodTypeDesc(Randomizer.randomString(20));
 		return record;
 	}

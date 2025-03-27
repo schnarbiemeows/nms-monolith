@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.ServingTypes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ServingTypes;
 
 import java.io.Serializable;
 import com.google.gson.Gson;

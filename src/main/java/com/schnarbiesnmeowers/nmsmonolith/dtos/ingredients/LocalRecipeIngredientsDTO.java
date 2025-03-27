@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalRecipeIngredients;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalRecipeIngredients;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

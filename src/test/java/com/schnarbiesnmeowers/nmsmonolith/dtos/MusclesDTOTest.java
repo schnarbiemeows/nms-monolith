@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the MusclesDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class MusclesDTOTest {
 
 	/**
@@ -23,10 +26,10 @@ public class MusclesDTOTest {
 	@Test
 	public void testClass() {
 		MusclesDTO classUnderTest = new MusclesDTO();
-		classUnderTest.setMuscleId(new Integer(1));
-		classUnderTest.setMuscleGroupId(new Integer(1));
+		classUnderTest.setMuscleId(2);
+		classUnderTest.setMuscleGroupId(2);
 		classUnderTest.setMuscleName("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		MusclesDTO newitem = new MusclesDTO(

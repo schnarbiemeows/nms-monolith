@@ -6,14 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.brands.BrandMinDTO;
-import com.schnarbiesnmeowers.nmsmonolith.dtos.brands.BrandsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.brands.LocalBrandsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.DependencyExistsException;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LocalBrandsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalBrands;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalBrands;
 
 import static com.schnarbiesnmeowers.nmsmonolith.utilities.Constants.NO;
 

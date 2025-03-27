@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.MessagesRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.MessagesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.MessagesService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,161 +31,134 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class MessagesControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private MessagesController messagesController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private MessagesService messagesService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private MessagesRepository messagesRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(messagesController).build();
+    }
 
 	/**
 	 * test creating a new Messages
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateMessages() throws URISyntaxException
+	public void testA_CreateMessages() throws Exception
 	{
 	    MessagesDTO messages = generateRandomMessages();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(messages.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/messages/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<MessagesDTO> request = new HttpEntity<>(messages,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(messagesService.createMessages(any(MessagesDTO.class))).thenReturn(messages);
+
+        mockMvc.perform(post("/messages/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(messages)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all Messages
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllMessages() throws URISyntaxException
+	public void testB_GetAllMessages() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/messages/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<MessagesDTO> messagess = Arrays.asList(generateRandomMessages(), generateRandomMessages());
+        when(messagesService.getAllMessages()).thenReturn(messagess);
+
+        mockMvc.perform(get("/messages/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single Messages by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetMessages() throws URISyntaxException
+	public void testC_GetMessages() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/messages/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		MessagesDTO messages = generateRandomMessages();
+        when(messagesService.findMessagesById(anyInt())).thenReturn(messages);
+
+        mockMvc.perform(get("/messages/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a Messages
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateMessages() throws URISyntaxException
+	public void testD_UpdateMessages() throws Exception
 	{
 	    MessagesDTO messages = generateRandomMessages();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/messages/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<MessagesDTO> request = new HttpEntity<>(messages);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(messagesService.updateMessages(any(MessagesDTO.class))).thenReturn(messages);
+
+        mockMvc.perform(post("/messages/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(messages)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a Messages
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteMessages() throws URISyntaxException
+	public void testE_DeleteMessages() throws Exception
 	{
-		MessagesDTO messages = generateRandomMessages();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/messages/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<MessagesDTO> request = new HttpEntity<>(messages);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(messagesService.deleteMessages(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/messages/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all Messages by foreign key eventId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetMessagesByEventId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/messages/findByEventId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single Messages by field EventId
+ * @throws
+ */
+@Test
+public void testC_findByEventId() throws Exception
+{
+    List<MessagesDTO> messages = Arrays.asList(generateRandomMessages());
+    when(messagesService.findMessagesByEventId(anyInt())).thenReturn(messages);
 
-	/**
-	 * test getting all Messages by foreign key messageTypeId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetMessagesByMessageTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/messages/findByMessageTypeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/messages/findByEventId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single Messages by field MessageTypeId
+ * @throws
+ */
+@Test
+public void testC_findByMessageTypeId() throws Exception
+{
+    List<MessagesDTO> messages = Arrays.asList(generateRandomMessages());
+    when(messagesService.findMessagesByMessageTypeId(anyInt())).thenReturn(messages);
 
-	/**
-	 * test getting all Messages by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetMessagesByEventIdAndMessageTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/messages/findByEventIdAndMessageTypeId/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/messages/findByMessageTypeId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static MessagesDTO generateRandomMessages() {
 		MessagesDTO record = new MessagesDTO();

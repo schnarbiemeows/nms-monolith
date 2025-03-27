@@ -1,14 +1,12 @@
 package com.schnarbiesnmeowers.nmsmonolith.utilities;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Time;
 import java.sql.Timestamp;
-import org.junit.Test;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 /**
@@ -16,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class RandomizerTest {
 
 	@Test

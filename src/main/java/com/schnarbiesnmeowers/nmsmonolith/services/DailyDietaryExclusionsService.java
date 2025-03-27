@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.DailyDietaryExclusionsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyDietaryExclusions;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDietaryExclusions;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.DailyDietaryExclusionsRepository;
 
 /**

@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecEquipJoin;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the RecEquipJoin class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class RecEquipJoinTest {
 
 	/**
@@ -23,9 +26,9 @@ public class RecEquipJoinTest {
 	@Test
 	public void testClass() {
 		RecEquipJoin classUnderTest = new RecEquipJoin();
-		classUnderTest.setRecEquipJoinId(new Integer(1));
-		classUnderTest.setRecipeId(new Integer(1));
-		classUnderTest.setRecipeEquipId(new Integer(1));
+		classUnderTest.setRecEquipJoinId(2);
+		classUnderTest.setRecipeId(2);
+		classUnderTest.setRecipeEquipId(2);
 		assertTrue(true);
 		RecEquipJoin newitem = new RecEquipJoin(
 		classUnderTest.getRecEquipJoinId(),

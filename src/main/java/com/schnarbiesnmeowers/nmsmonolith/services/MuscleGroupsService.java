@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.MuscleGroupsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.MuscleGroups;
+import com.schnarbiesnmeowers.nmsmonolith.entities.MuscleGroups;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.MuscleGroupsRepository;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +37,17 @@ public class MuscleGroupsService {
 	 */
 	public List<MuscleGroupsDTO> getAllMuscleGroups() throws Exception {
 		Iterable<MuscleGroups> musclegroups = muscleGroupsRepository.findAll();
+		Iterator<MuscleGroups> musclegroupss = musclegroups.iterator();
+		List<MuscleGroupsDTO> musclegroupsdto = new ArrayList();
+		while(musclegroupss.hasNext()) {
+			MuscleGroups item = musclegroupss.next();
+			musclegroupsdto.add(item.toDTO());
+		}
+		return musclegroupsdto;
+	}
+
+	public List<MuscleGroupsDTO> getWeightWorkoutTypes() throws Exception {
+		Iterable<MuscleGroups> musclegroups = muscleGroupsRepository.getWeightWorkoutTypes();
 		Iterator<MuscleGroups> musclegroupss = musclegroups.iterator();
 		List<MuscleGroupsDTO> musclegroupsdto = new ArrayList();
 		while(musclegroupss.hasNext()) {

@@ -1,12 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RecipeStepsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeSteps;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RecipeStepsRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -14,93 +22,122 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.RecipeStepsDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class RecipeStepsServiceTest {
+@ExtendWith(MockitoExtension.class)
+class RecipeStepsServiceTest {
 
+    @Mock
+    private RecipeStepsRepository recipestepsRepository;
 
-	/**
-	 * get all RecipeSteps records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<RecipeStepsDTO> getAllRecipeSteps() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<RecipeStepsDTO> recipestepsDTO = new ArrayList<RecipeStepsDTO>();
-		return recipestepsDTO;
+    @InjectMocks
+    private RecipeStepsService recipestepsService;
+
+    private RecipeSteps recipesteps;
+    private RecipeStepsDTO recipestepsDTO;
+
+    @BeforeEach
+    void setUp() {
+        recipesteps = generateRandomRecipeStepsEntity();
+        recipestepsDTO = generateRandomRecipeSteps();
+    }
+
+    @Test
+    void testGetAllRecipeSteps() throws Exception {
+        when(recipestepsRepository.findAll()).thenReturn(Collections.singletonList(recipesteps));
+
+        List<RecipeStepsDTO> result = recipestepsService.getAllRecipeSteps();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindRecipeStepsById_Found() throws Exception {
+        when(recipestepsRepository.findById(anyInt())).thenReturn(Optional.of(recipesteps));
+
+        RecipeStepsDTO result = recipestepsService.findRecipeStepsById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindRecipeStepsById_NotFound() {
+        when(recipestepsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recipestepsService.findRecipeStepsById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateRecipeSteps() {
+        when(recipestepsRepository.save(any(RecipeSteps.class))).thenReturn(recipesteps);
+
+        RecipeStepsDTO result = recipestepsService.createRecipeSteps(recipestepsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRecipeSteps_Found() throws Exception {
+        when(recipestepsRepository.findById(anyInt())).thenReturn(Optional.of(recipesteps));
+        when(recipestepsRepository.save(any(RecipeSteps.class))).thenReturn(recipesteps);
+
+        RecipeStepsDTO result = recipestepsService.updateRecipeSteps(recipestepsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRecipeSteps_NotFound() {
+        when(recipestepsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recipestepsService.updateRecipeSteps(recipestepsDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteRecipeSteps_Found() throws Exception {
+        when(recipestepsRepository.findById(anyInt())).thenReturn(Optional.of(recipesteps));
+        doNothing().when(recipestepsRepository).deleteById(anyInt());
+
+        String result = recipestepsService.deleteRecipeSteps(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteRecipeSteps_NotFound() {
+        when(recipestepsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recipestepsService.deleteRecipeSteps(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static RecipeStepsDTO generateRandomRecipeSteps() {
+		RecipeStepsDTO record = new RecipeStepsDTO();
+		record.setRecipeStepId(2);
+		record.setRecipeId(Randomizer.randomInt(1000));
+		record.setStepNum(Randomizer.randomInt(1000));
+		record.setStepDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get RecipeSteps by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public RecipeStepsDTO findRecipeStepsById(int id) throws Exception {
-		return new RecipeStepsDTO();
+    public static RecipeSteps generateRandomRecipeStepsEntity() {
+		RecipeSteps record = new RecipeSteps();
+		record.setRecipeStepId(2);
+		record.setRecipeId(Randomizer.randomInt(1000));
+		record.setStepNum(Randomizer.randomInt(1000));
+		record.setStepDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * create a new RecipeSteps
-	 * @param data
-	 * @return
-	 */
-	public RecipeStepsDTO createRecipeSteps(RecipeStepsDTO data) {
-        data.setRecipeStepId(1);
-        return data;
-	}
-
-	/**
-	 * update a RecipeSteps
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public RecipeStepsDTO updateRecipeSteps(RecipeStepsDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a RecipeSteps by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteRecipeSteps(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<RecipeStepsDTO> by foreign key : recipeId
-	 * @param id
-	 * @return List<RecipeSteps>
-	 * @throws Exception
-	*/
-	public List<RecipeStepsDTO> findRecipeStepsByRecipeId(int id) throws Exception {
-		List<RecipeStepsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RecipeStepsDTO> by foreign key : imageLoc
-	 * @param id
-	 * @return List<RecipeSteps>
-	 * @throws Exception
-	*/
-	public List<RecipeStepsDTO> findRecipeStepsByImageLoc(int id) throws Exception {
-		List<RecipeStepsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RecipeStepsDTO> by foreign key : RecipeIdAndImageLoc
-	 * @param id0
-	 * @param id1
-	 * @return
-	 * @throws Exception
-	 */
-	public List<RecipeStepsDTO> findRecipeStepsByRecipeIdAndImageLoc(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<RecipeStepsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

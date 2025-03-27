@@ -1,13 +1,11 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.dailyweight;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyWeight;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyWeight;
 import java.io.Serializable;
 import com.google.gson.Gson;
 import java.math.*;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
 
 /**
  *

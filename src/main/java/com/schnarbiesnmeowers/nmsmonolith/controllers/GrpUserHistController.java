@@ -1,15 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller
@@ -52,7 +53,7 @@ public class GrpUserHistController {
 
 	/**
 	 * create a new GrpUserHist
-	 * @param GrpUserHistDTO
+	 * @param data
 	 * @return GrpUserHist
 	 */
 	@PostMapping(path = "/create")
@@ -67,7 +68,7 @@ public class GrpUserHistController {
 
 	/**
 	 * update a GrpUserHist
-	 * @param GrpUserHistDTO
+	 * @param data
 	 * @return GrpUserHist
 	 */
 	@PostMapping(path = "/update")
@@ -89,7 +90,7 @@ public class GrpUserHistController {
 
 	/**
 	 * get List<GrpUserHistDTO> by foreign key : grpUserId
-	 * @param grpUserId
+	 * @param id
 	 * @return List<GrpUserHist>
 	 * @throws Exception
 	*/
@@ -101,7 +102,7 @@ public class GrpUserHistController {
 
 	/**
 	 * get List<GrpUserHistDTO> by foreign key : grpId
-	 * @param grpId
+	 * @param id
 	 * @return List<GrpUserHist>
 	 * @throws Exception
 	*/
@@ -113,7 +114,7 @@ public class GrpUserHistController {
 
 	/**
 	 * get List<GrpUserHistDTO> by foreign key : userId
-	 * @param userId
+	 * @param id
 	 * @return List<GrpUserHist>
 	 * @throws Exception
 	*/
@@ -125,7 +126,7 @@ public class GrpUserHistController {
 
 	/**
 	 * get List<GrpUserHistDTO> by foreign key : actionTypeId
-	 * @param actionTypeId
+	 * @param id
 	 * @return List<GrpUserHist>
 	 * @throws Exception
 	*/
@@ -137,7 +138,7 @@ public class GrpUserHistController {
 
 	/**
 	 * get List<GrpUserHistDTO> by foreign key : evntOperId
-	 * @param evntOperId
+	 * @param id
 	 * @return List<GrpUserHist>
 	 * @throws Exception
 	*/
@@ -149,7 +150,7 @@ public class GrpUserHistController {
 
 	/**
 	 * get List<GrpUserHistDTO> by foreign key : GrpUserIdAndGrpIdAndUserIdAndActionTypeIdAndEvntOperId
-	 * @param GrpUserIdAndGrpIdAndUserIdAndActionTypeIdAndEvntOperId
+	 * @param id0
 	 * @return List<GrpUserHist>
 	 * @throws Exception
 	*/

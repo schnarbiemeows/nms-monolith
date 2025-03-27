@@ -2,7 +2,6 @@ package com.schnarbiesnmeowers.nmsmonolith.services;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailydiet.DailyDietDisplayRecord;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailydiet.DailyDietRequest;
@@ -13,15 +12,15 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.RecipeIngredientDisplay;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.DependencyExistsException;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ServingRatioNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyDiet;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalRecipes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDiet;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalRecipes;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.RecipeCalculatorUtility;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.LocalIngredientsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalIngredients;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalIngredients;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LocalIngredientsRepository;
 
 import static com.schnarbiesnmeowers.nmsmonolith.utilities.Constants.INGREDIENT_TYPE_ID_FOR_RECIPE;
@@ -224,7 +223,7 @@ public class LocalIngredientsService {
 
 	private boolean checkIfWeNeedToRecursivelyUpdate(LocalIngredientsDTO ingredientRecord,
 		LocalIngredientsDTO currentRecipeRecord) throws Exception {
-		return !areTheyTheSame(ingredientRecord,currentRecipeRecord);
+		return /*!areTheyTheSame(ingredientRecord,currentRecipeRecord);*/ false;
 	}
 
 	private boolean areTheyTheSame(LocalIngredientsDTO ingredientRecord, LocalIngredientsDTO currentRecipeRecord) {

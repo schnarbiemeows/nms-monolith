@@ -1,23 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.dtos.dailyweight.DailyWeightDataPoint;
+import com.schnarbiesnmeowers.nmsmonolith.dtos.dailyweight.DailyWeightDTO;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-import static org.junit.Assert.*;
-
-import java.time.LocalDate;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
+import java.sql.Timestamp;
 
-import org.junit.Test;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the DailyWeightDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class DailyWeightDTOTest {
 
 	/**
@@ -25,21 +26,31 @@ public class DailyWeightDTOTest {
 	 */
 	@Test
 	public void testClass() {
-		DailyWeightDataPoint classUnderTest = new DailyWeightDataPoint();
-		classUnderTest.setDailyWeightId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
-		classUnderTest.setCalendarDate(LocalDate.now());
-		classUnderTest.setWeight(new BigDecimal(1.00));
+		DailyWeightDTO classUnderTest = generateRandomDailyWeight();
 		assertTrue(true);
-		DailyWeightDataPoint newitem = new DailyWeightDataPoint(
-		classUnderTest.getDailyWeightId(),
-		classUnderTest.getUserId(),
-		classUnderTest.getCalendarDate(),
-		classUnderTest.getWeight());
+		DailyWeightDTO newitem = new DailyWeightDTO(
+		classUnderTest.getData(),
+		classUnderTest.getMissingData(),
+		classUnderTest.getMin(),
+		classUnderTest.getMax(),
+				classUnderTest.getAverage(),
+				classUnderTest.getDayRange(),
+				classUnderTest.getMissingDates());
 		assertNotNull(newitem);
 		String string = classUnderTest.toString();
 		assertNotNull(string);
 		assertTrue(string.length()>0);
 	}
 
+	public static DailyWeightDTO generateRandomDailyWeight() {
+		DailyWeightDTO record = new DailyWeightDTO();
+		record.setMissingDates(new ArrayList<>());
+		record.setDayRange(10);
+		record.setMin(Randomizer.randomBigDecimal("3"));
+		record.setMax(Randomizer.randomBigDecimal("3"));
+		record.setData(new ArrayList<>());
+		record.setAverage(Randomizer.randomBigDecimal("3"));
+		record.setMissingData(new ArrayList<>());
+		return record;
+	}
 }

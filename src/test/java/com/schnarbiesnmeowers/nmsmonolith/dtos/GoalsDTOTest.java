@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the GoalsDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class GoalsDTOTest {
 
 	/**
@@ -23,14 +26,14 @@ public class GoalsDTOTest {
 	@Test
 	public void testClass() {
 		GoalsDTO classUnderTest = new GoalsDTO();
-		classUnderTest.setGoalId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setGoalId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setGoalName("a");
-		classUnderTest.setGcId(new Integer(1));
+		classUnderTest.setGcId(2);
 		classUnderTest.setComparator("a");
 		classUnderTest.setCompFld("a");
-		classUnderTest.setNumTimes(new Integer(1));
-		classUnderTest.setTimesMet(new Integer(1));
+		classUnderTest.setNumTimes(2);
+		classUnderTest.setTimesMet(2);
 		classUnderTest.setConseq("a");
 		classUnderTest.setRenew("a");
 		classUnderTest.setAchieved("a");

@@ -1,18 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeSteps;
+import java.math.*;
+
 
 /**
  * class to test the RecipeSteps class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class RecipeStepsTest {
 
 	/**
@@ -21,12 +26,12 @@ public class RecipeStepsTest {
 	@Test
 	public void testClass() {
 		RecipeSteps classUnderTest = new RecipeSteps();
-		classUnderTest.setRecipeStepId(new Integer(1));
-		classUnderTest.setRecipeId(new Integer(1));
-		classUnderTest.setStepNum(new Integer(1));
+		classUnderTest.setRecipeStepId(2);
+		classUnderTest.setRecipeId(2);
+		classUnderTest.setStepNum(2);
 		classUnderTest.setStepDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
-		classUnderTest.setActv("Y");
+		classUnderTest.setImageLoc(2);
+		classUnderTest.setActv("a");
 		assertTrue(true);
 		RecipeSteps newitem = new RecipeSteps(
 		classUnderTest.getRecipeStepId(),

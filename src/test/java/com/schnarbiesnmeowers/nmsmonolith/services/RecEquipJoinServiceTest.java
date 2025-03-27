@@ -1,12 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RecEquipJoinDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecEquipJoin;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RecEquipJoinRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -14,93 +22,116 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.RecEquipJoinDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class RecEquipJoinServiceTest {
+@ExtendWith(MockitoExtension.class)
+class RecEquipJoinServiceTest {
 
+    @Mock
+    private RecEquipJoinRepository recequipjoinRepository;
 
-	/**
-	 * get all RecEquipJoin records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<RecEquipJoinDTO> getAllRecEquipJoin() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<RecEquipJoinDTO> recequipjoinDTO = new ArrayList<RecEquipJoinDTO>();
-		return recequipjoinDTO;
+    @InjectMocks
+    private RecEquipJoinService recequipjoinService;
+
+    private RecEquipJoin recequipjoin;
+    private RecEquipJoinDTO recequipjoinDTO;
+
+    @BeforeEach
+    void setUp() {
+        recequipjoin = generateRandomRecEquipJoinEntity();
+        recequipjoinDTO = generateRandomRecEquipJoin();
+    }
+
+    @Test
+    void testGetAllRecEquipJoin() throws Exception {
+        when(recequipjoinRepository.findAll()).thenReturn(Collections.singletonList(recequipjoin));
+
+        List<RecEquipJoinDTO> result = recequipjoinService.getAllRecEquipJoin();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindRecEquipJoinById_Found() throws Exception {
+        when(recequipjoinRepository.findById(anyInt())).thenReturn(Optional.of(recequipjoin));
+
+        RecEquipJoinDTO result = recequipjoinService.findRecEquipJoinById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindRecEquipJoinById_NotFound() {
+        when(recequipjoinRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recequipjoinService.findRecEquipJoinById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateRecEquipJoin() {
+        when(recequipjoinRepository.save(any(RecEquipJoin.class))).thenReturn(recequipjoin);
+
+        RecEquipJoinDTO result = recequipjoinService.createRecEquipJoin(recequipjoinDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRecEquipJoin_Found() throws Exception {
+        when(recequipjoinRepository.findById(anyInt())).thenReturn(Optional.of(recequipjoin));
+        when(recequipjoinRepository.save(any(RecEquipJoin.class))).thenReturn(recequipjoin);
+
+        RecEquipJoinDTO result = recequipjoinService.updateRecEquipJoin(recequipjoinDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRecEquipJoin_NotFound() {
+        when(recequipjoinRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recequipjoinService.updateRecEquipJoin(recequipjoinDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteRecEquipJoin_Found() throws Exception {
+        when(recequipjoinRepository.findById(anyInt())).thenReturn(Optional.of(recequipjoin));
+        doNothing().when(recequipjoinRepository).deleteById(anyInt());
+
+        String result = recequipjoinService.deleteRecEquipJoin(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteRecEquipJoin_NotFound() {
+        when(recequipjoinRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recequipjoinService.deleteRecEquipJoin(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static RecEquipJoinDTO generateRandomRecEquipJoin() {
+		RecEquipJoinDTO record = new RecEquipJoinDTO();
+		record.setRecEquipJoinId(2);
+		record.setRecipeId(Randomizer.randomInt(1000));
+		record.setRecipeEquipId(Randomizer.randomInt(1000));
+		return record;
 	}
-
-	/**
-	 * get RecEquipJoin by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public RecEquipJoinDTO findRecEquipJoinById(int id) throws Exception {
-		return new RecEquipJoinDTO();
+    public static RecEquipJoin generateRandomRecEquipJoinEntity() {
+		RecEquipJoin record = new RecEquipJoin();
+		record.setRecEquipJoinId(2);
+		record.setRecipeId(Randomizer.randomInt(1000));
+		record.setRecipeEquipId(Randomizer.randomInt(1000));
+		return record;
 	}
-
-	/**
-	 * create a new RecEquipJoin
-	 * @param data
-	 * @return
-	 */
-	public RecEquipJoinDTO createRecEquipJoin(RecEquipJoinDTO data) {
-        data.setRecEquipJoinId(1);
-        return data;
-	}
-
-	/**
-	 * update a RecEquipJoin
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public RecEquipJoinDTO updateRecEquipJoin(RecEquipJoinDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a RecEquipJoin by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteRecEquipJoin(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<RecEquipJoinDTO> by foreign key : recipeId
-	 * @param id
-	 * @return List<RecEquipJoin>
-	 * @throws Exception
-	*/
-	public List<RecEquipJoinDTO> findRecEquipJoinByRecipeId(int id) throws Exception {
-		List<RecEquipJoinDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RecEquipJoinDTO> by foreign key : recipeEquipId
-	 * @param id
-	 * @return List<RecEquipJoin>
-	 * @throws Exception
-	*/
-	public List<RecEquipJoinDTO> findRecEquipJoinByRecipeEquipId(int id) throws Exception {
-		List<RecEquipJoinDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RecEquipJoinDTO> by foreign key : RecipeIdAndRecipeEquipId
-	 * @param id0
-	 * @param id1
-	 * @return
-	 * @throws Exception
-	 */
-	public List<RecEquipJoinDTO> findRecEquipJoinByRecipeIdAndRecipeEquipId(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<RecEquipJoinDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

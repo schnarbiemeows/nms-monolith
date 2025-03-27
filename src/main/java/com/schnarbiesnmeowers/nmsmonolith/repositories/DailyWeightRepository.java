@@ -2,7 +2,10 @@ package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyWeight;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyWeight;
+
+import java.util.Optional;
+
 /**
  *
  * @author Dylan I. Kessler
@@ -34,4 +37,7 @@ public interface DailyWeightRepository extends JpaRepository<DailyWeight, Intege
 	 */
 	@Query(value = "select dw.* from daily_weight dw where dw.user_id=?1 and dw.calendar_date >= ?2 order by dw.calendar_date", nativeQuery = true)
 	public Iterable<DailyWeight> findDailyWeightByUserIdAndDate(int userId, String dateStr);
+
+	@Query(value = "select dw.* from daily_weight dw where dw.user_id=?1 and dw.calendar_date = ?2", nativeQuery = true)
+	public Optional<DailyWeight> findSingleDailyWeightByUserIdAndDate(int userId, String dateStr);
 }

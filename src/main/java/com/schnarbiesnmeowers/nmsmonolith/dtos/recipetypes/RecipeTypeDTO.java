@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.recipetypes;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeType;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -4,25 +4,22 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Section;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.io.*;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.List;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller
@@ -61,6 +58,13 @@ public class RecipesController {
 	@GetMapping(path = "/all-displays/{id}")
 	public ResponseEntity<RecipeWrapper> getAllRecipeDisplays(@PathVariable int id) throws Exception {
 		RecipeWrapper recipes = recipesService.getAllRecipeDisplays(id);
+		return ResponseEntity.status(HttpStatus.OK).body(recipes);
+	}
+
+	@GetMapping(path = "/all-displays-ranked/{id}/{rankedBy}")
+	public ResponseEntity<RecipeWrapper> getRecipesByRanking(@PathVariable int id,
+		@PathVariable String rankedBy) throws Exception {
+		RecipeWrapper recipes = recipesService.getRecipesByRanking(id, rankedBy);
 		return ResponseEntity.status(HttpStatus.OK).body(recipes);
 	}
 
@@ -173,7 +177,7 @@ public class RecipesController {
 
 	@PostMapping(path = "/print")
 	public ResponseEntity<String> printRecipe(HttpServletResponse response,
-		@Valid @RequestBody RecipeFormDTO data) throws Exception {
+											  @Valid @RequestBody RecipeFormDTO data) throws Exception {
 		// HttpServletResponse response,
 		response.setContentType("application/pdf");
 		String headerKey = "Content-Disposition";

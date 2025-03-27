@@ -1,12 +1,11 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.recipes;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Recipes;
-import javax.validation.constraints.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Recipes;
+
 import java.io.Serializable;
 import com.google.gson.Gson;
 import java.math.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 /**
  *
  * @author Dylan I. Kessler

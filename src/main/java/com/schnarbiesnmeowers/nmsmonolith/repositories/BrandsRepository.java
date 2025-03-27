@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Brands;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Brands;
 import org.springframework.data.jpa.repository.Query;
 
 /**

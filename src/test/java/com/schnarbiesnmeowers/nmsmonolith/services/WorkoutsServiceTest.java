@@ -1,12 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.schnarbiesnmeowers.nmsmonolith.dtos.WorkoutsDTO;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.*;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.WeightWorkoutTypeRepository;
+import com.schnarbiesnmeowers.nmsmonolith.services.workouts.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.workouts.WorkoutsRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * this class retrieves data from the controller class
@@ -14,93 +26,181 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.WorkoutsDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class WorkoutsServiceTest {
+@ExtendWith(MockitoExtension.class)
+class WorkoutsServiceTest {
 
+    @Mock
+    private WorkoutsRepository workoutsRepository;
 
-	/**
-	 * get all Workouts records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<WorkoutsDTO> getAllWorkouts() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<WorkoutsDTO> workoutsDTO = new ArrayList<WorkoutsDTO>();
-		return workoutsDTO;
+    @Mock
+    StepsService stepsService;
+
+    @Mock
+    WorkoutCardioService workoutCardioService;
+
+    @Mock
+    WorkoutLiftService workoutLiftService;
+
+    @Mock
+    LiftSetService liftSetService;
+
+    @Mock
+    private WeightWorkoutTypeRepository weightWorkoutTypeRepository;
+
+    @InjectMocks
+    private WorkoutsService workoutsService;
+
+    private Workouts workouts;
+    private WorkoutsDTO workoutsDTO;
+
+    @BeforeEach
+    void setUp() {
+        workouts = generateRandomWorkoutsEntity();
+        workoutsDTO = generateRandomWorkouts();
+    }
+
+    @Test
+    void testGetAllWorkouts() throws Exception {
+        when(workoutsRepository.findAll()).thenReturn(Collections.singletonList(workouts));
+
+        List<WorkoutsDTO> result = workoutsService.getAllWorkouts();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindWorkoutsById_option1() throws Exception {
+        workouts.setExerciseTypeId(1);
+        when(workoutsRepository.findById(anyInt())).thenReturn(Optional.of(workouts));
+        when(workoutCardioService
+                .findWorkoutCardioByWorkoutId(anyInt()))
+                .thenReturn(new WorkoutCardioDTO());
+        WorkoutWrapperDTO result = workoutsService.findWorkoutsById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindWorkoutsById_option2() throws Exception {
+        workouts.setExerciseTypeId(2);
+        when(workoutsRepository.findById(anyInt())).thenReturn(Optional.of(workouts));
+        when(workoutLiftService
+                .findWorkoutLiftByWorkoutId(anyInt()))
+                .thenReturn(new ArrayList<>());
+        when(weightWorkoutTypeRepository
+                .findByWorkoutId(anyInt()))
+                .thenReturn(new WeightWorkoutType());
+        WorkoutWrapperDTO result = workoutsService.findWorkoutsById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindWorkoutsById_option3() throws Exception {
+        workouts.setExerciseTypeId(3);
+        when(workoutsRepository.findById(anyInt())).thenReturn(Optional.of(workouts));
+        when(stepsService.findStepsByWorkoutId(anyInt()))
+                .thenReturn(new StepsDTO());
+        WorkoutWrapperDTO result = workoutsService.findWorkoutsById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindWorkoutsById_NotFound() {
+        when(workoutsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            workoutsService.findWorkoutsById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateWorkouts() {
+        when(workoutsRepository.save(any(Workouts.class))).thenReturn(workouts);
+
+        WorkoutsDTO result = workoutsService.createWorkouts(workoutsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateWorkouts_Found() throws Exception {
+        when(workoutsRepository.findById(anyInt())).thenReturn(Optional.of(workouts));
+        when(workoutsRepository.save(any(Workouts.class))).thenReturn(workouts);
+
+        WorkoutsDTO result = workoutsService.updateWorkouts(workoutsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateWorkouts_NotFound() {
+        when(workoutsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            workoutsService.updateWorkouts(workoutsDTO);
+        });
+
+        assertEquals("id = " + workoutsDTO.getWorkoutId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteWorkouts_Found() throws Exception {
+        when(workoutsRepository.findById(anyInt())).thenReturn(Optional.of(workouts));
+        doNothing().when(workoutsRepository).deleteById(anyInt());
+
+        String result = workoutsService.deleteWorkouts(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteWorkouts_NotFound() {
+        when(workoutsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            workoutsService.deleteWorkouts(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static WorkoutsDTO generateRandomWorkouts() {
+		WorkoutsDTO record = new WorkoutsDTO();
+		record.setWorkoutId(2);
+		record.setUserId(Randomizer.randomInt(1000));
+		record.setCalendarDate(Randomizer.randomLocalDate());
+		record.setExerciseTypeId(Randomizer.randomInt(1000));
+		record.setDuration(Randomizer.randomInt(1000));
+		record.setRating(Randomizer.randomBigDecimal("1000"));
+		record.setNotes(Randomizer.randomString(20));
+		record.setActv(Randomizer.randomString(2));
+		return record;
+	}
+    public static Workouts generateRandomWorkoutsEntity() {
+		Workouts record = new Workouts();
+		record.setWorkoutId(2);
+		record.setUserId(Randomizer.randomInt(1000));
+		record.setCalendarDate(new java.sql.Date(Randomizer.randomDate()
+                .getTime()));
+		record.setExerciseTypeId(Randomizer.randomInt(1000));
+		record.setDuration(Randomizer.randomInt(1000));
+		record.setRating(Randomizer.randomBigDecimal("1000"));
+		record.setNotes(Randomizer.randomString(20));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
 
-	/**
-	 * get Workouts by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public WorkoutsDTO findWorkoutsById(int id) throws Exception {
-		return new WorkoutsDTO();
-	}
-
-	/**
-	 * create a new Workouts
-	 * @param data
-	 * @return
-	 */
-	public WorkoutsDTO createWorkouts(WorkoutsDTO data) {
-        data.setWorkoutId(1);
-        return data;
-	}
-
-	/**
-	 * update a Workouts
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public WorkoutsDTO updateWorkouts(WorkoutsDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a Workouts by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteWorkouts(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<WorkoutsDTO> by foreign key : userId
-	 * @param id
-	 * @return List<Workouts>
-	 * @throws Exception
-	*/
-	public List<WorkoutsDTO> findWorkoutsByUserId(int id) throws Exception {
-		List<WorkoutsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<WorkoutsDTO> by foreign key : exerciseTypeId
-	 * @param id
-	 * @return List<Workouts>
-	 * @throws Exception
-	*/
-	public List<WorkoutsDTO> findWorkoutsByExerciseTypeId(int id) throws Exception {
-		List<WorkoutsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<WorkoutsDTO> by foreign key : UserIdAndExerciseTypeId
-	 * @param id0
-	 * @param id1
-	 * @return
-	 * @throws Exception
-	 */
-	public List<WorkoutsDTO> findWorkoutsByUserIdAndExerciseTypeId(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<WorkoutsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
+    private static WorkoutWrapperDTO generateRandomWorkoutWrapper() {
+        WorkoutWrapperDTO wrapper = new WorkoutWrapperDTO();
+        wrapper.setWorkoutType(Randomizer.randomInt(anyInt()));
+        wrapper.setWorkoutCardioFormDTO(new WorkoutCardioFormDTO());
+        wrapper.setWorkoutStepsFormDTO(new WorkoutStepsFormDTO());
+        wrapper.setWorkoutWeightsFormDTO(new WorkoutWeightsFormDTO());
+        return wrapper;
+    }
 
 }

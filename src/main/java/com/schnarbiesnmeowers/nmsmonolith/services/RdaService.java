@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.services;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RdaDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Rda;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Rda;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.RdaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

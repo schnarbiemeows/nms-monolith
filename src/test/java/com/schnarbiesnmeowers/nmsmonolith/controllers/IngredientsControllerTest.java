@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.IngredientsRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.IngredientsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.IngredientsService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,189 +31,158 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class IngredientsControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private IngredientsController ingredientsController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private IngredientsService ingredientsService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private IngredientsRepository ingredientsRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(ingredientsController).build();
+    }
 
 	/**
 	 * test creating a new Ingredients
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateIngredients() throws URISyntaxException
+	public void testA_CreateIngredients() throws Exception
 	{
 	    IngredientsDTO ingredients = generateRandomIngredients();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(ingredients.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/ingredients/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<IngredientsDTO> request = new HttpEntity<>(ingredients,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(ingredientsService.createIngredients(any(IngredientsDTO.class))).thenReturn(ingredients);
+
+        mockMvc.perform(post("/ingredients/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(ingredients)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all Ingredients
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllIngredients() throws URISyntaxException
+	public void testB_GetAllIngredients() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/ingredients/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<IngredientsDTO> ingredientss = Arrays.asList(generateRandomIngredients(), generateRandomIngredients());
+        when(ingredientsService.getAllIngredients()).thenReturn(ingredientss);
+
+        mockMvc.perform(get("/ingredients/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single Ingredients by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetIngredients() throws URISyntaxException
+	public void testC_GetIngredients() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/ingredients/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		IngredientsDTO ingredients = generateRandomIngredients();
+        when(ingredientsService.findIngredientsById(anyInt())).thenReturn(ingredients);
+
+        mockMvc.perform(get("/ingredients/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a Ingredients
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateIngredients() throws URISyntaxException
+	public void testD_UpdateIngredients() throws Exception
 	{
 	    IngredientsDTO ingredients = generateRandomIngredients();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/ingredients/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<IngredientsDTO> request = new HttpEntity<>(ingredients);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(ingredientsService.updateIngredients(any(IngredientsDTO.class))).thenReturn(ingredients);
+
+        mockMvc.perform(post("/ingredients/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(ingredients)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a Ingredients
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteIngredients() throws URISyntaxException
+	public void testE_DeleteIngredients() throws Exception
 	{
-		IngredientsDTO ingredients = generateRandomIngredients();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/ingredients/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<IngredientsDTO> request = new HttpEntity<>(ingredients);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(ingredientsService.deleteIngredients(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/ingredients/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all Ingredients by foreign key ingrTypeId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetIngredientsByIngrTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/ingredients/findByIngrTypeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single Ingredients by field IngrTypeId
+ * @throws
+ */
+@Test
+public void testC_findByIngrTypeId() throws Exception
+{
+    List<IngredientsDTO> ingredients = Arrays.asList(generateRandomIngredients());
+    when(ingredientsService.findIngredientsByIngrTypeId(anyInt())).thenReturn(ingredients);
 
-	/**
-	 * test getting all Ingredients by foreign key brandId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetIngredientsByBrandId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/ingredients/findByBrandId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/ingredients/findByIngrTypeId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single Ingredients by field BrandId
+ * @throws
+ */
+@Test
+public void testC_findByBrandId() throws Exception
+{
+    List<IngredientsDTO> ingredients = Arrays.asList(generateRandomIngredients());
+    when(ingredientsService.findIngredientsByBrandId(anyInt())).thenReturn(ingredients);
 
-	/**
-	 * test getting all Ingredients by foreign key servTypeId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetIngredientsByServTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/ingredients/findByServTypeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/ingredients/findByBrandId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single Ingredients by field ServTypeId
+ * @throws
+ */
+@Test
+public void testC_findByServTypeId() throws Exception
+{
+    List<IngredientsDTO> ingredients = Arrays.asList(generateRandomIngredients());
+    when(ingredientsService.findIngredientsByServTypeId(anyInt())).thenReturn(ingredients);
 
-	/**
-	 * test getting all Ingredients by foreign key imageLoc
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetIngredientsByImageLoc() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/ingredients/findByImageLoc/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/ingredients/findByServTypeId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single Ingredients by field ImageLoc
+ * @throws
+ */
+@Test
+public void testC_findByImageLoc() throws Exception
+{
+    List<IngredientsDTO> ingredients = Arrays.asList(generateRandomIngredients());
+    when(ingredientsService.findIngredientsByImageLoc(anyInt())).thenReturn(ingredients);
 
-	/**
-	 * test getting all Ingredients by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetIngredientsByIngrTypeIdAndBrandIdAndServTypeIdAndImageLoc() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/ingredients/findByIngrTypeIdAndBrandIdAndServTypeIdAndImageLoc/1/1/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/ingredients/findByImageLoc/2"))
+            .andExpect(status().isOk());
+}
 
 	public static IngredientsDTO generateRandomIngredients() {
 		IngredientsDTO record = new IngredientsDTO();
@@ -237,7 +205,7 @@ public class IngredientsControllerTest {
 		record.setTotProtein(Randomizer.randomBigDecimal("1000"));
 		record.setGlycIndx(Randomizer.randomBigDecimal("1000"));
 		record.setImageLoc(Randomizer.randomInt(1000));
-		record.setActv(Randomizer.randomString(1));
+		record.setActv(Randomizer.randomString(2));
 		return record;
 	}
 }

@@ -1,19 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.brands.BrandsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-import static org.junit.Assert.*;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import java.math.*;
+
 
 /**
  * class to test the BrandsDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class BrandsDTOTest {
 
 	/**
@@ -22,10 +27,10 @@ public class BrandsDTOTest {
 	@Test
 	public void testClass() {
 		BrandsDTO classUnderTest = new BrandsDTO();
-		classUnderTest.setBrandId(new Integer(1));
+		classUnderTest.setBrandId(2);
 		classUnderTest.setBrandType("a");
 		classUnderTest.setBrandName("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		BrandsDTO newitem = new BrandsDTO(

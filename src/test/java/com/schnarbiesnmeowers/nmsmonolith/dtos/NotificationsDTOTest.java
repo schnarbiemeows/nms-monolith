@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the NotificationsDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class NotificationsDTOTest {
 
 	/**
@@ -23,8 +26,8 @@ public class NotificationsDTOTest {
 	@Test
 	public void testClass() {
 		NotificationsDTO classUnderTest = new NotificationsDTO();
-		classUnderTest.setNotificationId(new Integer(1));
-		classUnderTest.setEventId(new Integer(1));
+		classUnderTest.setNotificationId(2);
+		classUnderTest.setEventId(2);
 		classUnderTest.setNotifTime(new java.sql.Time(1000));
 		classUnderTest.setNextNotifDate(new Date());
 		classUnderTest.setDelivered("a");

@@ -1,14 +1,13 @@
 package com.schnarbiesnmeowers.nmsmonolith.services.helpers;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailyweight.DailyWeightDataPoint;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.tuples.Tuple2;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.tuples.Tuple3;
+import com.schnarbiesnmeowers.nmsmonolith.entities.tuples.Tuple2;
+import com.schnarbiesnmeowers.nmsmonolith.entities.tuples.Tuple3;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +47,7 @@ public class DailyWeightUtil {
      * @param records
      * @return
      */
-    public static List<LocalDate> findMissingDates(List<DailyWeightDataPoint> records, List<LocalDate> dateList, int daysBack) {
+    public static List<LocalDate> findMissingDates(List<DailyWeightDataPoint> records, List<LocalDate> dateList) {
         List<LocalDate> missingDates = new ArrayList();
         if(null!=records&&!records.isEmpty()) {
             // 2. map the records to a <LocalDate,datapoint> map

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.BrandIngrTypeDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.BrandIngrType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.BrandIngrType;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.BrandIngrTypeRepository;
 
 /**

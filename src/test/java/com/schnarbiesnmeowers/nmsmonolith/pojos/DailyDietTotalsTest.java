@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDietTotals;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the DailyDietTotals class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class DailyDietTotalsTest {
 
 	/**
@@ -23,10 +26,10 @@ public class DailyDietTotalsTest {
 	@Test
 	public void testClass() {
 		DailyDietTotals classUnderTest = new DailyDietTotals();
-		classUnderTest.setDailyDietTotalId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setDailyDietTotalId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setCalendarDate(new Date());
-		classUnderTest.setBldstId(new Integer(1));
+		classUnderTest.setBldstId(2);
 		classUnderTest.setKcalories(new BigDecimal(1.00));
 		classUnderTest.setTotFat(new BigDecimal(1.00));
 		classUnderTest.setSatFat(new BigDecimal(1.00));
@@ -34,7 +37,7 @@ public class DailyDietTotalsTest {
 		classUnderTest.setPolyFat(new BigDecimal(1.00));
 		classUnderTest.setMonoFat(new BigDecimal(1.00));
 		classUnderTest.setCholes(new BigDecimal(1.00));
-		classUnderTest.setSodium(new Integer(1));
+		classUnderTest.setSodium(2);
 		classUnderTest.setTotCarbs(new BigDecimal(1.00));
 		classUnderTest.setTotFiber(new BigDecimal(1.00));
 		classUnderTest.setTotSugars(new BigDecimal(1.00));

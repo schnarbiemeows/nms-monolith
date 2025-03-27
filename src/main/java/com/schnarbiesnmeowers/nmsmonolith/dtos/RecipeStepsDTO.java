@@ -1,14 +1,10 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.RecipeSteps;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeSteps;
 
-import javax.persistence.Column;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 import com.google.gson.Gson;
-import java.math.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 /**
  *
  * @author Dylan I. Kessler

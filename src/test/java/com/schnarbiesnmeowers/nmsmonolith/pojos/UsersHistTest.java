@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+import com.schnarbiesnmeowers.nmsmonolith.entities.UsersHist;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the UsersHist class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class UsersHistTest {
 
 	/**
@@ -23,16 +26,16 @@ public class UsersHistTest {
 	@Test
 	public void testClass() {
 		UsersHist classUnderTest = new UsersHist();
-		classUnderTest.setUsersHistId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setUsersHistId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setUsername("a");
 		classUnderTest.setEmail("a");
 		classUnderTest.setPassword("a");
-		classUnderTest.setAge(new Integer(1));
+		classUnderTest.setAge(2);
 		classUnderTest.setLstLogdIn(new Date());
-		classUnderTest.setActionTypeId(new Integer(1));
+		classUnderTest.setActionTypeId(2);
 		classUnderTest.setEvntTmestmp(new Date());
-		classUnderTest.setEvntOperId(new Integer(1));
+		classUnderTest.setEvntOperId(2);
 		assertTrue(true);
 		UsersHist newitem = new UsersHist(
 		classUnderTest.getUsersHistId(),

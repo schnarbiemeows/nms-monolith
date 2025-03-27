@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.EventsTableRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.EventsTableDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.EventsTableService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,161 +31,134 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class EventsTableControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private EventsTableController eventstableController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private EventsTableService eventstableService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private EventsTableRepository eventstableRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(eventstableController).build();
+    }
 
 	/**
 	 * test creating a new EventsTable
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateEventsTable() throws URISyntaxException
+	public void testA_CreateEventsTable() throws Exception
 	{
 	    EventsTableDTO eventstable = generateRandomEventsTable();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(eventstable.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/eventstable/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<EventsTableDTO> request = new HttpEntity<>(eventstable,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(eventstableService.createEventsTable(any(EventsTableDTO.class))).thenReturn(eventstable);
+
+        mockMvc.perform(post("/eventstable/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(eventstable)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all EventsTable
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllEventsTable() throws URISyntaxException
+	public void testB_GetAllEventsTable() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/eventstable/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<EventsTableDTO> eventstables = Arrays.asList(generateRandomEventsTable(), generateRandomEventsTable());
+        when(eventstableService.getAllEventsTable()).thenReturn(eventstables);
+
+        mockMvc.perform(get("/eventstable/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single EventsTable by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetEventsTable() throws URISyntaxException
+	public void testC_GetEventsTable() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/eventstable/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		EventsTableDTO eventstable = generateRandomEventsTable();
+        when(eventstableService.findEventsTableById(anyInt())).thenReturn(eventstable);
+
+        mockMvc.perform(get("/eventstable/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a EventsTable
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateEventsTable() throws URISyntaxException
+	public void testD_UpdateEventsTable() throws Exception
 	{
 	    EventsTableDTO eventstable = generateRandomEventsTable();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/eventstable/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<EventsTableDTO> request = new HttpEntity<>(eventstable);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(eventstableService.updateEventsTable(any(EventsTableDTO.class))).thenReturn(eventstable);
+
+        mockMvc.perform(post("/eventstable/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(eventstable)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a EventsTable
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteEventsTable() throws URISyntaxException
+	public void testE_DeleteEventsTable() throws Exception
 	{
-		EventsTableDTO eventstable = generateRandomEventsTable();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/eventstable/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<EventsTableDTO> request = new HttpEntity<>(eventstable);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(eventstableService.deleteEventsTable(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/eventstable/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all EventsTable by foreign key userId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetEventsTableByUserId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/eventstable/findByUserId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single EventsTable by field UserId
+ * @throws
+ */
+@Test
+public void testC_findByUserId() throws Exception
+{
+    List<EventsTableDTO> eventstable = Arrays.asList(generateRandomEventsTable());
+    when(eventstableService.findEventsTableByUserId(anyInt())).thenReturn(eventstable);
 
-	/**
-	 * test getting all EventsTable by foreign key periodId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetEventsTableByPeriodId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/eventstable/findByPeriodId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/eventstable/findByUserId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single EventsTable by field PeriodId
+ * @throws
+ */
+@Test
+public void testC_findByPeriodId() throws Exception
+{
+    List<EventsTableDTO> eventstable = Arrays.asList(generateRandomEventsTable());
+    when(eventstableService.findEventsTableByPeriodId(anyInt())).thenReturn(eventstable);
 
-	/**
-	 * test getting all EventsTable by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetEventsTableByUserIdAndPeriodId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/eventstable/findByUserIdAndPeriodId/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/eventstable/findByPeriodId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static EventsTableDTO generateRandomEventsTable() {
 		EventsTableDTO record = new EventsTableDTO();
@@ -194,7 +166,7 @@ public class EventsTableControllerTest {
 		record.setEventName(Randomizer.randomString(20));
 		record.setEventDesc(Randomizer.randomString(20));
 		record.setPeriodId(Randomizer.randomInt(1000));
-		record.setActv(Randomizer.randomString(1));
+		record.setActv(Randomizer.randomString(2));
 		return record;
 	}
 }

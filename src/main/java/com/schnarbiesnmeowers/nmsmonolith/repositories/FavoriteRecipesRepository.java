@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteRecipes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.FavoriteRecipes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

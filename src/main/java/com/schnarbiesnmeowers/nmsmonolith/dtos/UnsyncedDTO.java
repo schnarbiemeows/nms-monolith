@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Unsynced;
-import javax.validation.constraints.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Unsynced;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import com.google.gson.Gson;
 import java.math.*;

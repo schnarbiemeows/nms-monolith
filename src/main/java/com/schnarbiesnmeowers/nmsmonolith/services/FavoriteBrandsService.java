@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.brands.FavoriteBrandsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteBrands;
+import com.schnarbiesnmeowers.nmsmonolith.entities.FavoriteBrands;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.FavoriteBrandsRepository;
 
 /**

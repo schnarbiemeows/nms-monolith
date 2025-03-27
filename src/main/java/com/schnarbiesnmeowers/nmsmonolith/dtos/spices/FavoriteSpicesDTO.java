@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.spices;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.FavoriteSpices;
+import com.schnarbiesnmeowers.nmsmonolith.entities.FavoriteSpices;
 
 import java.io.Serializable;
 import com.google.gson.Gson;

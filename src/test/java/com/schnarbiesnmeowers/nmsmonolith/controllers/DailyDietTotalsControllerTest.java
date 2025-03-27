@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.DailyDietTotalsRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.DailyDietTotalsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.DailyDietTotalsService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,161 +31,134 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class DailyDietTotalsControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private DailyDietTotalsController dailydiettotalsController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private DailyDietTotalsService dailydiettotalsService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private DailyDietTotalsRepository dailydiettotalsRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(dailydiettotalsController).build();
+    }
 
 	/**
 	 * test creating a new DailyDietTotals
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateDailyDietTotals() throws URISyntaxException
+	public void testA_CreateDailyDietTotals() throws Exception
 	{
 	    DailyDietTotalsDTO dailydiettotals = generateRandomDailyDietTotals();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(dailydiettotals.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/dailydiettotals/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<DailyDietTotalsDTO> request = new HttpEntity<>(dailydiettotals,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(dailydiettotalsService.createDailyDietTotals(any(DailyDietTotalsDTO.class))).thenReturn(dailydiettotals);
+
+        mockMvc.perform(post("/dailydiettotals/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dailydiettotals)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all DailyDietTotals
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllDailyDietTotals() throws URISyntaxException
+	public void testB_GetAllDailyDietTotals() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/dailydiettotals/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<DailyDietTotalsDTO> dailydiettotalss = Arrays.asList(generateRandomDailyDietTotals(), generateRandomDailyDietTotals());
+        when(dailydiettotalsService.getAllDailyDietTotals()).thenReturn(dailydiettotalss);
+
+        mockMvc.perform(get("/dailydiettotals/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single DailyDietTotals by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetDailyDietTotals() throws URISyntaxException
+	public void testC_GetDailyDietTotals() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/dailydiettotals/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		DailyDietTotalsDTO dailydiettotals = generateRandomDailyDietTotals();
+        when(dailydiettotalsService.findDailyDietTotalsById(anyInt())).thenReturn(dailydiettotals);
+
+        mockMvc.perform(get("/dailydiettotals/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a DailyDietTotals
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateDailyDietTotals() throws URISyntaxException
+	public void testD_UpdateDailyDietTotals() throws Exception
 	{
 	    DailyDietTotalsDTO dailydiettotals = generateRandomDailyDietTotals();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/dailydiettotals/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<DailyDietTotalsDTO> request = new HttpEntity<>(dailydiettotals);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(dailydiettotalsService.updateDailyDietTotals(any(DailyDietTotalsDTO.class))).thenReturn(dailydiettotals);
+
+        mockMvc.perform(post("/dailydiettotals/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dailydiettotals)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a DailyDietTotals
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteDailyDietTotals() throws URISyntaxException
+	public void testE_DeleteDailyDietTotals() throws Exception
 	{
-		DailyDietTotalsDTO dailydiettotals = generateRandomDailyDietTotals();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/dailydiettotals/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<DailyDietTotalsDTO> request = new HttpEntity<>(dailydiettotals);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(dailydiettotalsService.deleteDailyDietTotals(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/dailydiettotals/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all DailyDietTotals by foreign key userId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetDailyDietTotalsByUserId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/dailydiettotals/findByUserId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single DailyDietTotals by field UserId
+ * @throws
+ */
+@Test
+public void testC_findByUserId() throws Exception
+{
+    List<DailyDietTotalsDTO> dailydiettotals = Arrays.asList(generateRandomDailyDietTotals());
+    when(dailydiettotalsService.findDailyDietTotalsByUserId(anyInt())).thenReturn(dailydiettotals);
 
-	/**
-	 * test getting all DailyDietTotals by foreign key bldstId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetDailyDietTotalsByBldstId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/dailydiettotals/findByBldstId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/dailydiettotals/findByUserId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single DailyDietTotals by field BldstId
+ * @throws
+ */
+@Test
+public void testC_findByBldstId() throws Exception
+{
+    List<DailyDietTotalsDTO> dailydiettotals = Arrays.asList(generateRandomDailyDietTotals());
+    when(dailydiettotalsService.findDailyDietTotalsByBldstId(anyInt())).thenReturn(dailydiettotals);
 
-	/**
-	 * test getting all DailyDietTotals by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetDailyDietTotalsByUserIdAndBldstId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/dailydiettotals/findByUserIdAndBldstId/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/dailydiettotals/findByBldstId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static DailyDietTotalsDTO generateRandomDailyDietTotals() {
 		DailyDietTotalsDTO record = new DailyDietTotalsDTO();

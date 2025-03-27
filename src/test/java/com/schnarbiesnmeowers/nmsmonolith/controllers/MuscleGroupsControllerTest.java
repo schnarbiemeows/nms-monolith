@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.MuscleGroupsRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.MuscleGroupsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.MuscleGroupsService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,124 +31,115 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class MuscleGroupsControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private MuscleGroupsController musclegroupsController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private MuscleGroupsService musclegroupsService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private MuscleGroupsRepository musclegroupsRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(musclegroupsController).build();
+    }
 
 	/**
 	 * test creating a new MuscleGroups
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateMuscleGroups() throws URISyntaxException
+	public void testA_CreateMuscleGroups() throws Exception
 	{
 	    MuscleGroupsDTO musclegroups = generateRandomMuscleGroups();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(musclegroups.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/musclegroups/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<MuscleGroupsDTO> request = new HttpEntity<>(musclegroups,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(musclegroupsService.createMuscleGroups(any(MuscleGroupsDTO.class))).thenReturn(musclegroups);
+
+        mockMvc.perform(post("/musclegroups/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(musclegroups)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all MuscleGroups
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllMuscleGroups() throws URISyntaxException
+	public void testB_GetAllMuscleGroups() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/musclegroups/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<MuscleGroupsDTO> musclegroupss = Arrays.asList(generateRandomMuscleGroups(), generateRandomMuscleGroups());
+        when(musclegroupsService.getAllMuscleGroups()).thenReturn(musclegroupss);
+
+        mockMvc.perform(get("/musclegroups/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single MuscleGroups by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetMuscleGroups() throws URISyntaxException
+	public void testC_GetMuscleGroups() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/musclegroups/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		MuscleGroupsDTO musclegroups = generateRandomMuscleGroups();
+        when(musclegroupsService.findMuscleGroupsById(anyInt())).thenReturn(musclegroups);
+
+        mockMvc.perform(get("/musclegroups/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a MuscleGroups
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateMuscleGroups() throws URISyntaxException
+	public void testD_UpdateMuscleGroups() throws Exception
 	{
 	    MuscleGroupsDTO musclegroups = generateRandomMuscleGroups();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/musclegroups/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<MuscleGroupsDTO> request = new HttpEntity<>(musclegroups);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(musclegroupsService.updateMuscleGroups(any(MuscleGroupsDTO.class))).thenReturn(musclegroups);
+
+        mockMvc.perform(post("/musclegroups/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(musclegroups)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a MuscleGroups
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteMuscleGroups() throws URISyntaxException
+	public void testE_DeleteMuscleGroups() throws Exception
 	{
-		MuscleGroupsDTO musclegroups = generateRandomMuscleGroups();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/musclegroups/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<MuscleGroupsDTO> request = new HttpEntity<>(musclegroups);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(musclegroupsService.deleteMuscleGroups(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/musclegroups/delete/2"))
+                .andExpect(status().isOk());
 	}
+
 
 
 	public static MuscleGroupsDTO generateRandomMuscleGroups() {
 		MuscleGroupsDTO record = new MuscleGroupsDTO();
 		record.setMuscleGrpName(Randomizer.randomString(20));
-		record.setActv(Randomizer.randomString(1));
+		record.setActv(Randomizer.randomString(2));
 		return record;
 	}
 }

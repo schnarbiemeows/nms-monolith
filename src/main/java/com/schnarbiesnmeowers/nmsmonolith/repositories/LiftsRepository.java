@@ -1,7 +1,9 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Lifts;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Lifts;
+import org.springframework.data.jpa.repository.Query;
+
 /**
  *
  * @author Dylan I. Kessler
@@ -9,13 +11,6 @@ import com.schnarbiesnmeowers.nmsmonolith.pojos.Lifts;
  */
 public interface LiftsRepository extends JpaRepository<Lifts, Integer> {
 
-
-	/**
-	 * get Iterable<Lifts> by foreign key : muscleId
-	 * @param muscleId
-	 * @return Iterable<Lifts>
-	*/
-	public Iterable<Lifts> findLiftsByMuscleId(int muscleId);
 	/**
 	 * get Iterable<Lifts> by foreign key : imageLoc
 	 * @param imageLoc
@@ -26,5 +21,7 @@ public interface LiftsRepository extends JpaRepository<Lifts, Integer> {
 	 * get Iterable<Lifts> by all foreign keys
 	 * @return Iterable<Lifts>
 	*/
-	public Iterable<Lifts> findLiftsByMuscleIdAndImageLoc(int muscleId,int imageLoc);
+
+	@Query(value = "select * from lifts l order by l.muscle_group_id",nativeQuery = true)
+	public Iterable<Lifts> getAllLiftsOrdered();
 }

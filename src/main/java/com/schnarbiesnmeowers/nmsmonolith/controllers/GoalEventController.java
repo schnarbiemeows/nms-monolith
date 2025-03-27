@@ -1,15 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller
@@ -52,7 +53,7 @@ public class GoalEventController {
 
 	/**
 	 * create a new GoalEvent
-	 * @param GoalEventDTO
+	 * @param data
 	 * @return GoalEvent
 	 */
 	@PostMapping(path = "/create")
@@ -67,7 +68,7 @@ public class GoalEventController {
 
 	/**
 	 * update a GoalEvent
-	 * @param GoalEventDTO
+	 * @param data
 	 * @return GoalEvent
 	 */
 	@PostMapping(path = "/update")
@@ -89,7 +90,7 @@ public class GoalEventController {
 
 	/**
 	 * get List<GoalEventDTO> by foreign key : userId
-	 * @param userId
+	 * @param id
 	 * @return List<GoalEvent>
 	 * @throws Exception
 	*/
@@ -101,7 +102,7 @@ public class GoalEventController {
 
 	/**
 	 * get List<GoalEventDTO> by foreign key : goalId
-	 * @param goalId
+	 * @param id
 	 * @return List<GoalEvent>
 	 * @throws Exception
 	*/
@@ -113,7 +114,7 @@ public class GoalEventController {
 
 	/**
 	 * get List<GoalEventDTO> by foreign key : eventId
-	 * @param eventId
+	 * @param id
 	 * @return List<GoalEvent>
 	 * @throws Exception
 	*/
@@ -125,7 +126,7 @@ public class GoalEventController {
 
 	/**
 	 * get List<GoalEventDTO> by foreign key : UserIdAndGoalIdAndEventId
-	 * @param UserIdAndGoalIdAndEventId
+	 * @param id0
 	 * @return List<GoalEvent>
 	 * @throws Exception
 	*/

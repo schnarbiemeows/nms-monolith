@@ -1,15 +1,15 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
 
 /**
  * this class is the main REST controller
@@ -27,7 +27,7 @@ public class UsersHistController {
 	 * JPA Repository handle
 	 */
 	@Autowired
-	private UsersHistBusiness businessService;
+	private UsersHistService usersHistService;
 
 	/**
 	 * get all UsersHist records
@@ -35,7 +35,7 @@ public class UsersHistController {
 	 */
 	@GetMapping(path = "/all")
 	public ResponseEntity<List<UsersHistDTO>> getAllUsersHist() throws Exception {
-		List<UsersHistDTO> usershist = businessService.getAllUsersHist();
+		List<UsersHistDTO> usershist = usersHistService.getAllUsersHist();
 		return ResponseEntity.status(HttpStatus.OK).body(usershist);
 	}
 
@@ -46,7 +46,7 @@ public class UsersHistController {
 	 */
 	@GetMapping(path = "/findById/{id}")
 	public ResponseEntity<UsersHistDTO> findUsersHistById(@PathVariable int id) throws Exception {
-		UsersHistDTO results = businessService.findUsersHistById(id);
+		UsersHistDTO results = usersHistService.findUsersHistById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 
@@ -58,7 +58,7 @@ public class UsersHistController {
 	@PostMapping(path = "/create")
 	public ResponseEntity<UsersHistDTO> createUsersHist(@Valid @RequestBody UsersHistDTO data) throws Exception {
 		try {
-		    UsersHistDTO createdData = businessService.createUsersHist(data);
+		    UsersHistDTO createdData = usersHistService.createUsersHist(data);
 		    return ResponseEntity.status(HttpStatus.CREATED).body(createdData);
 		} catch (Exception e) {
 			throw e;
@@ -72,7 +72,7 @@ public class UsersHistController {
 	 */
 	@PostMapping(path = "/update")
 	public ResponseEntity<UsersHistDTO> updateUsersHist(@Valid @RequestBody UsersHistDTO data) throws Exception {
-		UsersHistDTO updatedData = businessService.updateUsersHist(data);
+		UsersHistDTO updatedData = usersHistService.updateUsersHist(data);
 		return ResponseEntity.status(HttpStatus.OK).body(updatedData);
 	}
 
@@ -82,7 +82,7 @@ public class UsersHistController {
 	 */
 	@DeleteMapping(path = "/delete/{id}")
 	public ResponseEntity<ResponseMessage> deleteUsersHist(@PathVariable int id) throws Exception {
-		businessService.deleteUsersHist(id);
+		usersHistService.deleteUsersHist(id);
 		ResponseMessage rb = new ResponseMessage("successfully deleted");
 		return ResponseEntity.status(HttpStatus.OK).body(rb);
 	}
@@ -95,7 +95,7 @@ public class UsersHistController {
 	*/
 	@GetMapping(path = "/findByUserId/{id}")
 	public ResponseEntity<List<UsersHistDTO>> findUsersHistByUserId(@PathVariable int id) throws Exception {
-		List<UsersHistDTO> results = businessService.findUsersHistByUserId(id);
+		List<UsersHistDTO> results = usersHistService.findUsersHistByUserId(id);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 
@@ -107,7 +107,7 @@ public class UsersHistController {
 	*/
 	@GetMapping(path = "/findByActionTypeId/{id}")
 	public ResponseEntity<List<UsersHistDTO>> findUsersHistByActionTypeId(@PathVariable int id) throws Exception {
-		List<UsersHistDTO> results = businessService.findUsersHistByActionTypeId(id);
+		List<UsersHistDTO> results = usersHistService.findUsersHistByActionTypeId(id);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 
@@ -119,7 +119,7 @@ public class UsersHistController {
 	*/
 	@GetMapping(path = "/findByEvntOperId/{id}")
 	public ResponseEntity<List<UsersHistDTO>> findUsersHistByEvntOperId(@PathVariable int id) throws Exception {
-		List<UsersHistDTO> results = businessService.findUsersHistByEvntOperId(id);
+		List<UsersHistDTO> results = usersHistService.findUsersHistByEvntOperId(id);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 
@@ -131,7 +131,7 @@ public class UsersHistController {
 	*/
 	@GetMapping(path = "/findByUserIdAndActionTypeIdAndEvntOperId/{id0}/{id1}/{id2}")
 	public ResponseEntity<List<UsersHistDTO>> findUsersHistByUserIdAndActionTypeIdAndEvntOperId(@PathVariable int id0, @PathVariable int id1, @PathVariable int id2) throws Exception {
-		List<UsersHistDTO> results = businessService.findUsersHistByUserIdAndActionTypeIdAndEvntOperId(id0, id1, id2);
+		List<UsersHistDTO> results = usersHistService.findUsersHistByUserIdAndActionTypeIdAndEvntOperId(id0, id1, id2);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 

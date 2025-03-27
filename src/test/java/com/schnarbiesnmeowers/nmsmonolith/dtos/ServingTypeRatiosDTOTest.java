@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypeRatiosDTO;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-import static org.junit.Assert.*;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 
-import org.junit.Test;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the ServingTypeRatiosDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class ServingTypeRatiosDTOTest {
 
 	/**
@@ -23,9 +27,9 @@ public class ServingTypeRatiosDTOTest {
 	@Test
 	public void testClass() {
 		ServingTypeRatiosDTO classUnderTest = new ServingTypeRatiosDTO();
-		classUnderTest.setServTypeRatioId(new Integer(1));
-		classUnderTest.setServTypeId1(new Integer(1));
-		classUnderTest.setServTypeId2(new Integer(1));
+		classUnderTest.setServTypeRatioId(2);
+		classUnderTest.setServTypeId1(2);
+		classUnderTest.setServTypeId2(2);
 		classUnderTest.setRatio(new BigDecimal(1.00));
 		assertTrue(true);
 		ServingTypeRatiosDTO newitem = new ServingTypeRatiosDTO(

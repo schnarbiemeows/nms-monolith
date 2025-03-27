@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.dailydiet;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DietaryTemplates;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DietaryTemplates;
 
 import java.io.Serializable;
 import com.google.gson.Gson;

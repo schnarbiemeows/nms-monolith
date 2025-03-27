@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the RolesHistDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class RolesHistDTOTest {
 
 	/**
@@ -23,13 +26,13 @@ public class RolesHistDTOTest {
 	@Test
 	public void testClass() {
 		RolesHistDTO classUnderTest = new RolesHistDTO();
-		classUnderTest.setRoleHistId(new Integer(1));
-		classUnderTest.setRoleId(new Integer(1));
-		classUnderTest.setGrpId(new Integer(1));
-		classUnderTest.setRsrcId(new Integer(1));
-		classUnderTest.setActionTypeId(new Integer(1));
+		classUnderTest.setRoleHistId(2);
+		classUnderTest.setRoleId(2);
+		classUnderTest.setGrpId(2);
+		classUnderTest.setRsrcId(2);
+		classUnderTest.setActionTypeId(2);
 		classUnderTest.setEvntTmestmp(new Date());
-		classUnderTest.setEvntOperId(new Integer(1));
+		classUnderTest.setEvntOperId(2);
 		assertTrue(true);
 		RolesHistDTO newitem = new RolesHistDTO(
 		classUnderTest.getRoleHistId(),

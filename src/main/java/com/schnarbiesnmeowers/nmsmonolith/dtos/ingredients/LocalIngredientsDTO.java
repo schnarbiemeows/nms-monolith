@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalIngredients;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalIngredients;
 
 import java.io.Serializable;
 import com.google.gson.Gson;

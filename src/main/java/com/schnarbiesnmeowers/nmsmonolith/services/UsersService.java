@@ -5,13 +5,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.dtos.UsersDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Users;
-import com.schnarbiesnmeowers.nmsmonolith.repositories.UsersRepository;
 import org.springframework.stereotype.Service;
-
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import com.schnarbiesnmeowers.nmsmonolith.dtos.UsersDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Users;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.UsersRepository;
+import java.util.List;
 /**
  * this class retrieves data from the controller class
  * most business logic should be put in this class
@@ -28,7 +31,7 @@ public class UsersService {
 	 * JPA Repository handle
 	 */
 	@Autowired
-	private UsersRepository usersRepository;
+	private UsersRepository service;
 
 	/**
 	 * get all Users records
@@ -36,7 +39,7 @@ public class UsersService {
 	 * @throws Exception
 	 */
 	public List<UsersDTO> getAllUsers() throws Exception {
-		Iterable<Users> users = usersRepository.findAll();
+		Iterable<Users> users = service.findAll();
 		Iterator<Users> userss = users.iterator();
 		List<UsersDTO> usersdto = new ArrayList();
 		while(userss.hasNext()) {
@@ -53,7 +56,7 @@ public class UsersService {
 	 * @throws Exception
 	 */
 	public UsersDTO findUsersById(int id) throws Exception {
-		Optional<Users> usersOptional = usersRepository.findById(id);
+		Optional<Users> usersOptional = service.findById(id);
 		if(usersOptional.isPresent()) {
 			Users results = usersOptional.get();
 			return results.toDTO();
@@ -70,7 +73,7 @@ public class UsersService {
 	public UsersDTO createUsers(UsersDTO data) {
 		try {
 		    Users createdData = data.toEntity();
-		    createdData = usersRepository.save(createdData);
+		    createdData = service.save(createdData);
 		    return createdData.toDTO();
 		} catch (Exception e) {
 			throw e;
@@ -84,10 +87,10 @@ public class UsersService {
 	 * @throws Exception
 	 */
 	public UsersDTO updateUsers(UsersDTO data) throws Exception {
-		Optional<Users> usersOptional = usersRepository.findById(data.getUserId());
+		Optional<Users> usersOptional = service.findById(data.getUserId());
 		if(usersOptional.isPresent()) {
 		    Users updatedData = data.toEntity();
-			updatedData = usersRepository.save(updatedData);
+			updatedData = service.save(updatedData);
 			return updatedData.toDTO();
 		} else {
 			throw new ResourceNotFoundException(ID_EQUALS + data.getUserId() + NOT_FOUND);
@@ -101,9 +104,9 @@ public class UsersService {
 	 * @throws Exception
 	 */
 	public String deleteUsers(int id) throws Exception {
-		Optional<Users> usersOptional = usersRepository.findById(id);
+		Optional<Users> usersOptional = service.findById(id);
 		if(usersOptional.isPresent()) {
-			usersRepository.deleteById(id);
+			service.deleteById(id);
 			return "Successfully Deleted";
 		} else {
 			throw new ResourceNotFoundException(ID_EQUALS + id + NOT_FOUND);

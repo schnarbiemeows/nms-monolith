@@ -1,21 +1,25 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import static org.junit.Assert.*;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.*;
-
-import org.junit.Test;
+import java.sql.Timestamp;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyWeight;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the DailyWeight class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class DailyWeightTest {
 
 	/**
@@ -24,8 +28,8 @@ public class DailyWeightTest {
 	@Test
 	public void testClass() {
 		DailyWeight classUnderTest = new DailyWeight();
-		classUnderTest.setDailyWeightId(new Integer(1));
-		classUnderTest.setUserId(new Integer(1));
+		classUnderTest.setDailyWeightId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setCalendarDate(LocalDate.now());
 		classUnderTest.setWeight(new BigDecimal(1.00));
 		assertTrue(true);

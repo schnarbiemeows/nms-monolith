@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DietaryTemplates;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DietaryTemplates;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;

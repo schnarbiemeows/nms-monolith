@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Lifts;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the Lifts class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class LiftsTest {
 
 	/**
@@ -23,18 +26,18 @@ public class LiftsTest {
 	@Test
 	public void testClass() {
 		Lifts classUnderTest = new Lifts();
-		classUnderTest.setLiftId(new Integer(1));
-		classUnderTest.setMuscleId(new Integer(1));
+		classUnderTest.setLiftId(2);
 		classUnderTest.setLiftDesc("a");
-		classUnderTest.setImageLoc(new Integer(1));
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
+		classUnderTest.setMuscleGroupId(2);
 		assertTrue(true);
 		Lifts newitem = new Lifts(
 		classUnderTest.getLiftId(),
-		classUnderTest.getMuscleId(),
 		classUnderTest.getLiftDesc(),
 		classUnderTest.getImageLoc(),
-		classUnderTest.getActv());
+		classUnderTest.getActv(),
+		classUnderTest.getMuscleGroupId());
 		assertNotNull(newitem);
 		String string = classUnderTest.toString();
 		assertNotNull(string);

@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RecEqTypeRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RecEqTypeDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.RecEqTypeService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,125 +31,116 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class RecEqTypeControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private RecEqTypeController receqtypeController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private RecEqTypeService receqtypeService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private RecEqTypeRepository receqtypeRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(receqtypeController).build();
+    }
 
 	/**
 	 * test creating a new RecEqType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateRecEqType() throws URISyntaxException
+	public void testA_CreateRecEqType() throws Exception
 	{
 	    RecEqTypeDTO receqtype = generateRandomRecEqType();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(receqtype.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/receqtype/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<RecEqTypeDTO> request = new HttpEntity<>(receqtype,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(receqtypeService.createRecEqType(any(RecEqTypeDTO.class))).thenReturn(receqtype);
+
+        mockMvc.perform(post("/receqtype/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(receqtype)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all RecEqType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllRecEqType() throws URISyntaxException
+	public void testB_GetAllRecEqType() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/receqtype/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<RecEqTypeDTO> receqtypes = Arrays.asList(generateRandomRecEqType(), generateRandomRecEqType());
+        when(receqtypeService.getAllRecEqType()).thenReturn(receqtypes);
+
+        mockMvc.perform(get("/receqtype/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single RecEqType by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetRecEqType() throws URISyntaxException
+	public void testC_GetRecEqType() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/receqtype/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		RecEqTypeDTO receqtype = generateRandomRecEqType();
+        when(receqtypeService.findRecEqTypeById(anyInt())).thenReturn(receqtype);
+
+        mockMvc.perform(get("/receqtype/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a RecEqType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateRecEqType() throws URISyntaxException
+	public void testD_UpdateRecEqType() throws Exception
 	{
 	    RecEqTypeDTO receqtype = generateRandomRecEqType();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/receqtype/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<RecEqTypeDTO> request = new HttpEntity<>(receqtype);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(receqtypeService.updateRecEqType(any(RecEqTypeDTO.class))).thenReturn(receqtype);
+
+        mockMvc.perform(post("/receqtype/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(receqtype)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a RecEqType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteRecEqType() throws URISyntaxException
+	public void testE_DeleteRecEqType() throws Exception
 	{
-		RecEqTypeDTO receqtype = generateRandomRecEqType();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/receqtype/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<RecEqTypeDTO> request = new HttpEntity<>(receqtype);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(receqtypeService.deleteRecEqType(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/receqtype/delete/2"))
+                .andExpect(status().isOk());
 	}
+
 
 
 	public static RecEqTypeDTO generateRandomRecEqType() {
 		RecEqTypeDTO record = new RecEqTypeDTO();
 		record.setRecEqCde(Randomizer.randomString(5));
 		record.setRecEqDesc(Randomizer.randomString(20));
-		record.setActv(Randomizer.randomString(1));
+		record.setActv(Randomizer.randomString(2));
 		return record;
 	}
 }

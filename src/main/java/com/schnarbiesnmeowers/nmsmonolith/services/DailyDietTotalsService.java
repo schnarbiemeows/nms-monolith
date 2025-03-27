@@ -1,6 +1,5 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import java.sql.SQLException;
 import java.util.*;
 
 import org.springframework.stereotype.Service;
@@ -8,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.DailyDietTotalsDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyDietTotals;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDietTotals;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.DailyDietTotalsRepository;
 
 /**

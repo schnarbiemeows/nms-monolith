@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.NotificationsRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.NotificationsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.NotificationsService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,140 +31,129 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class NotificationsControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private NotificationsController notificationsController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private NotificationsService notificationsService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private NotificationsRepository notificationsRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(notificationsController).build();
+    }
 
 	/**
 	 * test creating a new Notifications
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateNotifications() throws URISyntaxException
+	public void testA_CreateNotifications() throws Exception
 	{
 	    NotificationsDTO notifications = generateRandomNotifications();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(notifications.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/notifications/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<NotificationsDTO> request = new HttpEntity<>(notifications,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(notificationsService.createNotifications(any(NotificationsDTO.class))).thenReturn(notifications);
+
+        mockMvc.perform(post("/notifications/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(notifications)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all Notifications
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllNotifications() throws URISyntaxException
+	public void testB_GetAllNotifications() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/notifications/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<NotificationsDTO> notificationss = Arrays.asList(generateRandomNotifications(), generateRandomNotifications());
+        when(notificationsService.getAllNotifications()).thenReturn(notificationss);
+
+        mockMvc.perform(get("/notifications/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single Notifications by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetNotifications() throws URISyntaxException
+	public void testC_GetNotifications() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/notifications/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		NotificationsDTO notifications = generateRandomNotifications();
+        when(notificationsService.findNotificationsById(anyInt())).thenReturn(notifications);
+
+        mockMvc.perform(get("/notifications/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a Notifications
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateNotifications() throws URISyntaxException
+	public void testD_UpdateNotifications() throws Exception
 	{
 	    NotificationsDTO notifications = generateRandomNotifications();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/notifications/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<NotificationsDTO> request = new HttpEntity<>(notifications);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(notificationsService.updateNotifications(any(NotificationsDTO.class))).thenReturn(notifications);
+
+        mockMvc.perform(post("/notifications/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(notifications)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a Notifications
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteNotifications() throws URISyntaxException
+	public void testE_DeleteNotifications() throws Exception
 	{
-		NotificationsDTO notifications = generateRandomNotifications();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/notifications/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<NotificationsDTO> request = new HttpEntity<>(notifications);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(notificationsService.deleteNotifications(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/notifications/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all Notifications by foreign key eventId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetNotificationsByEventId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/notifications/findByEventId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single Notifications by field EventId
+ * @throws
+ */
+@Test
+public void testC_findByEventId() throws Exception
+{
+    List<NotificationsDTO> notifications = Arrays.asList(generateRandomNotifications());
+    when(notificationsService.findNotificationsByEventId(anyInt())).thenReturn(notifications);
 
+    mockMvc.perform(get("/notifications/findByEventId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static NotificationsDTO generateRandomNotifications() {
 		NotificationsDTO record = new NotificationsDTO();
 		record.setEventId(Randomizer.randomInt(1000));
 		record.setNotifTime(Randomizer.randomTime(1000));
 		record.setNextNotifDate(Randomizer.randomDate());
-		record.setDelivered(Randomizer.randomString(1));
+		record.setDelivered(Randomizer.randomString(2));
 		return record;
 	}
 }

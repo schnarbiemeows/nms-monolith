@@ -1,9 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.mockito.Mockito.*;
+
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredienttype.IngredientTypesDTO;
-import org.springframework.stereotype.Service;
+import com.schnarbiesnmeowers.nmsmonolith.entities.IngredientTypes;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.IngredientTypesRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -11,70 +22,120 @@ import org.springframework.stereotype.Service;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class IngredientTypesServiceTest {
+@ExtendWith(MockitoExtension.class)
+class IngredientTypesServiceTest {
 
+    @Mock
+    private IngredientTypesRepository ingredienttypesRepository;
 
-	/**
-	 * get all IngredientTypes records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<IngredientTypesDTO> getAllIngredientTypes() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<IngredientTypesDTO> ingredienttypesDTO = new ArrayList<IngredientTypesDTO>();
-		return ingredienttypesDTO;
+    @InjectMocks
+    private IngredientTypesService ingredienttypesService;
+
+    private IngredientTypes ingredienttypes;
+    private IngredientTypesDTO ingredienttypesDTO;
+
+    @BeforeEach
+    void setUp() {
+        ingredienttypes = generateRandomIngredientTypesEntity();
+        ingredienttypesDTO = generateRandomIngredientTypes();
+    }
+
+    @Test
+    void testGetAllIngredientTypes() throws Exception {
+        when(ingredienttypesRepository.findActiveIngredientTypes()).thenReturn(Collections.singletonList(ingredienttypes));
+
+        List<IngredientTypesDTO> result = ingredienttypesService.getAllIngredientTypes();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindIngredientTypesById_Found() throws Exception {
+        when(ingredienttypesRepository.findById(anyInt())).thenReturn(Optional.of(ingredienttypes));
+
+        IngredientTypesDTO result = ingredienttypesService.findIngredientTypesById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindIngredientTypesById_NotFound() {
+        when(ingredienttypesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            ingredienttypesService.findIngredientTypesById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateIngredientTypes() {
+        when(ingredienttypesRepository.save(any(IngredientTypes.class))).thenReturn(ingredienttypes);
+
+        IngredientTypesDTO result = ingredienttypesService.createIngredientTypes(ingredienttypesDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateIngredientTypes_Found() throws Exception {
+        when(ingredienttypesRepository.findById(anyInt())).thenReturn(Optional.of(ingredienttypes));
+        when(ingredienttypesRepository.save(any(IngredientTypes.class))).thenReturn(ingredienttypes);
+
+        IngredientTypesDTO result = ingredienttypesService.updateIngredientTypes(ingredienttypesDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateIngredientTypes_NotFound() {
+        when(ingredienttypesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            ingredienttypesService.updateIngredientTypes(ingredienttypesDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteIngredientTypes_Found() throws Exception {
+        when(ingredienttypesRepository.findById(anyInt())).thenReturn(Optional.of(ingredienttypes));
+        doNothing().when(ingredienttypesRepository).deleteById(anyInt());
+
+        String result = ingredienttypesService.deleteIngredientTypes(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteIngredientTypes_NotFound() {
+        when(ingredienttypesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            ingredienttypesService.deleteIngredientTypes(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static IngredientTypesDTO generateRandomIngredientTypes() {
+		IngredientTypesDTO record = new IngredientTypesDTO();
+		record.setIngrTypeId(2);
+		record.setPrntIngrType(Randomizer.randomInt(1000));
+		record.setIngrTypeDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get IngredientTypes by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public IngredientTypesDTO findIngredientTypesById(int id) throws Exception {
-		return new IngredientTypesDTO();
+    public static IngredientTypes generateRandomIngredientTypesEntity() {
+		IngredientTypes record = new IngredientTypes();
+		record.setIngrTypeId(2);
+		record.setPrntIngrType(Randomizer.randomInt(1000));
+		record.setIngrTypeDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * create a new IngredientTypes
-	 * @param data
-	 * @return
-	 */
-	public IngredientTypesDTO createIngredientTypes(IngredientTypesDTO data) {
-        data.setIngrTypeId(1);
-        return data;
-	}
-
-	/**
-	 * update a IngredientTypes
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public IngredientTypesDTO updateIngredientTypes(IngredientTypesDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a IngredientTypes by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteIngredientTypes(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<IngredientTypesDTO> by foreign key : imageLoc
-	 * @param imageLoc
-	 * @return List<IngredientTypes>
-	 * @throws Exception
-	*/
-	public List<IngredientTypesDTO> findIngredientTypesByImageLoc(int id) throws Exception {
-		List<IngredientTypesDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

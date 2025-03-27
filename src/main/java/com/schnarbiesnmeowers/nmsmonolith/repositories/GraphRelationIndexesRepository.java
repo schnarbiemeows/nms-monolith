@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.GraphRelationIndexes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.GraphRelationIndexes;
 /**
  *
  * @author Dylan I. Kessler

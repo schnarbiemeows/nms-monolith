@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.NotificationsDTO;
-import org.springframework.stereotype.Service;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Notifications;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.NotificationsRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,70 +22,120 @@ import org.springframework.stereotype.Service;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class NotificationsServiceTest {
+@ExtendWith(MockitoExtension.class)
+class NotificationsServiceTest {
 
+    @Mock
+    private NotificationsRepository notificationsRepository;
 
-	/**
-	 * get all Notifications records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<NotificationsDTO> getAllNotifications() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<NotificationsDTO> notificationsDTO = new ArrayList<NotificationsDTO>();
-		return notificationsDTO;
+    @InjectMocks
+    private NotificationsService notificationsService;
+
+    private Notifications notifications;
+    private NotificationsDTO notificationsDTO;
+
+    @BeforeEach
+    void setUp() {
+        notifications = generateRandomNotificationsEntity();
+        notificationsDTO = generateRandomNotifications();
+    }
+
+    @Test
+    void testGetAllNotifications() throws Exception {
+        when(notificationsRepository.findAll()).thenReturn(Collections.singletonList(notifications));
+
+        List<NotificationsDTO> result = notificationsService.getAllNotifications();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindNotificationsById_Found() throws Exception {
+        when(notificationsRepository.findById(anyInt())).thenReturn(Optional.of(notifications));
+
+        NotificationsDTO result = notificationsService.findNotificationsById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindNotificationsById_NotFound() {
+        when(notificationsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            notificationsService.findNotificationsById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateNotifications() {
+        when(notificationsRepository.save(any(Notifications.class))).thenReturn(notifications);
+
+        NotificationsDTO result = notificationsService.createNotifications(notificationsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateNotifications_Found() throws Exception {
+        when(notificationsRepository.findById(anyInt())).thenReturn(Optional.of(notifications));
+        when(notificationsRepository.save(any(Notifications.class))).thenReturn(notifications);
+
+        NotificationsDTO result = notificationsService.updateNotifications(notificationsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateNotifications_NotFound() {
+        when(notificationsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            notificationsService.updateNotifications(notificationsDTO);
+        });
+
+        assertEquals("id = " + notificationsDTO.getNotificationId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteNotifications_Found() throws Exception {
+        when(notificationsRepository.findById(anyInt())).thenReturn(Optional.of(notifications));
+        doNothing().when(notificationsRepository).deleteById(anyInt());
+
+        String result = notificationsService.deleteNotifications(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteNotifications_NotFound() {
+        when(notificationsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            notificationsService.deleteNotifications(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static NotificationsDTO generateRandomNotifications() {
+		NotificationsDTO record = new NotificationsDTO();
+		record.setNotificationId(2);
+		record.setEventId(Randomizer.randomInt(1000));
+		record.setNotifTime(Randomizer.randomTime(1000));
+		record.setNextNotifDate(Randomizer.randomDate());
+		record.setDelivered(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get Notifications by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public NotificationsDTO findNotificationsById(int id) throws Exception {
-		return new NotificationsDTO();
+    public static Notifications generateRandomNotificationsEntity() {
+		Notifications record = new Notifications();
+		record.setNotificationId(2);
+		record.setEventId(Randomizer.randomInt(1000));
+		record.setNotifTime(Randomizer.randomTime(1000));
+		record.setNextNotifDate(Randomizer.randomDate());
+		record.setDelivered(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * create a new Notifications
-	 * @param data
-	 * @return
-	 */
-	public NotificationsDTO createNotifications(NotificationsDTO data) {
-        data.setNotificationId(1);
-        return data;
-	}
-
-	/**
-	 * update a Notifications
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public NotificationsDTO updateNotifications(NotificationsDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a Notifications by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteNotifications(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<NotificationsDTO> by foreign key : eventId
-	 * @param id
-	 * @return List<Notifications>
-	 * @throws Exception
-	*/
-	public List<NotificationsDTO> findNotificationsByEventId(int id) throws Exception {
-		List<NotificationsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

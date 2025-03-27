@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RolesRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RolesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.RolesService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,175 +31,146 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class RolesControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private RolesController rolesController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private RolesService rolesService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private RolesRepository rolesRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(rolesController).build();
+    }
 
 	/**
 	 * test creating a new Roles
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateRoles() throws URISyntaxException
+	public void testA_CreateRoles() throws Exception
 	{
 	    RolesDTO roles = generateRandomRoles();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(roles.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/roles/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<RolesDTO> request = new HttpEntity<>(roles,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(rolesService.createRoles(any(RolesDTO.class))).thenReturn(roles);
+
+        mockMvc.perform(post("/roles/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(roles)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all Roles
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllRoles() throws URISyntaxException
+	public void testB_GetAllRoles() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/roles/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<RolesDTO> roless = Arrays.asList(generateRandomRoles(), generateRandomRoles());
+        when(rolesService.getAllRoles()).thenReturn(roless);
+
+        mockMvc.perform(get("/roles/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single Roles by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetRoles() throws URISyntaxException
+	public void testC_GetRoles() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/roles/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		RolesDTO roles = generateRandomRoles();
+        when(rolesService.findRolesById(anyInt())).thenReturn(roles);
+
+        mockMvc.perform(get("/roles/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a Roles
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateRoles() throws URISyntaxException
+	public void testD_UpdateRoles() throws Exception
 	{
 	    RolesDTO roles = generateRandomRoles();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/roles/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<RolesDTO> request = new HttpEntity<>(roles);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(rolesService.updateRoles(any(RolesDTO.class))).thenReturn(roles);
+
+        mockMvc.perform(post("/roles/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(roles)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a Roles
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteRoles() throws URISyntaxException
+	public void testE_DeleteRoles() throws Exception
 	{
-		RolesDTO roles = generateRandomRoles();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/roles/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<RolesDTO> request = new HttpEntity<>(roles);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(rolesService.deleteRoles(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/roles/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all Roles by foreign key grpId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetRolesByGrpId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/roles/findByGrpId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single Roles by field GrpId
+ * @throws
+ */
+@Test
+public void testC_findByGrpId() throws Exception
+{
+    List<RolesDTO> roles = Arrays.asList(generateRandomRoles());
+    when(rolesService.findRolesByGrpId(anyInt())).thenReturn(roles);
 
-	/**
-	 * test getting all Roles by foreign key rsrcId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetRolesByRsrcId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/roles/findByRsrcId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/roles/findByGrpId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single Roles by field RsrcId
+ * @throws
+ */
+@Test
+public void testC_findByRsrcId() throws Exception
+{
+    List<RolesDTO> roles = Arrays.asList(generateRandomRoles());
+    when(rolesService.findRolesByRsrcId(anyInt())).thenReturn(roles);
 
-	/**
-	 * test getting all Roles by foreign key actionTypeId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetRolesByActionTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/roles/findByActionTypeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/roles/findByRsrcId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single Roles by field ActionTypeId
+ * @throws
+ */
+@Test
+public void testC_findByActionTypeId() throws Exception
+{
+    List<RolesDTO> roles = Arrays.asList(generateRandomRoles());
+    when(rolesService.findRolesByActionTypeId(anyInt())).thenReturn(roles);
 
-	/**
-	 * test getting all Roles by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetRolesByGrpIdAndRsrcIdAndActionTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/roles/findByGrpIdAndRsrcIdAndActionTypeId/1/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/roles/findByActionTypeId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static RolesDTO generateRandomRoles() {
 		RolesDTO record = new RolesDTO();

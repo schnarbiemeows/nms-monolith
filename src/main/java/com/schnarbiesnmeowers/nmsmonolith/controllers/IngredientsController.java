@@ -3,16 +3,17 @@ package com.schnarbiesnmeowers.nmsmonolith.controllers;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.IngredientsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.IngredientsWrapper;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.RecipeIngredientDisplay;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller
@@ -49,6 +50,13 @@ public class IngredientsController {
 	@GetMapping(path = "/all-displays/{id}")
 	public ResponseEntity<IngredientsWrapper> getAllIngredientDisplays(@PathVariable int id) throws Exception {
 		IngredientsWrapper ingredients = ingredientsService.getAllIngredientDisplays(id);
+		return ResponseEntity.status(HttpStatus.OK).body(ingredients);
+	}
+
+	@GetMapping(path = "/all-displays-ranked/{id}/{rankedBy}")
+	public ResponseEntity<IngredientsWrapper> getAllIngredientDisplaysRanked(@PathVariable int id,
+		@PathVariable String rankedBy) throws Exception {
+		IngredientsWrapper ingredients = ingredientsService.getIngredientsByRanking(id, rankedBy);
 		return ResponseEntity.status(HttpStatus.OK).body(ingredients);
 	}
 
@@ -137,7 +145,7 @@ public class IngredientsController {
 	 * @return List<Ingredients>
 	 * @throws Exception
 	*/
-	@GetMapping(path = "/findByIngrTypeId/{id}")
+	@GetMapping(path = "/findByIngrTypeId/{ingrTypeId}")
 	public ResponseEntity<List<IngredientsDTO>> findIngredientsByIngrTypeId(@PathVariable int ingrTypeId) throws Exception {
 		List<IngredientsDTO> results = ingredientsService.findIngredientsByIngrTypeId(ingrTypeId);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
@@ -149,7 +157,7 @@ public class IngredientsController {
 	 * @return List<Ingredients>
 	 * @throws Exception
 	*/
-	@GetMapping(path = "/findByBrandId/{id}")
+	@GetMapping(path = "/findByBrandId/{brandId}")
 	public ResponseEntity<List<IngredientsDTO>> findIngredientsByBrandId(@PathVariable int brandId) throws Exception {
 		List<IngredientsDTO> results = ingredientsService.findIngredientsByBrandId(brandId);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
@@ -161,7 +169,7 @@ public class IngredientsController {
 	 * @return List<Ingredients>
 	 * @throws Exception
 	*/
-	@GetMapping(path = "/findByServTypeId/{id}")
+	@GetMapping(path = "/findByServTypeId/{servTypeId}")
 	public ResponseEntity<List<IngredientsDTO>> findIngredientsByServTypeId(@PathVariable int servTypeId) throws Exception {
 		List<IngredientsDTO> results = ingredientsService.findIngredientsByServTypeId(servTypeId);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
@@ -173,7 +181,7 @@ public class IngredientsController {
 	 * @return List<Ingredients>
 	 * @throws Exception
 	*/
-	@GetMapping(path = "/findByImageLoc/{id}")
+	@GetMapping(path = "/findByImageLoc/{imageLoc}")
 	public ResponseEntity<List<IngredientsDTO>> findIngredientsByImageLoc(@PathVariable int imageLoc) throws Exception {
 		List<IngredientsDTO> results = ingredientsService.findIngredientsByImageLoc(imageLoc);
 		return ResponseEntity.status(HttpStatus.OK).body(results);

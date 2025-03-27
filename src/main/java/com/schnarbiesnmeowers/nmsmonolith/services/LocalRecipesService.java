@@ -18,13 +18,14 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.LocalSpicesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.SpicesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.DependencyExistsException;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ServingRatioNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyDiet;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Recipes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDiet;
+import com.schnarbiesnmeowers.nmsmonolith.entities.MacroType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Recipes;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.RecipeCalculatorUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalRecipes;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalRecipes;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LocalRecipesRepository;
 
 import static com.schnarbiesnmeowers.nmsmonolith.utilities.Constants.*;
@@ -127,7 +128,32 @@ public class LocalRecipesService {
         }
         return recipesDTOS;
     }
-
+    public List<LocalRecipesDTO> getAllLocalRecipesRanked(int userId, String rankBy) throws Exception {
+        Iterable<LocalRecipes> recipes = null;
+        if (rankBy.equals(MacroType.tot_protein.getValue())) {
+            recipes = localRecipesRepository
+                    .findRecipesByProtein(userId);
+        } else if (rankBy.equals(MacroType.tot_fat.getValue())) {
+            recipes = localRecipesRepository
+                    .findRecipesByFats(userId);
+        } else if (rankBy.equals(MacroType.mono_fat.getValue())) {
+            recipes = localRecipesRepository
+                    .findRecipesByMonoFats(userId);
+        } else if (rankBy.equals(MacroType.tot_carbs.getValue())) {
+            recipes = localRecipesRepository
+                    .findRecipesByCarbs(userId);
+        } else if (rankBy.equals(MacroType.tot_fiber.getValue())) {
+            recipes = localRecipesRepository
+                    .findRecipesByFiber(userId);
+        }
+        Iterator<LocalRecipes> recipesIterator = recipes.iterator();
+        List<LocalRecipesDTO> recipesDTOS = new ArrayList();
+        while (recipesIterator.hasNext()) {
+            LocalRecipes item = recipesIterator.next();
+            recipesDTOS.add(item.toDTO());
+        }
+        return recipesDTOS;
+    }
     public LocalRecipes findBasicRecipeInfoByRecipeId(int id) throws Exception {
         Optional<LocalRecipes> recipesOptional = localRecipesRepository.findById(id);
         if (recipesOptional.isPresent()) {
@@ -641,9 +667,10 @@ public class LocalRecipesService {
     }
 
     private boolean checkIfWeNeedToRecursivelyUpdate(LocalIngredientsDTO ingredientRecord, RecipeFormDTO data) throws Exception {
-        LocalIngredientsDTO currentRecipeRecord = localIngredientsService
+        /*LocalIngredientsDTO currentRecipeRecord = localIngredientsService
                 .findLocalIngredientsById(data.getRecipeMetaData().getIngrId());
-        return !areTheyTheSame(ingredientRecord,currentRecipeRecord);
+        return !areTheyTheSame(ingredientRecord,currentRecipeRecord);*/
+        return false;
     }
 
     private boolean areTheyTheSame(LocalIngredientsDTO ingredientRecord, LocalIngredientsDTO currentRecipeRecord) {
@@ -843,6 +870,7 @@ public class LocalRecipesService {
                 LocalRecipeSpicesDTO dto = new LocalRecipeSpicesDTO();
                 dto.setRecipeId(recipeId);
                 dto.setActv("Y");
+                dto.setIsLocal(rec.isLocal());
                 dto.setSpiceId(rec.getSpiceId());
                 dto.setServSz(rec.getServSz());
                 dto.setServTypeId(rec.getServUnitId());
@@ -852,13 +880,13 @@ public class LocalRecipesService {
         }
         for (Integer key : globalRecipeSpicesMap.keySet()) {
             LocalRecipeSpicesDTO dto = globalRecipeSpicesMap.get(key);
-            dto.setActv(NO);
-            localRecipeSpicesService.updateLocalRecipeSpices(dto);
+            //dto.setActv(NO);
+            localRecipeSpicesService.deleteLocalRecipeSpices(dto.getRecipeSpiceId());
         }
         for (Integer key : localRecipeSpicesMap.keySet()) {
             LocalRecipeSpicesDTO dto = localRecipeSpicesMap.get(key);
             dto.setActv(NO);
-            localRecipeSpicesService.updateLocalRecipeSpices(dto);
+            localRecipeSpicesService.deleteLocalRecipeSpices(dto.getRecipeSpiceId());
         }
     }
 

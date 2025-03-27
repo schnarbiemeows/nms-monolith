@@ -1,20 +1,23 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
-import org.junit.Test;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeIngredients;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the RecipeIngredients class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class RecipeIngredientsTest {
 
 	/**
@@ -23,18 +26,22 @@ public class RecipeIngredientsTest {
 	@Test
 	public void testClass() {
 		RecipeIngredients classUnderTest = new RecipeIngredients();
-		classUnderTest.setRecipeIngrId(new Integer(1));
-		classUnderTest.setRecipeId(new Integer(1));
-		classUnderTest.setRecOrIngrId(new Integer(1));
+		classUnderTest.setRecipeIngrId(2);
+		classUnderTest.setRecipeId(2);
+		classUnderTest.setRecOrIngrId(2);
 		classUnderTest.setRecipeFlg("a");
+		classUnderTest.setServSz(new BigDecimal(1.00));
+		classUnderTest.setServTypeId(2);
+		classUnderTest.setActv("a");
 		assertTrue(true);
 		RecipeIngredients newitem = new RecipeIngredients(
 		classUnderTest.getRecipeIngrId(),
 		classUnderTest.getRecipeId(),
 		classUnderTest.getRecOrIngrId(),
 		classUnderTest.getRecipeFlg(),
-				BigDecimal.ZERO,
-				new Integer(1), "Y");
+		classUnderTest.getServSz(),
+		classUnderTest.getServTypeId(),
+		classUnderTest.getActv());
 		assertNotNull(newitem);
 		String string = classUnderTest.toString();
 		assertNotNull(string);

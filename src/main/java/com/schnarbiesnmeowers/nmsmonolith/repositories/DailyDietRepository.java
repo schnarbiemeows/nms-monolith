@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyDiet;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDiet;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
@@ -39,7 +39,7 @@ public interface DailyDietRepository extends JpaRepository<DailyDiet, Integer> {
 	public Iterable<DailyDiet> findDailyDietByUserIdAndIngrIdAndBldstId(int userId,int ingrId,int bldstId);
 
 	@Query(value = "select * from daily_diet dd where dd.user_id = ?1 and dd.calendar_date = ?2 " +
-			"order by dd.time_eaten", nativeQuery = true)
+			"order by dd.bldst_id, dd.time_eaten", nativeQuery = true)
 	public Iterable<DailyDiet> findDailyDietByUserIdAndDate(int userId, Date date);
 
 	/**

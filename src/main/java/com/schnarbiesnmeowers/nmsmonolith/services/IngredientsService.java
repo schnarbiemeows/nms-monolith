@@ -10,9 +10,10 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.RecipeIngredientsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.*;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.RecipeIngredientDisplay;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypesDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.DependencyExistsException;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ServingRatioNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.IngredientTypesRepository;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LocalIngredientsRepository;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.RecipeCalculatorUtility;
@@ -95,6 +96,34 @@ public class IngredientsService {
 		return ingredientsdto;
 	}
 
+	public List<IngredientsDTO> getAllIngredientsRanked(String rankBy) throws Exception {
+		Iterable<Ingredients> ingredients = null;
+		if(rankBy.equals(MacroType.tot_protein.getValue())) {
+			ingredients = ingredientsRepository
+					.findIngredientsByProtein(INGREDIENT_TYPE_ID_FOR_RECIPE);
+		} else if(rankBy.equals(MacroType.tot_fat.getValue())) {
+			ingredients = ingredientsRepository
+					.findIngredientsByFats(INGREDIENT_TYPE_ID_FOR_RECIPE);
+		} else if(rankBy.equals(MacroType.mono_fat.getValue())) {
+			ingredients = ingredientsRepository
+					.findIngredientsByMonoFats(INGREDIENT_TYPE_ID_FOR_RECIPE);
+		}
+		else if(rankBy.equals(MacroType.tot_carbs.getValue())) {
+			ingredients = ingredientsRepository
+					.findIngredientsByCarbs(INGREDIENT_TYPE_ID_FOR_RECIPE);
+		} else if(rankBy.equals(MacroType.tot_fiber.getValue())) {
+			ingredients = ingredientsRepository
+					.findIngredientsByFiber(INGREDIENT_TYPE_ID_FOR_RECIPE);
+		}
+		Iterator<Ingredients> ingredientsIterator = ingredients.iterator();
+		List<IngredientsDTO> ingredientsdto = new ArrayList();
+		while(ingredientsIterator.hasNext()) {
+			Ingredients item = ingredientsIterator.next();
+			ingredientsdto.add(item.toDTO());
+		}
+		return ingredientsdto;
+	}
+
 	/**
 	 * get all of the ingredient displays for a user, consisting of:
 	 * - global ingredient displays
@@ -137,6 +166,33 @@ public class IngredientsService {
 		}
 		return ingredientsdto;
 	}
+	public List<LocalIngredientsDTO> getAllLocalIngredientsRanked(int userId, String rankBy) throws Exception {
+		Iterable<LocalIngredients> ingredients = null;
+		if(rankBy.equals(MacroType.tot_protein.getValue())) {
+			ingredients = localIngredientsRepository
+					.findLocalIngredientsByProtein(INGREDIENT_TYPE_ID_FOR_RECIPE,userId);
+		} else if(rankBy.equals(MacroType.tot_fat.getValue())) {
+			ingredients = localIngredientsRepository
+					.findLocalIngredientsByFats(INGREDIENT_TYPE_ID_FOR_RECIPE,userId);
+		} else if(rankBy.equals(MacroType.mono_fat.getValue())) {
+			ingredients = localIngredientsRepository
+					.findLocalIngredientsByMonoFats(INGREDIENT_TYPE_ID_FOR_RECIPE,userId);
+		} else if(rankBy.equals(MacroType.tot_carbs.getValue())) {
+			ingredients = localIngredientsRepository
+					.findLocalIngredientsByCarbs(INGREDIENT_TYPE_ID_FOR_RECIPE,userId);
+		} else if(rankBy.equals(MacroType.tot_fiber.getValue())) {
+			ingredients = localIngredientsRepository
+					.findLocalIngredientsByFiber(INGREDIENT_TYPE_ID_FOR_RECIPE,userId);
+		}
+		Iterator<LocalIngredients> ingredientsIterator = ingredients.iterator();
+		List<LocalIngredientsDTO> ingredientsdto = new ArrayList();
+		while(ingredientsIterator.hasNext()) {
+			LocalIngredients item = ingredientsIterator.next();
+			ingredientsdto.add(item.toDTO());
+		}
+		return ingredientsdto;
+	}
+
 
 	/**
 	 * get all of the favorite ingredients for a user
@@ -304,7 +360,7 @@ public class IngredientsService {
 
 	private boolean checkIfWeNeedToRecursivelyUpdate(IngredientsDTO ingredientRecord,
 													 IngredientsDTO currentRecipeRecord) throws Exception {
-		return !areTheyTheSame(ingredientRecord,currentRecipeRecord);
+		return /*!areTheyTheSame(ingredientRecord,currentRecipeRecord);*/ false;
 	}
 
 	private boolean areTheyTheSame(IngredientsDTO ingredientRecord, IngredientsDTO currentRecipeRecord) {
@@ -551,4 +607,27 @@ public class IngredientsService {
 		IngredientsDTO dto = findIngredientsById(data.getIngrId());
 		return calculateM1(data,dto);
 	}
+
+	public IngredientsWrapper getIngredientsByRanking(int userId, String rankBy) throws Exception {
+		if(MacroType.rankByInEnums(rankBy)) {
+			List<IngredientsDTO> globals = getAllIngredientsRanked(rankBy);
+			List<IngredientRecordDisplay> globalDisplays = new ArrayList();
+			for(IngredientsDTO item : globals) {
+				globalDisplays.add(item.toDisplayObject());
+			}
+			List<LocalIngredientsDTO> locals = getAllLocalIngredientsRanked(userId, rankBy);
+			List<IngredientRecordDisplay> localDisplays = new ArrayList();
+			for(LocalIngredientsDTO item : locals) {
+				localDisplays.add(item.toDisplayObject());
+			}
+			List<FavoriteIngredientsDTO> favorites = getFavoriteIngredients(userId);
+			Integer recipeIngredientTypeId = ingredientTypeRepository.findTheIngredientTypeForRecipe();
+			return new IngredientsWrapper(globalDisplays,localDisplays,favorites,recipeIngredientTypeId);
+		} else {
+			throw new Exception("invalid ranking type");
+		}
+
+	}
+
+
 }

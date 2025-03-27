@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalRecipeSpices;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalRecipeSpices;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.LocalRecipeSpicesDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalRecipeSpices;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LocalRecipeSpicesRepository;
 
 /**

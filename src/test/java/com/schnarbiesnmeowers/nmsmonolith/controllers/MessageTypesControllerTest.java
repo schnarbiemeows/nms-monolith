@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.MessageTypesRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.MessageTypesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.MessageTypesService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,123 +31,114 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class MessageTypesControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private MessageTypesController messagetypesController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private MessageTypesService messagetypesService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private MessageTypesRepository messagetypesRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(messagetypesController).build();
+    }
 
 	/**
 	 * test creating a new MessageTypes
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateMessageTypes() throws URISyntaxException
+	public void testA_CreateMessageTypes() throws Exception
 	{
 	    MessageTypesDTO messagetypes = generateRandomMessageTypes();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(messagetypes.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/messagetypes/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<MessageTypesDTO> request = new HttpEntity<>(messagetypes,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(messagetypesService.createMessageTypes(any(MessageTypesDTO.class))).thenReturn(messagetypes);
+
+        mockMvc.perform(post("/messagetypes/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(messagetypes)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all MessageTypes
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllMessageTypes() throws URISyntaxException
+	public void testB_GetAllMessageTypes() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/messagetypes/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<MessageTypesDTO> messagetypess = Arrays.asList(generateRandomMessageTypes(), generateRandomMessageTypes());
+        when(messagetypesService.getAllMessageTypes()).thenReturn(messagetypess);
+
+        mockMvc.perform(get("/messagetypes/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single MessageTypes by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetMessageTypes() throws URISyntaxException
+	public void testC_GetMessageTypes() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/messagetypes/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		MessageTypesDTO messagetypes = generateRandomMessageTypes();
+        when(messagetypesService.findMessageTypesById(anyInt())).thenReturn(messagetypes);
+
+        mockMvc.perform(get("/messagetypes/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a MessageTypes
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateMessageTypes() throws URISyntaxException
+	public void testD_UpdateMessageTypes() throws Exception
 	{
 	    MessageTypesDTO messagetypes = generateRandomMessageTypes();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/messagetypes/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<MessageTypesDTO> request = new HttpEntity<>(messagetypes);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(messagetypesService.updateMessageTypes(any(MessageTypesDTO.class))).thenReturn(messagetypes);
+
+        mockMvc.perform(post("/messagetypes/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(messagetypes)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a MessageTypes
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteMessageTypes() throws URISyntaxException
+	public void testE_DeleteMessageTypes() throws Exception
 	{
-		MessageTypesDTO messagetypes = generateRandomMessageTypes();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/messagetypes/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<MessageTypesDTO> request = new HttpEntity<>(messagetypes);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(messagetypesService.deleteMessageTypes(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/messagetypes/delete/2"))
+                .andExpect(status().isOk());
 	}
+
 
 
 	public static MessageTypesDTO generateRandomMessageTypes() {
 		MessageTypesDTO record = new MessageTypesDTO();
-		record.setMessageTypeCde(Randomizer.randomString(1));
+		record.setMessageTypeCde(Randomizer.randomString(2));
 		record.setMessageTypeDesc(Randomizer.randomString(20));
 		return record;
 	}

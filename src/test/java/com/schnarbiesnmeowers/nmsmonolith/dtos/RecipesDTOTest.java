@@ -1,20 +1,24 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.RecipesDTO;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-import static org.junit.Assert.*;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 
-import org.junit.Test;
 import java.math.*;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * class to test the RecipesDTO class
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
 public class RecipesDTOTest {
 
 	/**
@@ -23,9 +27,10 @@ public class RecipesDTOTest {
 	@Test
 	public void testClass() {
 		RecipesDTO classUnderTest = new RecipesDTO();
-		classUnderTest.setRecipeId(new Integer(1));
+		classUnderTest.setRecipeId(2);
 		classUnderTest.setRecipeName("a");
-		classUnderTest.setIngrId(new Integer(1));
+		classUnderTest.setRecipeTypeId(2);
+		classUnderTest.setIngrId(2);
 		classUnderTest.setRecipeDesc("a");
 		classUnderTest.setRecipeLink("a");
 		classUnderTest.setNumSrv(new BigDecimal(1.00));
@@ -34,7 +39,7 @@ public class RecipesDTOTest {
 		RecipesDTO newitem = new RecipesDTO(
 		classUnderTest.getRecipeId(),
 		classUnderTest.getRecipeName(),
-		classUnderTest.getIngrId(),
+		classUnderTest.getRecipeTypeId(),
 		classUnderTest.getIngrId(),
 		classUnderTest.getRecipeDesc(),
 		classUnderTest.getRecipeLink(),

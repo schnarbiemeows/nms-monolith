@@ -1,11 +1,10 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos.dailydiet;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyDiet;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDiet;
 
 import java.io.Serializable;
 import com.google.gson.Gson;
 import java.math.*;
-import java.sql.Time;
 import java.util.*;
 
 /**

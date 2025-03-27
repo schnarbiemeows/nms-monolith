@@ -4,8 +4,8 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.RecipeSpiceDisplay;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.*;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.DependencyExistsException;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LocalSpices;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.Spices;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LocalSpices;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Spices;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LocalSpicesRepository;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.SpicesRepository;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.RecipeCalculatorUtility;
@@ -240,7 +240,7 @@ public class SpicesService {
 		}
 	}
 
-	private void checkForDependencies(int id) throws DependencyExistsException {
+	public void checkForDependencies(int id) throws DependencyExistsException {
 		if(checkForFavoriteDependencies(id, null)) {
 			throw new DependencyExistsException("A Favorite(s) has been found for this Spice. Delete these " +
 					"Favorite(s) before deleting this Spice.");

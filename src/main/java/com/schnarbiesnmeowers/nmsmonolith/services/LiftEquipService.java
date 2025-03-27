@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.LiftEquipDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.LiftEquip;
+import com.schnarbiesnmeowers.nmsmonolith.entities.LiftEquip;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.LiftEquipRepository;
 import org.springframework.stereotype.Service;
 

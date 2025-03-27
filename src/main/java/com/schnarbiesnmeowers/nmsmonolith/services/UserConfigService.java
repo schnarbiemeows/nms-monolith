@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.UserConfigDTO;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.UserConfig;
+import com.schnarbiesnmeowers.nmsmonolith.entities.UserConfig;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.UserConfigRepository;
 import org.springframework.stereotype.Service;
 

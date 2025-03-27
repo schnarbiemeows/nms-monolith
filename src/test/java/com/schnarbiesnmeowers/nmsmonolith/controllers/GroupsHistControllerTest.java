@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.GroupsHistRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GroupsHistDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.GroupsHistService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,175 +31,146 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class GroupsHistControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private GroupsHistController groupshistController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private GroupsHistService groupshistService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private GroupsHistRepository groupshistRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(groupshistController).build();
+    }
 
 	/**
 	 * test creating a new GroupsHist
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreateGroupsHist() throws URISyntaxException
+	public void testA_CreateGroupsHist() throws Exception
 	{
 	    GroupsHistDTO groupshist = generateRandomGroupsHist();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(groupshist.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/groupshist/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<GroupsHistDTO> request = new HttpEntity<>(groupshist,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(groupshistService.createGroupsHist(any(GroupsHistDTO.class))).thenReturn(groupshist);
+
+        mockMvc.perform(post("/groupshist/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(groupshist)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all GroupsHist
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllGroupsHist() throws URISyntaxException
+	public void testB_GetAllGroupsHist() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/groupshist/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<GroupsHistDTO> groupshists = Arrays.asList(generateRandomGroupsHist(), generateRandomGroupsHist());
+        when(groupshistService.getAllGroupsHist()).thenReturn(groupshists);
+
+        mockMvc.perform(get("/groupshist/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single GroupsHist by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetGroupsHist() throws URISyntaxException
+	public void testC_GetGroupsHist() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/groupshist/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		GroupsHistDTO groupshist = generateRandomGroupsHist();
+        when(groupshistService.findGroupsHistById(anyInt())).thenReturn(groupshist);
+
+        mockMvc.perform(get("/groupshist/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a GroupsHist
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdateGroupsHist() throws URISyntaxException
+	public void testD_UpdateGroupsHist() throws Exception
 	{
 	    GroupsHistDTO groupshist = generateRandomGroupsHist();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/groupshist/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<GroupsHistDTO> request = new HttpEntity<>(groupshist);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(groupshistService.updateGroupsHist(any(GroupsHistDTO.class))).thenReturn(groupshist);
+
+        mockMvc.perform(post("/groupshist/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(groupshist)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a GroupsHist
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeleteGroupsHist() throws URISyntaxException
+	public void testE_DeleteGroupsHist() throws Exception
 	{
-		GroupsHistDTO groupshist = generateRandomGroupsHist();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/groupshist/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<GroupsHistDTO> request = new HttpEntity<>(groupshist);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(groupshistService.deleteGroupsHist(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/groupshist/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all GroupsHist by foreign key grpId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetGroupsHistByGrpId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/groupshist/findByGrpId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single GroupsHist by field GrpId
+ * @throws
+ */
+@Test
+public void testC_findByGrpId() throws Exception
+{
+    List<GroupsHistDTO> groupshist = Arrays.asList(generateRandomGroupsHist());
+    when(groupshistService.findGroupsHistByGrpId(anyInt())).thenReturn(groupshist);
 
-	/**
-	 * test getting all GroupsHist by foreign key actionTypeId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetGroupsHistByActionTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/groupshist/findByActionTypeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/groupshist/findByGrpId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single GroupsHist by field ActionTypeId
+ * @throws
+ */
+@Test
+public void testC_findByActionTypeId() throws Exception
+{
+    List<GroupsHistDTO> groupshist = Arrays.asList(generateRandomGroupsHist());
+    when(groupshistService.findGroupsHistByActionTypeId(anyInt())).thenReturn(groupshist);
 
-	/**
-	 * test getting all GroupsHist by foreign key evntOperId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetGroupsHistByEvntOperId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/groupshist/findByEvntOperId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/groupshist/findByActionTypeId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single GroupsHist by field EvntOperId
+ * @throws
+ */
+@Test
+public void testC_findByEvntOperId() throws Exception
+{
+    List<GroupsHistDTO> groupshist = Arrays.asList(generateRandomGroupsHist());
+    when(groupshistService.findGroupsHistByEvntOperId(anyInt())).thenReturn(groupshist);
 
-	/**
-	 * test getting all GroupsHist by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetGroupsHistByGrpIdAndActionTypeIdAndEvntOperId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/groupshist/findByGrpIdAndActionTypeIdAndEvntOperId/1/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/groupshist/findByEvntOperId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static GroupsHistDTO generateRandomGroupsHist() {
 		GroupsHistDTO record = new GroupsHistDTO();

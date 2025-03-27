@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.Assert.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.PaymentRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.PaymentDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.PaymentService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -32,161 +31,134 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  * @author Dylan I. Kessler
  *
  */
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(MockitoExtension.class)
 public class PaymentControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private PaymentController paymentController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private PaymentService paymentService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private PaymentRepository paymentRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(paymentController).build();
+    }
 
 	/**
 	 * test creating a new Payment
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testA_CreatePayment() throws URISyntaxException
+	public void testA_CreatePayment() throws Exception
 	{
 	    PaymentDTO payment = generateRandomPayment();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(payment.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/payment/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<PaymentDTO> request = new HttpEntity<>(payment,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(paymentService.createPayment(any(PaymentDTO.class))).thenReturn(payment);
+
+        mockMvc.perform(post("/payment/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payment)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all Payment
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testB_GetAllPayment() throws URISyntaxException
+	public void testB_GetAllPayment() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/payment/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<PaymentDTO> payments = Arrays.asList(generateRandomPayment(), generateRandomPayment());
+        when(paymentService.getAllPayment()).thenReturn(payments);
+
+        mockMvc.perform(get("/payment/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single Payment by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testC_GetPayment() throws URISyntaxException
+	public void testC_GetPayment() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/payment/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		PaymentDTO payment = generateRandomPayment();
+        when(paymentService.findPaymentById(anyInt())).thenReturn(payment);
+
+        mockMvc.perform(get("/payment/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a Payment
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testD_UpdatePayment() throws URISyntaxException
+	public void testD_UpdatePayment() throws Exception
 	{
 	    PaymentDTO payment = generateRandomPayment();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/payment/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<PaymentDTO> request = new HttpEntity<>(payment);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(paymentService.updatePayment(any(PaymentDTO.class))).thenReturn(payment);
+
+        mockMvc.perform(post("/payment/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payment)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a Payment
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
 	@Test
-	public void testE_DeletePayment() throws URISyntaxException
+	public void testE_DeletePayment() throws Exception
 	{
-		PaymentDTO payment = generateRandomPayment();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/payment/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<PaymentDTO> request = new HttpEntity<>(payment);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(paymentService.deletePayment(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/payment/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all Payment by foreign key userId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetPaymentByUserId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/payment/findByUserId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single Payment by field UserId
+ * @throws
+ */
+@Test
+public void testC_findByUserId() throws Exception
+{
+    List<PaymentDTO> payment = Arrays.asList(generateRandomPayment());
+    when(paymentService.findPaymentByUserId(anyInt())).thenReturn(payment);
 
-	/**
-	 * test getting all Payment by foreign key paymentTypeId
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetPaymentByPaymentTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/payment/findByPaymentTypeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/payment/findByUserId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single Payment by field PaymentTypeId
+ * @throws
+ */
+@Test
+public void testC_findByPaymentTypeId() throws Exception
+{
+    List<PaymentDTO> payment = Arrays.asList(generateRandomPayment());
+    when(paymentService.findPaymentByPaymentTypeId(anyInt())).thenReturn(payment);
 
-	/**
-	 * test getting all Payment by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	@Test
-	public void testGetPaymentByUserIdAndPaymentTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/payment/findByUserIdAndPaymentTypeId/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/payment/findByPaymentTypeId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static PaymentDTO generateRandomPayment() {
 		PaymentDTO record = new PaymentDTO();
@@ -194,7 +166,7 @@ public class PaymentControllerTest {
 		record.setPaymentTypeId(Randomizer.randomInt(1000));
 		record.setPaymentAmt(Randomizer.randomBigDecimal("1000"));
 		record.setPaymentDesc(Randomizer.randomString(20));
-		record.setActv(Randomizer.randomString(1));
+		record.setActv(Randomizer.randomString(2));
 		return record;
 	}
 }

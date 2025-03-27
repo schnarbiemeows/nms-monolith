@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.utilities.excel;
 
-import com.schnarbiesnmeowers.nmsmonolith.pojos.DailyWeight;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyWeight;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 

@@ -1,9 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.mockito.Mockito.*;
+
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GroupsDTO;
-import org.springframework.stereotype.Service;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Groups;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.GroupsRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -11,59 +22,117 @@ import org.springframework.stereotype.Service;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class GroupsServiceTest {
+@ExtendWith(MockitoExtension.class)
+class GroupsServiceTest {
 
+    @Mock
+    private GroupsRepository groupsRepository;
 
-	/**
-	 * get all Groups records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<GroupsDTO> getAllGroups() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<GroupsDTO> groupsDTO = new ArrayList<GroupsDTO>();
-		return groupsDTO;
+    @InjectMocks
+    private GroupsService groupsService;
+
+    private Groups groups;
+    private GroupsDTO groupsDTO;
+
+    @BeforeEach
+    void setUp() {
+        groups = generateRandomGroupsEntity();
+        groupsDTO = generateRandomGroups();
+    }
+
+    @Test
+    void testGetAllGroups() throws Exception {
+        when(groupsRepository.findAll()).thenReturn(Collections.singletonList(groups));
+
+        List<GroupsDTO> result = groupsService.getAllGroups();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindGroupsById_Found() throws Exception {
+        when(groupsRepository.findById(anyInt())).thenReturn(Optional.of(groups));
+
+        GroupsDTO result = groupsService.findGroupsById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindGroupsById_NotFound() {
+        when(groupsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            groupsService.findGroupsById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateGroups() {
+        when(groupsRepository.save(any(Groups.class))).thenReturn(groups);
+
+        GroupsDTO result = groupsService.createGroups(groupsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateGroups_Found() throws Exception {
+        when(groupsRepository.findById(anyInt())).thenReturn(Optional.of(groups));
+        when(groupsRepository.save(any(Groups.class))).thenReturn(groups);
+
+        GroupsDTO result = groupsService.updateGroups(groupsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateGroups_NotFound() {
+        when(groupsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            groupsService.updateGroups(groupsDTO);
+        });
+
+        assertEquals("id = " + groupsDTO.getGrpId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteGroups_Found() throws Exception {
+        when(groupsRepository.findById(anyInt())).thenReturn(Optional.of(groups));
+        doNothing().when(groupsRepository).deleteById(anyInt());
+
+        String result = groupsService.deleteGroups(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteGroups_NotFound() {
+        when(groupsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            groupsService.deleteGroups(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static GroupsDTO generateRandomGroups() {
+		GroupsDTO record = new GroupsDTO();
+		record.setGrpId(2);
+		record.setGrpName(Randomizer.randomString(20));
+		record.setGrpDesc(Randomizer.randomString(20));
+		return record;
 	}
-
-	/**
-	 * get Groups by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public GroupsDTO findGroupsById(int id) throws Exception {
-		return new GroupsDTO();
-	}
-
-	/**
-	 * create a new Groups
-	 * @param data
-	 * @return
-	 */
-	public GroupsDTO createGroups(GroupsDTO data) {
-        data.setGrpId(1);
-        return data;
-	}
-
-	/**
-	 * update a Groups
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public GroupsDTO updateGroups(GroupsDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a Groups by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteGroups(int id) throws Exception {
-		return "Successfully Deleted";
+    public static Groups generateRandomGroupsEntity() {
+		Groups record = new Groups();
+		record.setGrpId(2);
+		record.setGrpName(Randomizer.randomString(20));
+		record.setGrpDesc(Randomizer.randomString(20));
+		return record;
 	}
 
 }

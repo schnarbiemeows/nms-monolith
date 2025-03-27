@@ -1,12 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.MessagesDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Messages;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.MessagesRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -14,93 +22,118 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.MessagesDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class MessagesServiceTest {
+@ExtendWith(MockitoExtension.class)
+class MessagesServiceTest {
 
+    @Mock
+    private MessagesRepository messagesRepository;
 
-	/**
-	 * get all Messages records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<MessagesDTO> getAllMessages() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<MessagesDTO> messagesDTO = new ArrayList<MessagesDTO>();
-		return messagesDTO;
+    @InjectMocks
+    private MessagesService messagesService;
+
+    private Messages messages;
+    private MessagesDTO messagesDTO;
+
+    @BeforeEach
+    void setUp() {
+        messages = generateRandomMessagesEntity();
+        messagesDTO = generateRandomMessages();
+    }
+
+    @Test
+    void testGetAllMessages() throws Exception {
+        when(messagesRepository.findAll()).thenReturn(Collections.singletonList(messages));
+
+        List<MessagesDTO> result = messagesService.getAllMessages();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindMessagesById_Found() throws Exception {
+        when(messagesRepository.findById(anyInt())).thenReturn(Optional.of(messages));
+
+        MessagesDTO result = messagesService.findMessagesById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindMessagesById_NotFound() {
+        when(messagesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            messagesService.findMessagesById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateMessages() {
+        when(messagesRepository.save(any(Messages.class))).thenReturn(messages);
+
+        MessagesDTO result = messagesService.createMessages(messagesDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateMessages_Found() throws Exception {
+        when(messagesRepository.findById(anyInt())).thenReturn(Optional.of(messages));
+        when(messagesRepository.save(any(Messages.class))).thenReturn(messages);
+
+        MessagesDTO result = messagesService.updateMessages(messagesDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateMessages_NotFound() {
+        when(messagesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            messagesService.updateMessages(messagesDTO);
+        });
+
+        assertEquals("id = " + messagesDTO.getMessageId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteMessages_Found() throws Exception {
+        when(messagesRepository.findById(anyInt())).thenReturn(Optional.of(messages));
+        doNothing().when(messagesRepository).deleteById(anyInt());
+
+        String result = messagesService.deleteMessages(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteMessages_NotFound() {
+        when(messagesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            messagesService.deleteMessages(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static MessagesDTO generateRandomMessages() {
+		MessagesDTO record = new MessagesDTO();
+		record.setMessageId(2);
+		record.setEventId(Randomizer.randomInt(1000));
+		record.setMessageTypeId(Randomizer.randomInt(1000));
+		record.setMessageTxt(Randomizer.randomString(20));
+		return record;
 	}
-
-	/**
-	 * get Messages by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public MessagesDTO findMessagesById(int id) throws Exception {
-		return new MessagesDTO();
+    public static Messages generateRandomMessagesEntity() {
+		Messages record = new Messages();
+		record.setMessageId(2);
+		record.setEventId(Randomizer.randomInt(1000));
+		record.setMessageTypeId(Randomizer.randomInt(1000));
+		record.setMessageTxt(Randomizer.randomString(20));
+		return record;
 	}
-
-	/**
-	 * create a new Messages
-	 * @param data
-	 * @return
-	 */
-	public MessagesDTO createMessages(MessagesDTO data) {
-        data.setMessageId(1);
-        return data;
-	}
-
-	/**
-	 * update a Messages
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public MessagesDTO updateMessages(MessagesDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a Messages by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteMessages(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<MessagesDTO> by foreign key : eventId
-	 * @param id
-	 * @return List<Messages>
-	 * @throws Exception
-	*/
-	public List<MessagesDTO> findMessagesByEventId(int id) throws Exception {
-		List<MessagesDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<MessagesDTO> by foreign key : messageTypeId
-	 * @param id
-	 * @return List<Messages>
-	 * @throws Exception
-	*/
-	public List<MessagesDTO> findMessagesByMessageTypeId(int id) throws Exception {
-		List<MessagesDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<MessagesDTO> by foreign key : EventIdAndMessageTypeId
-	 * @param id0
-	 * @param id1
-	 * @return
-	 * @throws Exception
-	 */
-	public List<MessagesDTO> findMessagesByEventIdAndMessageTypeId(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<MessagesDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

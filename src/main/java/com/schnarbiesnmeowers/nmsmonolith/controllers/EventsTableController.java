@@ -1,15 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import com.schnarbiesnmeowers.nmsmonolith.entities.ResponseMessage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.*;
-import com.schnarbiesnmeowers.nmsmonolith.pojos.*;
+import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller
@@ -52,7 +53,7 @@ public class EventsTableController {
 
 	/**
 	 * create a new EventsTable
-	 * @param EventsTableDTO
+	 * @param data
 	 * @return EventsTable
 	 */
 	@PostMapping(path = "/create")
@@ -67,7 +68,7 @@ public class EventsTableController {
 
 	/**
 	 * update a EventsTable
-	 * @param EventsTableDTO
+	 * @param data
 	 * @return EventsTable
 	 */
 	@PostMapping(path = "/update")
@@ -89,7 +90,7 @@ public class EventsTableController {
 
 	/**
 	 * get List<EventsTableDTO> by foreign key : userId
-	 * @param userId
+	 * @param id
 	 * @return List<EventsTable>
 	 * @throws Exception
 	*/
@@ -101,7 +102,7 @@ public class EventsTableController {
 
 	/**
 	 * get List<EventsTableDTO> by foreign key : periodId
-	 * @param periodId
+	 * @param id
 	 * @return List<EventsTable>
 	 * @throws Exception
 	*/
@@ -113,7 +114,7 @@ public class EventsTableController {
 
 	/**
 	 * get List<EventsTableDTO> by foreign key : UserIdAndPeriodId
-	 * @param UserIdAndPeriodId
+	 * @param id0
 	 * @return List<EventsTable>
 	 * @throws Exception
 	*/

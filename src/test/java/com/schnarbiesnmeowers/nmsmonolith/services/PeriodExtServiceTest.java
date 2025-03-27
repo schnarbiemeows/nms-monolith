@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.PeriodExtDTO;
-import org.springframework.stereotype.Service;
+import com.schnarbiesnmeowers.nmsmonolith.entities.PeriodExt;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.PeriodExtRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,70 +22,118 @@ import org.springframework.stereotype.Service;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class PeriodExtServiceTest {
+@ExtendWith(MockitoExtension.class)
+class PeriodExtServiceTest {
 
+    @Mock
+    private PeriodExtRepository periodextRepository;
 
-	/**
-	 * get all PeriodExt records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<PeriodExtDTO> getAllPeriodExt() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<PeriodExtDTO> periodextDTO = new ArrayList<PeriodExtDTO>();
-		return periodextDTO;
+    @InjectMocks
+    private PeriodExtService periodextService;
+
+    private PeriodExt periodext;
+    private PeriodExtDTO periodextDTO;
+
+    @BeforeEach
+    void setUp() {
+        periodext = generateRandomPeriodExtEntity();
+        periodextDTO = generateRandomPeriodExt();
+    }
+
+    @Test
+    void testGetAllPeriodExt() throws Exception {
+        when(periodextRepository.findAll()).thenReturn(Collections.singletonList(periodext));
+
+        List<PeriodExtDTO> result = periodextService.getAllPeriodExt();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindPeriodExtById_Found() throws Exception {
+        when(periodextRepository.findById(anyInt())).thenReturn(Optional.of(periodext));
+
+        PeriodExtDTO result = periodextService.findPeriodExtById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindPeriodExtById_NotFound() {
+        when(periodextRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            periodextService.findPeriodExtById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreatePeriodExt() {
+        when(periodextRepository.save(any(PeriodExt.class))).thenReturn(periodext);
+
+        PeriodExtDTO result = periodextService.createPeriodExt(periodextDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdatePeriodExt_Found() throws Exception {
+        when(periodextRepository.findById(anyInt())).thenReturn(Optional.of(periodext));
+        when(periodextRepository.save(any(PeriodExt.class))).thenReturn(periodext);
+
+        PeriodExtDTO result = periodextService.updatePeriodExt(periodextDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdatePeriodExt_NotFound() {
+        when(periodextRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            periodextService.updatePeriodExt(periodextDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeletePeriodExt_Found() throws Exception {
+        when(periodextRepository.findById(anyInt())).thenReturn(Optional.of(periodext));
+        doNothing().when(periodextRepository).deleteById(anyInt());
+
+        String result = periodextService.deletePeriodExt(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeletePeriodExt_NotFound() {
+        when(periodextRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            periodextService.deletePeriodExt(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static PeriodExtDTO generateRandomPeriodExt() {
+		PeriodExtDTO record = new PeriodExtDTO();
+		record.setPeriodExtId(2);
+		record.setPeriodId(Randomizer.randomInt(1000));
+		record.setSpecificDate(Randomizer.randomDate());
+		record.setSpecificTime(Randomizer.randomTime(1000));
+		return record;
 	}
-
-	/**
-	 * get PeriodExt by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public PeriodExtDTO findPeriodExtById(int id) throws Exception {
-		return new PeriodExtDTO();
+    public static PeriodExt generateRandomPeriodExtEntity() {
+		PeriodExt record = new PeriodExt();
+		record.setPeriodExtId(2);
+		record.setPeriodId(Randomizer.randomInt(1000));
+		record.setSpecificDate(Randomizer.randomDate());
+		record.setSpecificTime(Randomizer.randomTime(1000));
+		return record;
 	}
-
-	/**
-	 * create a new PeriodExt
-	 * @param data
-	 * @return
-	 */
-	public PeriodExtDTO createPeriodExt(PeriodExtDTO data) {
-        data.setPeriodExtId(1);
-        return data;
-	}
-
-	/**
-	 * update a PeriodExt
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public PeriodExtDTO updatePeriodExt(PeriodExtDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a PeriodExt by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deletePeriodExt(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<PeriodExtDTO> by foreign key : periodId
-	 * @param id
-	 * @return List<PeriodExt>
-	 * @throws Exception
-	*/
-	public List<PeriodExtDTO> findPeriodExtByPeriodId(int id) throws Exception {
-		List<PeriodExtDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }
