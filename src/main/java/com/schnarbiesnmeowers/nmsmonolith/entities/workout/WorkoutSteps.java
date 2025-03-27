@@ -3,7 +3,7 @@ package com.schnarbiesnmeowers.nmsmonolith.entities.workout;
 import com.google.gson.Gson;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.WorkoutStepsDTO;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -20,7 +20,7 @@ public class WorkoutSteps implements Serializable {
      */
     @Column(name = "workout_id")
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer workoutId;
 
     /**

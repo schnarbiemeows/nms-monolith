@@ -1,6 +1,6 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 import java.math.BigDecimal;
 
 public class QuickIngredientsListDTO {

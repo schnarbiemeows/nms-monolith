@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.entities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.LocalRecipeIngredientsDTO;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -25,7 +25,7 @@ public class LocalRecipeIngredients implements Serializable {
 	 */
 	@Column(name = "recipe_ingr_id")
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer recipeIngrId;
 
 	/**

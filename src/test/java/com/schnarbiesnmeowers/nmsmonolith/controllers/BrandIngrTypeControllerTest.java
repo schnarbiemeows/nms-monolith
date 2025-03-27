@@ -1,27 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import org.springframework.web.client.RestTemplate;
+import java.util.Arrays;
+import java.util.List;
 
+import com.schnarbiesnmeowers.nmsmonolith.repositories.BrandIngrTypeRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.BrandIngrTypeDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.BrandIngrTypeService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -33,174 +32,145 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class BrandIngrTypeControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private BrandIngrTypeController brandingrtypeController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private BrandIngrTypeService brandingrtypeService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private BrandIngrTypeRepository brandingrtypeRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(brandingrtypeController).build();
+    }
 
 	/**
 	 * test creating a new BrandIngrType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreateBrandIngrType() throws URISyntaxException
+	@Test
+	public void testA_CreateBrandIngrType() throws Exception
 	{
 	    BrandIngrTypeDTO brandingrtype = generateRandomBrandIngrType();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(brandingrtype.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/brandingrtype/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<BrandIngrTypeDTO> request = new HttpEntity<>(brandingrtype,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(brandingrtypeService.createBrandIngrType(any(BrandIngrTypeDTO.class))).thenReturn(brandingrtype);
+
+        mockMvc.perform(post("/brandingrtype/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(brandingrtype)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all BrandIngrType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllBrandIngrType() throws URISyntaxException
+	@Test
+	public void testB_GetAllBrandIngrType() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/brandingrtype/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<BrandIngrTypeDTO> brandingrtypes = Arrays.asList(generateRandomBrandIngrType(), generateRandomBrandIngrType());
+        when(brandingrtypeService.getAllBrandIngrType()).thenReturn(brandingrtypes);
+
+        mockMvc.perform(get("/brandingrtype/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single BrandIngrType by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetBrandIngrType() throws URISyntaxException
+	@Test
+	public void testC_GetBrandIngrType() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/brandingrtype/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		BrandIngrTypeDTO brandingrtype = generateRandomBrandIngrType();
+        when(brandingrtypeService.findBrandIngrTypeById(anyInt())).thenReturn(brandingrtype);
+
+        mockMvc.perform(get("/brandingrtype/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a BrandIngrType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdateBrandIngrType() throws URISyntaxException
+	@Test
+	public void testD_UpdateBrandIngrType() throws Exception
 	{
 	    BrandIngrTypeDTO brandingrtype = generateRandomBrandIngrType();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/brandingrtype/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<BrandIngrTypeDTO> request = new HttpEntity<>(brandingrtype);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(brandingrtypeService.updateBrandIngrType(any(BrandIngrTypeDTO.class))).thenReturn(brandingrtype);
+
+        mockMvc.perform(post("/brandingrtype/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(brandingrtype)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a BrandIngrType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeleteBrandIngrType() throws URISyntaxException
+	@Test
+	public void testE_DeleteBrandIngrType() throws Exception
 	{
-		BrandIngrTypeDTO brandingrtype = generateRandomBrandIngrType();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/brandingrtype/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<BrandIngrTypeDTO> request = new HttpEntity<>(brandingrtype);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(brandingrtypeService.deleteBrandIngrType(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/brandingrtype/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all BrandIngrType by foreign key brandId
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetBrandIngrTypeByBrandId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/brandingrtype/findByBrandId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single BrandIngrType by field BrandId
+ * @throws
+ */
+@Test
+public void testC_findByBrandId() throws Exception
+{
+    List<BrandIngrTypeDTO> brandingrtype = Arrays.asList(generateRandomBrandIngrType());
+    when(brandingrtypeService.findBrandIngrTypeByBrandId(anyInt())).thenReturn(brandingrtype);
 
-	/**
-	 * test getting all BrandIngrType by foreign key ingrTypeId
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetBrandIngrTypeByIngrTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/brandingrtype/findByIngrTypeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/brandingrtype/findByBrandId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single BrandIngrType by field IngrTypeId
+ * @throws
+ */
+@Test
+public void testC_findByIngrTypeId() throws Exception
+{
+    List<BrandIngrTypeDTO> brandingrtype = Arrays.asList(generateRandomBrandIngrType());
+    when(brandingrtypeService.findBrandIngrTypeByIngrTypeId(anyInt())).thenReturn(brandingrtype);
 
-	/**
-	 * test getting all BrandIngrType by foreign key prntIngrType
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetBrandIngrTypeByPrntIngrType() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/brandingrtype/findByPrntIngrType/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/brandingrtype/findByIngrTypeId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single BrandIngrType by field PrntIngrType
+ * @throws
+ */
+@Test
+public void testC_findByPrntIngrType() throws Exception
+{
+    List<BrandIngrTypeDTO> brandingrtype = Arrays.asList(generateRandomBrandIngrType());
+    when(brandingrtypeService.findBrandIngrTypeByPrntIngrType(anyInt())).thenReturn(brandingrtype);
 
-	/**
-	 * test getting all BrandIngrType by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetBrandIngrTypeByBrandIdAndIngrTypeIdAndPrntIngrType() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/brandingrtype/findByBrandIdAndIngrTypeIdAndPrntIngrType/1/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/brandingrtype/findByPrntIngrType/2"))
+            .andExpect(status().isOk());
+}
 
 	public static BrandIngrTypeDTO generateRandomBrandIngrType() {
 		BrandIngrTypeDTO record = new BrandIngrTypeDTO();

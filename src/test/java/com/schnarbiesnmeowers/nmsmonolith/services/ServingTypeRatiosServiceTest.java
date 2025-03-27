@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypeRatiosDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ServingTypeRatios;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.ServingTypeRatiosRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,93 +22,118 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypeRatiosDTO
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class ServingTypeRatiosServiceTest {
+@ExtendWith(MockitoExtension.class)
+class ServingTypeRatiosServiceTest {
 
+    @Mock
+    private ServingTypeRatiosRepository servingtyperatiosRepository;
 
-	/**
-	 * get all ServingTypeRatios records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<ServingTypeRatiosDTO> getAllServingTypeRatios() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<ServingTypeRatiosDTO> servingtyperatiosDTO = new ArrayList<ServingTypeRatiosDTO>();
-		return servingtyperatiosDTO;
+    @InjectMocks
+    private ServingTypeRatiosService servingtyperatiosService;
+
+    private ServingTypeRatios servingtyperatios;
+    private ServingTypeRatiosDTO servingtyperatiosDTO;
+
+    @BeforeEach
+    void setUp() {
+        servingtyperatios = generateRandomServingTypeRatiosEntity();
+        servingtyperatiosDTO = generateRandomServingTypeRatios();
+    }
+
+    @Test
+    void testGetAllServingTypeRatios() throws Exception {
+        when(servingtyperatiosRepository.findAll()).thenReturn(Collections.singletonList(servingtyperatios));
+
+        List<ServingTypeRatiosDTO> result = servingtyperatiosService.getAllServingTypeRatios();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindServingTypeRatiosById_Found() throws Exception {
+        when(servingtyperatiosRepository.findById(anyInt())).thenReturn(Optional.of(servingtyperatios));
+
+        ServingTypeRatiosDTO result = servingtyperatiosService.findServingTypeRatiosById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindServingTypeRatiosById_NotFound() {
+        when(servingtyperatiosRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            servingtyperatiosService.findServingTypeRatiosById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateServingTypeRatios() {
+        when(servingtyperatiosRepository.save(any(ServingTypeRatios.class))).thenReturn(servingtyperatios);
+
+        ServingTypeRatiosDTO result = servingtyperatiosService.createServingTypeRatios(servingtyperatiosDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateServingTypeRatios_Found() throws Exception {
+        when(servingtyperatiosRepository.findById(anyInt())).thenReturn(Optional.of(servingtyperatios));
+        when(servingtyperatiosRepository.save(any(ServingTypeRatios.class))).thenReturn(servingtyperatios);
+
+        ServingTypeRatiosDTO result = servingtyperatiosService.updateServingTypeRatios(servingtyperatiosDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateServingTypeRatios_NotFound() {
+        when(servingtyperatiosRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            servingtyperatiosService.updateServingTypeRatios(servingtyperatiosDTO);
+        });
+
+        assertEquals("id = " + servingtyperatiosDTO.getServTypeRatioId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteServingTypeRatios_Found() throws Exception {
+        when(servingtyperatiosRepository.findById(anyInt())).thenReturn(Optional.of(servingtyperatios));
+        doNothing().when(servingtyperatiosRepository).deleteById(anyInt());
+
+        String result = servingtyperatiosService.deleteServingTypeRatios(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteServingTypeRatios_NotFound() {
+        when(servingtyperatiosRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            servingtyperatiosService.deleteServingTypeRatios(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static ServingTypeRatiosDTO generateRandomServingTypeRatios() {
+		ServingTypeRatiosDTO record = new ServingTypeRatiosDTO();
+		record.setServTypeRatioId(2);
+		record.setServTypeId1(Randomizer.randomInt(1000));
+		record.setServTypeId2(Randomizer.randomInt(1000));
+		record.setRatio(Randomizer.randomBigDecimal("1000"));
+		return record;
 	}
-
-	/**
-	 * get ServingTypeRatios by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public ServingTypeRatiosDTO findServingTypeRatiosById(int id) throws Exception {
-		return new ServingTypeRatiosDTO();
+    public static ServingTypeRatios generateRandomServingTypeRatiosEntity() {
+		ServingTypeRatios record = new ServingTypeRatios();
+		record.setServTypeRatioId(2);
+		record.setServTypeId1(Randomizer.randomInt(1000));
+		record.setServTypeId2(Randomizer.randomInt(1000));
+		record.setRatio(Randomizer.randomBigDecimal("1000"));
+		return record;
 	}
-
-	/**
-	 * create a new ServingTypeRatios
-	 * @param data
-	 * @return
-	 */
-	public ServingTypeRatiosDTO createServingTypeRatios(ServingTypeRatiosDTO data) {
-        data.setServTypeRatioId(1);
-        return data;
-	}
-
-	/**
-	 * update a ServingTypeRatios
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public ServingTypeRatiosDTO updateServingTypeRatios(ServingTypeRatiosDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a ServingTypeRatios by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteServingTypeRatios(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<ServingTypeRatiosDTO> by foreign key : servTypeId1
-	 * @param id
-	 * @return List<ServingTypeRatios>
-	 * @throws Exception
-	*/
-	public List<ServingTypeRatiosDTO> findServingTypeRatiosByServTypeId1(int id) throws Exception {
-		List<ServingTypeRatiosDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<ServingTypeRatiosDTO> by foreign key : servTypeId2
-	 * @param id
-	 * @return List<ServingTypeRatios>
-	 * @throws Exception
-	*/
-	public List<ServingTypeRatiosDTO> findServingTypeRatiosByServTypeId2(int id) throws Exception {
-		List<ServingTypeRatiosDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<ServingTypeRatiosDTO> by foreign key : ServTypeId1AndServTypeId2
-	 * @param id0
-	 * @param id1
-	 * @return
-	 * @throws Exception
-	 */
-	public List<ServingTypeRatiosDTO> findServingTypeRatiosByServTypeId1AndServTypeId2(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<ServingTypeRatiosDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

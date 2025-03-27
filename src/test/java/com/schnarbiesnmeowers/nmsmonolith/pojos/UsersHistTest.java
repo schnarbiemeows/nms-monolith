@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.entities.UsersHist;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
-
-
-
+import java.sql.Timestamp;
+import com.schnarbiesnmeowers.nmsmonolith.entities.UsersHist;
+import java.math.*;
 
 
 /**
@@ -14,30 +18,24 @@ import java.util.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class UsersHistTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		UsersHist classUnderTest = new UsersHist();
-		classUnderTest.setUsersHistId(1);
-		classUnderTest.setUserId(1);
+		classUnderTest.setUsersHistId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setUsername("a");
 		classUnderTest.setEmail("a");
 		classUnderTest.setPassword("a");
-		classUnderTest.setAge(1);
+		classUnderTest.setAge(2);
 		classUnderTest.setLstLogdIn(new Date());
-		classUnderTest.setActionTypeId(1);
+		classUnderTest.setActionTypeId(2);
 		classUnderTest.setEvntTmestmp(new Date());
-		classUnderTest.setEvntOperId(1);
+		classUnderTest.setEvntOperId(2);
 		assertTrue(true);
 		UsersHist newitem = new UsersHist(
 		classUnderTest.getUsersHistId(),

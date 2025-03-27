@@ -5,12 +5,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.*;
-import com.schnarbiesnmeowers.nmsmonolith.entities.*;
 
 /**
  * this class is the main REST controller
@@ -28,7 +27,7 @@ public class RolesHistController {
 	 * JPA Repository handle
 	 */
 	@Autowired
-	private RolesHistBusiness businessService;
+	private RolesHistService businessService;
 
 	/**
 	 * get all RolesHist records

@@ -1,39 +1,41 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.util.*;
+import java.sql.Timestamp;
 import com.schnarbiesnmeowers.nmsmonolith.entities.workout.Workouts;
+import java.math.*;
 
-import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * class to test the Workouts class
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class WorkoutsTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		Workouts classUnderTest = new Workouts();
-		classUnderTest.setWorkoutId(1);
-		classUnderTest.setUserId(1);
-		classUnderTest.setCalendarDate(null);
-		classUnderTest.setExerciseTypeId(1);
-		classUnderTest.setDuration(1);
+		classUnderTest.setWorkoutId(2);
+		classUnderTest.setUserId(2);
+		classUnderTest.setCalendarDate(new java.sql.Date(new Date().getTime()));
+		classUnderTest.setExerciseTypeId(2);
+		classUnderTest.setDuration(2);
 		classUnderTest.setRating(new BigDecimal(1.00));
+		classUnderTest.setNotes("a");
 		classUnderTest.setActv("a");
-		classUnderTest.setNotes("A");
 		assertTrue(true);
 		Workouts newitem = new Workouts(
 		classUnderTest.getWorkoutId(),
@@ -42,8 +44,8 @@ public class WorkoutsTest {
 		classUnderTest.getExerciseTypeId(),
 		classUnderTest.getDuration(),
 		classUnderTest.getRating(),
-		classUnderTest.getActv(),
-		classUnderTest.getNotes());
+		classUnderTest.getNotes(),
+		classUnderTest.getActv());
 		assertNotNull(newitem);
 		String string = classUnderTest.toString();
 		assertNotNull(string);

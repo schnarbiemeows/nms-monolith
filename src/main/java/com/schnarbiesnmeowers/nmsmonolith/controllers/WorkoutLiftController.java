@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.entities.*;
@@ -19,7 +19,7 @@ import com.schnarbiesnmeowers.nmsmonolith.entities.*;
  */
 @CrossOrigin
 @RestController
-@RequestMapping(path="/workoutLift")
+@RequestMapping(path="/workoutlift")
 public class WorkoutLiftController {
 
 	//private static final Logger applicationLogger = LogManager.getLogger("FileAppender");

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
@@ -90,7 +90,7 @@ public class DailyDietTotalsController {
 
 	/**
 	 * get List<DailyDietTotalsDTO> by foreign key : userId
-	 * @param userId
+	 * @param id
 	 * @return List<DailyDietTotals>
 	 * @throws Exception
 	*/
@@ -102,7 +102,7 @@ public class DailyDietTotalsController {
 
 	/**
 	 * get List<DailyDietTotalsDTO> by foreign key : bldstId
-	 * @param bldstId
+	 * @param id
 	 * @return List<DailyDietTotals>
 	 * @throws Exception
 	*/
@@ -114,7 +114,7 @@ public class DailyDietTotalsController {
 
 	/**
 	 * get List<DailyDietTotalsDTO> by foreign key : UserIdAndBldstId
-	 * @param UserIdAndBldstId
+	 * @param id0
 	 * @return List<DailyDietTotals>
 	 * @throws Exception
 	*/

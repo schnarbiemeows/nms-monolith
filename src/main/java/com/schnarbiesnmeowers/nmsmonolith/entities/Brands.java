@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.entities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.brands.BrandsDTO;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import com.google.gson.Gson;
 
@@ -23,7 +23,7 @@ public class Brands implements Serializable {
 	 */
 	@Column(name = "brand_id")
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer brandId;
 
 	/**

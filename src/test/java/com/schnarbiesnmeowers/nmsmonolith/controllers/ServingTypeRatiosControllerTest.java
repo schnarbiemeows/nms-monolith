@@ -1,28 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import org.springframework.web.client.RestTemplate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.ServingTypeRatiosRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypeRatiosDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.ServingTypeRatiosService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -34,160 +32,133 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ServingTypeRatiosControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private ServingTypeRatiosController servingtyperatiosController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private ServingTypeRatiosService servingtyperatiosService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private ServingTypeRatiosRepository servingtyperatiosRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(servingtyperatiosController).build();
+    }
 
 	/**
 	 * test creating a new ServingTypeRatios
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreateServingTypeRatios() throws URISyntaxException
+	@Test
+	public void testA_CreateServingTypeRatios() throws Exception
 	{
 	    ServingTypeRatiosDTO servingtyperatios = generateRandomServingTypeRatios();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(servingtyperatios.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<ServingTypeRatiosDTO> request = new HttpEntity<>(servingtyperatios,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(servingtyperatiosService.createServingTypeRatios(any(ServingTypeRatiosDTO.class))).thenReturn(servingtyperatios);
+
+        mockMvc.perform(post("/servingtyperatios/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(servingtyperatios)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all ServingTypeRatios
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllServingTypeRatios() throws URISyntaxException
+	@Test
+	public void testB_GetAllServingTypeRatios() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<ServingTypeRatiosDTO> servingtyperatioss = Arrays.asList(generateRandomServingTypeRatios(), generateRandomServingTypeRatios());
+        when(servingtyperatiosService.getAllServingTypeRatios()).thenReturn(servingtyperatioss);
+
+        mockMvc.perform(get("/servingtyperatios/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single ServingTypeRatios by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetServingTypeRatios() throws URISyntaxException
+	@Test
+	public void testC_GetServingTypeRatios() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		ServingTypeRatiosDTO servingtyperatios = generateRandomServingTypeRatios();
+        when(servingtyperatiosService.findServingTypeRatiosById(anyInt())).thenReturn(servingtyperatios);
+
+        mockMvc.perform(get("/servingtyperatios/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a ServingTypeRatios
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdateServingTypeRatios() throws URISyntaxException
+	@Test
+	public void testD_UpdateServingTypeRatios() throws Exception
 	{
 	    ServingTypeRatiosDTO servingtyperatios = generateRandomServingTypeRatios();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<ServingTypeRatiosDTO> request = new HttpEntity<>(servingtyperatios);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(servingtyperatiosService.updateServingTypeRatios(any(ServingTypeRatiosDTO.class))).thenReturn(servingtyperatios);
+
+        mockMvc.perform(post("/servingtyperatios/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(servingtyperatios)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a ServingTypeRatios
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeleteServingTypeRatios() throws URISyntaxException
+	@Test
+	public void testE_DeleteServingTypeRatios() throws Exception
 	{
-		ServingTypeRatiosDTO servingtyperatios = generateRandomServingTypeRatios();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<ServingTypeRatiosDTO> request = new HttpEntity<>(servingtyperatios);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(servingtyperatiosService.deleteServingTypeRatios(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/servingtyperatios/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all ServingTypeRatios by foreign key servTypeId1
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetServingTypeRatiosByServTypeId1() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/findByServTypeId1/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single ServingTypeRatios by field ServTypeId1
+ * @throws
+ */
+@Test
+public void testC_findByServTypeId1() throws Exception
+{
+    List<ServingTypeRatiosDTO> servingtyperatios = Arrays.asList(generateRandomServingTypeRatios());
+    when(servingtyperatiosService.findServingTypeRatiosByServTypeId1(anyInt())).thenReturn(servingtyperatios);
 
-	/**
-	 * test getting all ServingTypeRatios by foreign key servTypeId2
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetServingTypeRatiosByServTypeId2() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/findByServTypeId2/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/servingtyperatios/findByServTypeId1/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single ServingTypeRatios by field ServTypeId2
+ * @throws
+ */
+@Test
+public void testC_findByServTypeId2() throws Exception
+{
+    List<ServingTypeRatiosDTO> servingtyperatios = Arrays.asList(generateRandomServingTypeRatios());
+    when(servingtyperatiosService.findServingTypeRatiosByServTypeId2(anyInt())).thenReturn(servingtyperatios);
 
-	/**
-	 * test getting all ServingTypeRatios by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetServingTypeRatiosByServTypeId1AndServTypeId2() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/servingtyperatios/findByServTypeId1AndServTypeId2/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/servingtyperatios/findByServTypeId2/2"))
+            .andExpect(status().isOk());
+}
 
 	public static ServingTypeRatiosDTO generateRandomServingTypeRatios() {
 		ServingTypeRatiosDTO record = new ServingTypeRatiosDTO();

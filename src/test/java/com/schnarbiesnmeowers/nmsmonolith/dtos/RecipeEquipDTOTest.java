@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.math.*;
 
 
 /**
@@ -14,23 +18,19 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class RecipeEquipDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		RecipeEquipDTO classUnderTest = new RecipeEquipDTO();
-		classUnderTest.setRecipeEquipId(1);
-		classUnderTest.setRecEqTypeId(1);
+		classUnderTest.setRecipeEquipId(2);
+		classUnderTest.setRecEqTypeId(2);
 		classUnderTest.setEquipDesc("a");
 		classUnderTest.setEquipLongDesc("a");
-		classUnderTest.setImageLoc(1);
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		RecipeEquipDTO newitem = new RecipeEquipDTO(

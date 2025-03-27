@@ -1,9 +1,21 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.mockito.Mockito.*;
+
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.RecipeIngredientsDTO;
-import org.springframework.stereotype.Service;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeIngredients;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RecipeIngredientsRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -11,70 +23,124 @@ import org.springframework.stereotype.Service;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class RecipeIngredientsServiceTest {
+@ExtendWith(MockitoExtension.class)
+class RecipeIngredientsServiceTest {
 
+    @Mock
+    private RecipeIngredientsRepository recipeingredientsRepository;
 
-	/**
-	 * get all RecipeIngredients records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<RecipeIngredientsDTO> getAllRecipeIngredients() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<RecipeIngredientsDTO> recipeingredientsDTO = new ArrayList<RecipeIngredientsDTO>();
-		return recipeingredientsDTO;
+    @InjectMocks
+    private RecipeIngredientsService recipeingredientsService;
+
+    private RecipeIngredients recipeingredients;
+    private RecipeIngredientsDTO recipeingredientsDTO;
+
+    @BeforeEach
+    void setUp() {
+        recipeingredients = generateRandomRecipeIngredientsEntity();
+        recipeingredientsDTO = generateRandomRecipeIngredients();
+    }
+
+    @Test
+    void testGetAllRecipeIngredients() throws Exception {
+        when(recipeingredientsRepository.findAll()).thenReturn(Collections.singletonList(recipeingredients));
+
+        List<RecipeIngredientsDTO> result = recipeingredientsService.getAllRecipeIngredients();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindRecipeIngredientsById_Found() throws Exception {
+        when(recipeingredientsRepository.findById(anyInt())).thenReturn(Optional.of(recipeingredients));
+
+        RecipeIngredientsDTO result = recipeingredientsService.findRecipeIngredientsById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindRecipeIngredientsById_NotFound() {
+        when(recipeingredientsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recipeingredientsService.findRecipeIngredientsById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateRecipeIngredients() {
+        when(recipeingredientsRepository.save(any(RecipeIngredients.class))).thenReturn(recipeingredients);
+
+        RecipeIngredientsDTO result = recipeingredientsService.createRecipeIngredients(recipeingredientsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRecipeIngredients_Found() throws Exception {
+        when(recipeingredientsRepository.findById(anyInt())).thenReturn(Optional.of(recipeingredients));
+        when(recipeingredientsRepository.save(any(RecipeIngredients.class))).thenReturn(recipeingredients);
+
+        RecipeIngredientsDTO result = recipeingredientsService.updateRecipeIngredients(recipeingredientsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRecipeIngredients_NotFound() {
+        when(recipeingredientsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recipeingredientsService.updateRecipeIngredients(recipeingredientsDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteRecipeIngredients_Found() throws Exception {
+        when(recipeingredientsRepository.findById(anyInt())).thenReturn(Optional.of(recipeingredients));
+        doNothing().when(recipeingredientsRepository).deleteById(anyInt());
+
+        String result = recipeingredientsService.deleteRecipeIngredients(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteRecipeIngredients_NotFound() {
+        when(recipeingredientsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recipeingredientsService.deleteRecipeIngredients(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static RecipeIngredientsDTO generateRandomRecipeIngredients() {
+		RecipeIngredientsDTO record = new RecipeIngredientsDTO();
+		record.setRecipeIngrId(2);
+		record.setRecipeId(Randomizer.randomInt(1000));
+		record.setRecOrIngrId(Randomizer.randomInt(1000));
+		record.setRecipeFlg(Randomizer.randomString(2));
+		record.setServSz(Randomizer.randomBigDecimal("1000"));
+		record.setServTypeId(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get RecipeIngredients by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public RecipeIngredientsDTO findRecipeIngredientsById(int id) throws Exception {
-		return new RecipeIngredientsDTO();
+    public static RecipeIngredients generateRandomRecipeIngredientsEntity() {
+		RecipeIngredients record = new RecipeIngredients();
+		record.setRecipeIngrId(2);
+		record.setRecipeId(Randomizer.randomInt(1000));
+		record.setRecOrIngrId(Randomizer.randomInt(1000));
+		record.setRecipeFlg(Randomizer.randomString(2));
+		record.setServSz(Randomizer.randomBigDecimal("1000"));
+		record.setServTypeId(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * create a new RecipeIngredients
-	 * @param data
-	 * @return
-	 */
-	public RecipeIngredientsDTO createRecipeIngredients(RecipeIngredientsDTO data) {
-        data.setRecipeIngrId(1);
-        return data;
-	}
-
-	/**
-	 * update a RecipeIngredients
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public RecipeIngredientsDTO updateRecipeIngredients(RecipeIngredientsDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a RecipeIngredients by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteRecipeIngredients(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<RecipeIngredientsDTO> by foreign key : recipeId
-	 * @param id
-	 * @return List<RecipeIngredients>
-	 * @throws Exception
-	*/
-	public List<RecipeIngredientsDTO> findRecipeIngredientsByRecipeId(int id) throws Exception {
-		List<RecipeIngredientsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

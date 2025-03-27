@@ -1,12 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RolesHistDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RolesHist;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RolesHistRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -14,129 +22,124 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.RolesHistDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class RolesHistServiceTest {
+@ExtendWith(MockitoExtension.class)
+class RolesHistServiceTest {
 
+    @Mock
+    private RolesHistRepository roleshistRepository;
 
-	/**
-	 * get all RolesHist records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<RolesHistDTO> getAllRolesHist() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<RolesHistDTO> roleshistDTO = new ArrayList<RolesHistDTO>();
-		return roleshistDTO;
+    @InjectMocks
+    private RolesHistService roleshistService;
+
+    private RolesHist roleshist;
+    private RolesHistDTO roleshistDTO;
+
+    @BeforeEach
+    void setUp() {
+        roleshist = generateRandomRolesHistEntity();
+        roleshistDTO = generateRandomRolesHist();
+    }
+
+    @Test
+    void testGetAllRolesHist() throws Exception {
+        when(roleshistRepository.findAll()).thenReturn(Collections.singletonList(roleshist));
+
+        List<RolesHistDTO> result = roleshistService.getAllRolesHist();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindRolesHistById_Found() throws Exception {
+        when(roleshistRepository.findById(anyInt())).thenReturn(Optional.of(roleshist));
+
+        RolesHistDTO result = roleshistService.findRolesHistById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindRolesHistById_NotFound() {
+        when(roleshistRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            roleshistService.findRolesHistById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateRolesHist() {
+        when(roleshistRepository.save(any(RolesHist.class))).thenReturn(roleshist);
+
+        RolesHistDTO result = roleshistService.createRolesHist(roleshistDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRolesHist_Found() throws Exception {
+        when(roleshistRepository.findById(anyInt())).thenReturn(Optional.of(roleshist));
+        when(roleshistRepository.save(any(RolesHist.class))).thenReturn(roleshist);
+
+        RolesHistDTO result = roleshistService.updateRolesHist(roleshistDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRolesHist_NotFound() {
+        when(roleshistRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            roleshistService.updateRolesHist(roleshistDTO);
+        });
+
+        assertEquals("id = " + roleshistDTO.getRoleHistId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteRolesHist_Found() throws Exception {
+        when(roleshistRepository.findById(anyInt())).thenReturn(Optional.of(roleshist));
+        doNothing().when(roleshistRepository).deleteById(anyInt());
+
+        String result = roleshistService.deleteRolesHist(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteRolesHist_NotFound() {
+        when(roleshistRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            roleshistService.deleteRolesHist(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static RolesHistDTO generateRandomRolesHist() {
+		RolesHistDTO record = new RolesHistDTO();
+		record.setRoleHistId(2);
+		record.setRoleId(Randomizer.randomInt(1000));
+		record.setGrpId(Randomizer.randomInt(1000));
+		record.setRsrcId(Randomizer.randomInt(1000));
+		record.setActionTypeId(Randomizer.randomInt(1000));
+		record.setEvntTmestmp(Randomizer.randomDate());
+		record.setEvntOperId(Randomizer.randomInt(1000));
+		return record;
 	}
-
-	/**
-	 * get RolesHist by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public RolesHistDTO findRolesHistById(int id) throws Exception {
-		return new RolesHistDTO();
+    public static RolesHist generateRandomRolesHistEntity() {
+		RolesHist record = new RolesHist();
+		record.setRoleHistId(2);
+		record.setRoleId(Randomizer.randomInt(1000));
+		record.setGrpId(Randomizer.randomInt(1000));
+		record.setRsrcId(Randomizer.randomInt(1000));
+		record.setActionTypeId(Randomizer.randomInt(1000));
+		record.setEvntTmestmp(Randomizer.randomDate());
+		record.setEvntOperId(Randomizer.randomInt(1000));
+		return record;
 	}
-
-	/**
-	 * create a new RolesHist
-	 * @param data
-	 * @return
-	 */
-	public RolesHistDTO createRolesHist(RolesHistDTO data) {
-        data.setRoleHistId(1);
-        return data;
-	}
-
-	/**
-	 * update a RolesHist
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public RolesHistDTO updateRolesHist(RolesHistDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a RolesHist by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteRolesHist(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<RolesHistDTO> by foreign key : roleId
-	 * @param id
-	 * @return List<RolesHist>
-	 * @throws Exception
-	*/
-	public List<RolesHistDTO> findRolesHistByRoleId(int id) throws Exception {
-		List<RolesHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RolesHistDTO> by foreign key : grpId
-	 * @param id
-	 * @return List<RolesHist>
-	 * @throws Exception
-	*/
-	public List<RolesHistDTO> findRolesHistByGrpId(int id) throws Exception {
-		List<RolesHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RolesHistDTO> by foreign key : rsrcId
-	 * @param id
-	 * @return List<RolesHist>
-	 * @throws Exception
-	*/
-	public List<RolesHistDTO> findRolesHistByRsrcId(int id) throws Exception {
-		List<RolesHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RolesHistDTO> by foreign key : actionTypeId
-	 * @param id
-	 * @return List<RolesHist>
-	 * @throws Exception
-	*/
-	public List<RolesHistDTO> findRolesHistByActionTypeId(int id) throws Exception {
-		List<RolesHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RolesHistDTO> by foreign key : evntOperId
-	 * @param id
-	 * @return List<RolesHist>
-	 * @throws Exception
-	*/
-	public List<RolesHistDTO> findRolesHistByEvntOperId(int id) throws Exception {
-		List<RolesHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RolesHistDTO> by foreign key : RoleIdAndGrpIdAndRsrcIdAndActionTypeIdAndEvntOperId
-	 * @param id0
-	 * @param id1
-	 * @param id2
-	 * @param id3
-	 * @param id4
-	 * @return
-	 * @throws Exception
-	 */
-	public List<RolesHistDTO> findRolesHistByRoleIdAndGrpIdAndRsrcIdAndActionTypeIdAndEvntOperId(@PathVariable int id0,@PathVariable int id1,@PathVariable int id2,@PathVariable int id3,@PathVariable int id4) throws Exception {
-		List<RolesHistDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

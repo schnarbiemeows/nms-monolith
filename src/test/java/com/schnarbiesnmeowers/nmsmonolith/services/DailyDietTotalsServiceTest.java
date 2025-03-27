@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.DailyDietTotalsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.DailyDietTotals;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.DailyDietTotalsRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,92 +22,142 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.DailyDietTotalsDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class DailyDietTotalsServiceTest {
+@ExtendWith(MockitoExtension.class)
+class DailyDietTotalsServiceTest {
 
+    @Mock
+    private DailyDietTotalsRepository dailydiettotalsRepository;
 
-	/**
-	 * get all DailyDietTotals records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<DailyDietTotalsDTO> getAllDailyDietTotals() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<DailyDietTotalsDTO> dailydiettotalsDTO = new ArrayList<DailyDietTotalsDTO>();
-		return dailydiettotalsDTO;
+    @InjectMocks
+    private DailyDietTotalsService dailydiettotalsService;
+
+    private DailyDietTotals dailydiettotals;
+    private DailyDietTotalsDTO dailydiettotalsDTO;
+
+    @BeforeEach
+    void setUp() {
+        dailydiettotals = generateRandomDailyDietTotalsEntity();
+        dailydiettotalsDTO = generateRandomDailyDietTotals();
+    }
+
+    @Test
+    void testGetAllDailyDietTotals() throws Exception {
+        when(dailydiettotalsRepository.findAll()).thenReturn(Collections.singletonList(dailydiettotals));
+
+        List<DailyDietTotalsDTO> result = dailydiettotalsService.getAllDailyDietTotals();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindDailyDietTotalsById_Found() throws Exception {
+        when(dailydiettotalsRepository.findById(anyInt())).thenReturn(Optional.of(dailydiettotals));
+
+        DailyDietTotalsDTO result = dailydiettotalsService.findDailyDietTotalsById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindDailyDietTotalsById_NotFound() {
+        when(dailydiettotalsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            dailydiettotalsService.findDailyDietTotalsById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateDailyDietTotals() {
+        when(dailydiettotalsRepository.save(any(DailyDietTotals.class))).thenReturn(dailydiettotals);
+
+        DailyDietTotalsDTO result = dailydiettotalsService.createDailyDietTotals(dailydiettotalsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateDailyDietTotals_Found() throws Exception {
+        when(dailydiettotalsRepository.findById(anyInt())).thenReturn(Optional.of(dailydiettotals));
+        when(dailydiettotalsRepository.save(any(DailyDietTotals.class))).thenReturn(dailydiettotals);
+
+        DailyDietTotalsDTO result = dailydiettotalsService.updateDailyDietTotals(dailydiettotalsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateDailyDietTotals_NotFound() {
+        when(dailydiettotalsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            dailydiettotalsService.updateDailyDietTotals(dailydiettotalsDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteDailyDietTotals_Found() throws Exception {
+        when(dailydiettotalsRepository.findById(anyInt())).thenReturn(Optional.of(dailydiettotals));
+        doNothing().when(dailydiettotalsRepository).deleteById(anyInt());
+
+        String result = dailydiettotalsService.deleteDailyDietTotals(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteDailyDietTotals_NotFound() {
+        when(dailydiettotalsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            dailydiettotalsService.deleteDailyDietTotals(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static DailyDietTotalsDTO generateRandomDailyDietTotals() {
+		DailyDietTotalsDTO record = new DailyDietTotalsDTO();
+		record.setDailyDietTotalId(2);
+		record.setUserId(Randomizer.randomInt(1000));
+		record.setCalendarDate(Randomizer.randomDate());
+		record.setBldstId(Randomizer.randomInt(1000));
+		record.setKcalories(Randomizer.randomBigDecimal("1000"));
+		record.setTotFat(Randomizer.randomBigDecimal("1000"));
+		record.setSatFat(Randomizer.randomBigDecimal("1000"));
+		record.setTransFat(Randomizer.randomBigDecimal("1000"));
+		record.setPolyFat(Randomizer.randomBigDecimal("1000"));
+		record.setMonoFat(Randomizer.randomBigDecimal("1000"));
+		record.setCholes(Randomizer.randomBigDecimal("1000"));
+		record.setSodium(Randomizer.randomInt(1000));
+		record.setTotCarbs(Randomizer.randomBigDecimal("1000"));
+		record.setTotFiber(Randomizer.randomBigDecimal("1000"));
+		record.setTotSugars(Randomizer.randomBigDecimal("1000"));
+		record.setTotProtein(Randomizer.randomBigDecimal("1000"));
+		return record;
 	}
-
-	/**
-	 * get DailyDietTotals by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public DailyDietTotalsDTO findDailyDietTotalsById(int id) throws Exception {
-		return new DailyDietTotalsDTO();
+    public static DailyDietTotals generateRandomDailyDietTotalsEntity() {
+		DailyDietTotals record = new DailyDietTotals();
+		record.setDailyDietTotalId(2);
+		record.setUserId(Randomizer.randomInt(1000));
+		record.setCalendarDate(Randomizer.randomDate());
+		record.setBldstId(Randomizer.randomInt(1000));
+		record.setKcalories(Randomizer.randomBigDecimal("1000"));
+		record.setTotFat(Randomizer.randomBigDecimal("1000"));
+		record.setSatFat(Randomizer.randomBigDecimal("1000"));
+		record.setTransFat(Randomizer.randomBigDecimal("1000"));
+		record.setPolyFat(Randomizer.randomBigDecimal("1000"));
+		record.setMonoFat(Randomizer.randomBigDecimal("1000"));
+		record.setCholes(Randomizer.randomBigDecimal("1000"));
+		record.setSodium(Randomizer.randomInt(1000));
+		record.setTotCarbs(Randomizer.randomBigDecimal("1000"));
+		record.setTotFiber(Randomizer.randomBigDecimal("1000"));
+		record.setTotSugars(Randomizer.randomBigDecimal("1000"));
+		record.setTotProtein(Randomizer.randomBigDecimal("1000"));
+		return record;
 	}
-
-	/**
-	 * create a new DailyDietTotals
-	 * @param data
-	 * @return
-	 */
-	public DailyDietTotalsDTO createDailyDietTotals(DailyDietTotalsDTO data) {
-        data.setDailyDietTotalId(1);
-        return data;
-	}
-
-	/**
-	 * update a DailyDietTotals
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public DailyDietTotalsDTO updateDailyDietTotals(DailyDietTotalsDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a DailyDietTotals by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteDailyDietTotals(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<DailyDietTotalsDTO> by foreign key : userId
-	 * @param userId
-	 * @return List<DailyDietTotals>
-	 * @throws Exception
-	*/
-	public List<DailyDietTotalsDTO> findDailyDietTotalsByUserId(int id) throws Exception {
-		List<DailyDietTotalsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<DailyDietTotalsDTO> by foreign key : bldstId
-	 * @param bldstId
-	 * @return List<DailyDietTotals>
-	 * @throws Exception
-	*/
-	public List<DailyDietTotalsDTO> findDailyDietTotalsByBldstId(int id) throws Exception {
-		List<DailyDietTotalsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<DailyDietTotalsDTO> by foreign key : UserIdAndBldstId
-	 * @param UserIdAndBldstId
-	 * @return List<DailyDietTotals>
-	 * @throws Exception
-	*/
-	public List<DailyDietTotalsDTO> findDailyDietTotalsByUserIdAndBldstId(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<DailyDietTotalsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

@@ -1,10 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 
+import java.math.*;
 
 
 /**
@@ -12,28 +18,26 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class LiftsDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		LiftsDTO classUnderTest = new LiftsDTO();
-		classUnderTest.setLiftId(1);
+		classUnderTest.setLiftId(2);
 		classUnderTest.setLiftDesc("a");
-		classUnderTest.setImageLoc(1);
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
+		classUnderTest.setMuscleGroupId(2);
 		assertTrue(true);
 		LiftsDTO newitem = new LiftsDTO(
 		classUnderTest.getLiftId(),
 		classUnderTest.getLiftDesc(),
 		classUnderTest.getImageLoc(),
-		classUnderTest.getActv(),classUnderTest.getMuscleGroupId());
+		classUnderTest.getActv(),
+		classUnderTest.getMuscleGroupId());
 		assertNotNull(newitem);
 		String string = classUnderTest.toString();
 		assertNotNull(string);

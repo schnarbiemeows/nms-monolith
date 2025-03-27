@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.entities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RecEquipJoinDTO;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import com.google.gson.Gson;
 
@@ -23,7 +23,7 @@ public class RecEquipJoin implements Serializable {
 	 */
 	@Column(name = "rec_equip_join_id")
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer recEquipJoinId;
 
 	/**

@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.entities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.BodyMeasurementsDTO;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,7 +13,7 @@ public class BodyMeasurements implements Serializable {
 
     @Column(name = "body_meas_id")
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bodyMeasurementId;
     @Column(name = "user_id")
     private Integer userId;

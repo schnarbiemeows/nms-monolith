@@ -1,11 +1,17 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredienttype.IngredientTypesDTO;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-import java.math.BigDecimal;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 
-
-
+import java.math.*;
 
 
 /**
@@ -13,22 +19,18 @@ import java.math.BigDecimal;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import static org.junit.jupiter.api.Assertions.*;
-@ExtendWith(MockitoExtension.class)
 public class IngredientTypesDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		IngredientTypesDTO classUnderTest = new IngredientTypesDTO();
-		classUnderTest.setIngrTypeId(1);
-		classUnderTest.setPrntIngrType(1);
+		classUnderTest.setIngrTypeId(2);
+		classUnderTest.setPrntIngrType(2);
 		classUnderTest.setIngrTypeDesc("a");
-		classUnderTest.setImageLoc(1);
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		IngredientTypesDTO newitem = new IngredientTypesDTO(

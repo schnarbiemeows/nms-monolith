@@ -8,12 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/body_measurements")
+@RequestMapping("/bodymeasurements")
 public class BodyMeasurementsController {
 
     //private static final Logger applicationLogger = LogManager.getLogger("FileAppender");

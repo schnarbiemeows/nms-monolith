@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.entities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GrpUserHistDTO;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import com.google.gson.Gson;
 
@@ -25,7 +25,7 @@ public class GrpUserHist implements Serializable {
 	 */
 	@Column(name = "grp_user_hist_id")
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer grpUserHistId;
 
 	/**

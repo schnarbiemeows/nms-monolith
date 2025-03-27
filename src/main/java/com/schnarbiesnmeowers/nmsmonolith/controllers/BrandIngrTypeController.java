@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
@@ -133,8 +133,10 @@ public class BrandIngrTypeController {
 	 * @throws Exception
 	 */
 	@GetMapping(path = "/findByBrandIdAndIngrTypeIdAndPrntIngrType/{id0}/{id1}/{id2}")
-	public ResponseEntity<List<BrandIngrTypeDTO>> findBrandIngrTypeByBrandIdAndIngrTypeIdAndPrntIngrType(@PathVariable int id0, @PathVariable int id1, @PathVariable int id2) throws Exception {
-		List<BrandIngrTypeDTO> results = businessService.findBrandIngrTypeByBrandIdAndIngrTypeIdAndPrntIngrType(id0, id1, id2);
+	public ResponseEntity<List<BrandIngrTypeDTO>> findBrandIngrTypeByBrandIdAndIngrTypeIdAndPrntIngrType(
+			@PathVariable int id0, @PathVariable int id1, @PathVariable int id2) throws Exception {
+		List<BrandIngrTypeDTO> results = businessService
+				.findBrandIngrTypeByBrandIdAndIngrTypeIdAndPrntIngrType(id0, id1, id2);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 

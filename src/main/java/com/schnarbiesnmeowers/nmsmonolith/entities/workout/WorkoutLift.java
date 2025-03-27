@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.entities.workout;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.WorkoutLiftDTO;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "workout_lift")
@@ -17,7 +17,7 @@ public class WorkoutLift {
      */
     @Column(name = "workout_lift_id")
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer workoutLiftId;
 
     /**

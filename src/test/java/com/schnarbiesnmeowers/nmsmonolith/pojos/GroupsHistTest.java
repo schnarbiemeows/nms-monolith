@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.entities.GroupsHist;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
-
-
-
+import java.sql.Timestamp;
+import com.schnarbiesnmeowers.nmsmonolith.entities.GroupsHist;
+import java.math.*;
 
 
 /**
@@ -14,27 +18,21 @@ import java.util.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class GroupsHistTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		GroupsHist classUnderTest = new GroupsHist();
-		classUnderTest.setGrpHistId(1);
-		classUnderTest.setGrpId(1);
+		classUnderTest.setGrpHistId(2);
+		classUnderTest.setGrpId(2);
 		classUnderTest.setGrpName("a");
 		classUnderTest.setGrpDesc("a");
-		classUnderTest.setActionTypeId(1);
+		classUnderTest.setActionTypeId(2);
 		classUnderTest.setEvntTmestmp(new Date());
-		classUnderTest.setEvntOperId(1);
+		classUnderTest.setEvntOperId(2);
 		assertTrue(true);
 		GroupsHist newitem = new GroupsHist(
 		classUnderTest.getGrpHistId(),

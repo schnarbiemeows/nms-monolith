@@ -551,11 +551,8 @@ public class RecipesService {
             Recipes recipe = recipesOptional.get();
             recipe.setActv(NO);
             int numRecordsChanged = recipeIngredientsService.deleteRecipeIngredientsForaGlobalRecipe(id);
-            System.out.println(" number of global recipe_ingredient records changed = " + numRecordsChanged);
             numRecordsChanged = recipeSpicesService.deleteRecipeSpicesForaGlobalRecipe(id);
-            System.out.println(" number of global recipe_spice records changed = " + numRecordsChanged);
             numRecordsChanged = recipeStepsService.deleteRecipeStepsForaGlobalRecipe(id);
-            System.out.println(" number of global recipe_step records changed = " + numRecordsChanged);
             ingredientsService.deleteIngredientRecordForRecipe(recipe.getIngrId());
             globalRecipesRepository.save(recipe);
             return "Successfully Deleted";

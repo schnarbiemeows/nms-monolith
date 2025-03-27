@@ -37,6 +37,10 @@ public class DateUtil {
         return dates;
     }
 
+    public static LocalDate getBeginningDate(LocalDate today, int daysBack) {
+        return today.minusDays(daysBack-1);
+    }
+
     public static int getDaysBetween(LocalDate start, LocalDate end) {
         return Period.between(start,end).getDays();
     }

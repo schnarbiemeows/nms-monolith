@@ -240,7 +240,7 @@ public class SpicesService {
 		}
 	}
 
-	private void checkForDependencies(int id) throws DependencyExistsException {
+	public void checkForDependencies(int id) throws DependencyExistsException {
 		if(checkForFavoriteDependencies(id, null)) {
 			throw new DependencyExistsException("A Favorite(s) has been found for this Spice. Delete these " +
 					"Favorite(s) before deleting this Spice.");

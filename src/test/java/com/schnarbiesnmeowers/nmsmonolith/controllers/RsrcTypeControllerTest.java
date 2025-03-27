@@ -1,28 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RsrcTypeRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RsrcTypeDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.RsrcTypeService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -34,124 +32,115 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class RsrcTypeControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private RsrcTypeController rsrctypeController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private RsrcTypeService rsrctypeService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private RsrcTypeRepository rsrctypeRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(rsrctypeController).build();
+    }
 
 	/**
 	 * test creating a new RsrcType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreateRsrcType() throws URISyntaxException
+	@Test
+	public void testA_CreateRsrcType() throws Exception
 	{
 	    RsrcTypeDTO rsrctype = generateRandomRsrcType();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(rsrctype.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/rsrctype/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<RsrcTypeDTO> request = new HttpEntity<>(rsrctype,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(rsrctypeService.createRsrcType(any(RsrcTypeDTO.class))).thenReturn(rsrctype);
+
+        mockMvc.perform(post("/rsrctype/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(rsrctype)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all RsrcType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllRsrcType() throws URISyntaxException
+	@Test
+	public void testB_GetAllRsrcType() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/rsrctype/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<RsrcTypeDTO> rsrctypes = Arrays.asList(generateRandomRsrcType(), generateRandomRsrcType());
+        when(rsrctypeService.getAllRsrcType()).thenReturn(rsrctypes);
+
+        mockMvc.perform(get("/rsrctype/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single RsrcType by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetRsrcType() throws URISyntaxException
+	@Test
+	public void testC_GetRsrcType() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/rsrctype/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		RsrcTypeDTO rsrctype = generateRandomRsrcType();
+        when(rsrctypeService.findRsrcTypeById(anyInt())).thenReturn(rsrctype);
+
+        mockMvc.perform(get("/rsrctype/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a RsrcType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdateRsrcType() throws URISyntaxException
+	@Test
+	public void testD_UpdateRsrcType() throws Exception
 	{
 	    RsrcTypeDTO rsrctype = generateRandomRsrcType();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/rsrctype/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<RsrcTypeDTO> request = new HttpEntity<>(rsrctype);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(rsrctypeService.updateRsrcType(any(RsrcTypeDTO.class))).thenReturn(rsrctype);
+
+        mockMvc.perform(post("/rsrctype/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(rsrctype)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a RsrcType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeleteRsrcType() throws URISyntaxException
+	@Test
+	public void testE_DeleteRsrcType() throws Exception
 	{
-		RsrcTypeDTO rsrctype = generateRandomRsrcType();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/rsrctype/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<RsrcTypeDTO> request = new HttpEntity<>(rsrctype);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(rsrctypeService.deleteRsrcType(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/rsrctype/delete/2"))
+                .andExpect(status().isOk());
 	}
+
 
 
 	public static RsrcTypeDTO generateRandomRsrcType() {
 		RsrcTypeDTO record = new RsrcTypeDTO();
 		record.setRsrcType(Randomizer.randomString(20));
 		record.setRsrcTypeDesc(Randomizer.randomString(20));
-		record.setActv(Randomizer.randomString(1));
+		record.setActv(Randomizer.randomString(2));
 		return record;
 	}
 }

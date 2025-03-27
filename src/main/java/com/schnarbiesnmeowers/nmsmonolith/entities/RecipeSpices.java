@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.entities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.spices.RecipeSpicesDTO;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import com.google.gson.Gson;
 import java.math.*;
@@ -24,7 +24,7 @@ public class RecipeSpices implements Serializable {
 	 */
 	@Column(name = "recipe_spice_id")
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer recipeSpiceId;
 
 	/**

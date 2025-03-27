@@ -109,13 +109,13 @@ public class LiftMuscleService {
      * @throws Exception
      */
     public LiftMuscleDTO updateLiftMuscle(LiftMuscleDTO data) throws Exception {
-        Optional<LiftMuscle> LiftMuscleOptional = liftMuscleRepository.findById(data.getLiftId());
+        Optional<LiftMuscle> LiftMuscleOptional = liftMuscleRepository.findById(data.getLiftMuscleId());
         if(LiftMuscleOptional.isPresent()) {
             LiftMuscle updatedData = data.toEntity();
             updatedData = liftMuscleRepository.save(updatedData);
             return updatedData.toDTO();
         } else {
-            throw new ResourceNotFoundException(ID_EQUALS + data.getLiftId() + NOT_FOUND);
+            throw new ResourceNotFoundException(ID_EQUALS + data.getLiftMuscleId() + NOT_FOUND);
         }
     }
 

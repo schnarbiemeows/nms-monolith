@@ -1,11 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 import com.schnarbiesnmeowers.nmsmonolith.entities.Resources;
-
-
-
-
-
+import java.math.*;
 
 
 /**
@@ -13,22 +18,16 @@ import com.schnarbiesnmeowers.nmsmonolith.entities.Resources;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class ResourcesTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		Resources classUnderTest = new Resources();
-		classUnderTest.setRsrcId(1);
-		classUnderTest.setRsrcTypeId(1);
+		classUnderTest.setRsrcId(2);
+		classUnderTest.setRsrcTypeId(2);
 		classUnderTest.setRsrcDesc("a");
 		classUnderTest.setActv("a");
 		assertTrue(true);

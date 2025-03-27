@@ -1,12 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RecipeEquipDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecipeEquip;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RecipeEquipRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -14,93 +22,122 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.RecipeEquipDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class RecipeEquipServiceTest {
+@ExtendWith(MockitoExtension.class)
+class RecipeEquipServiceTest {
 
+    @Mock
+    private RecipeEquipRepository recipeequipRepository;
 
-	/**
-	 * get all RecipeEquip records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<RecipeEquipDTO> getAllRecipeEquip() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<RecipeEquipDTO> recipeequipDTO = new ArrayList<RecipeEquipDTO>();
-		return recipeequipDTO;
+    @InjectMocks
+    private RecipeEquipService recipeequipService;
+
+    private RecipeEquip recipeequip;
+    private RecipeEquipDTO recipeequipDTO;
+
+    @BeforeEach
+    void setUp() {
+        recipeequip = generateRandomRecipeEquipEntity();
+        recipeequipDTO = generateRandomRecipeEquip();
+    }
+
+    @Test
+    void testGetAllRecipeEquip() throws Exception {
+        when(recipeequipRepository.findAll()).thenReturn(Collections.singletonList(recipeequip));
+
+        List<RecipeEquipDTO> result = recipeequipService.getAllRecipeEquip();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindRecipeEquipById_Found() throws Exception {
+        when(recipeequipRepository.findById(anyInt())).thenReturn(Optional.of(recipeequip));
+
+        RecipeEquipDTO result = recipeequipService.findRecipeEquipById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindRecipeEquipById_NotFound() {
+        when(recipeequipRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recipeequipService.findRecipeEquipById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateRecipeEquip() {
+        when(recipeequipRepository.save(any(RecipeEquip.class))).thenReturn(recipeequip);
+
+        RecipeEquipDTO result = recipeequipService.createRecipeEquip(recipeequipDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRecipeEquip_Found() throws Exception {
+        when(recipeequipRepository.findById(anyInt())).thenReturn(Optional.of(recipeequip));
+        when(recipeequipRepository.save(any(RecipeEquip.class))).thenReturn(recipeequip);
+
+        RecipeEquipDTO result = recipeequipService.updateRecipeEquip(recipeequipDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRecipeEquip_NotFound() {
+        when(recipeequipRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recipeequipService.updateRecipeEquip(recipeequipDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteRecipeEquip_Found() throws Exception {
+        when(recipeequipRepository.findById(anyInt())).thenReturn(Optional.of(recipeequip));
+        doNothing().when(recipeequipRepository).deleteById(anyInt());
+
+        String result = recipeequipService.deleteRecipeEquip(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteRecipeEquip_NotFound() {
+        when(recipeequipRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            recipeequipService.deleteRecipeEquip(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static RecipeEquipDTO generateRandomRecipeEquip() {
+		RecipeEquipDTO record = new RecipeEquipDTO();
+		record.setRecipeEquipId(2);
+		record.setRecEqTypeId(Randomizer.randomInt(1000));
+		record.setEquipDesc(Randomizer.randomString(20));
+		record.setEquipLongDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get RecipeEquip by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public RecipeEquipDTO findRecipeEquipById(int id) throws Exception {
-		return new RecipeEquipDTO();
+    public static RecipeEquip generateRandomRecipeEquipEntity() {
+		RecipeEquip record = new RecipeEquip();
+		record.setRecipeEquipId(2);
+		record.setRecEqTypeId(Randomizer.randomInt(1000));
+		record.setEquipDesc(Randomizer.randomString(20));
+		record.setEquipLongDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * create a new RecipeEquip
-	 * @param data
-	 * @return
-	 */
-	public RecipeEquipDTO createRecipeEquip(RecipeEquipDTO data) {
-        data.setRecipeEquipId(1);
-        return data;
-	}
-
-	/**
-	 * update a RecipeEquip
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public RecipeEquipDTO updateRecipeEquip(RecipeEquipDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a RecipeEquip by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteRecipeEquip(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<RecipeEquipDTO> by foreign key : recEqTypeId
-	 * @param id
-	 * @return List<RecipeEquip>
-	 * @throws Exception
-	*/
-	public List<RecipeEquipDTO> findRecipeEquipByRecEqTypeId(int id) throws Exception {
-		List<RecipeEquipDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RecipeEquipDTO> by foreign key : imageLoc
-	 * @param id
-	 * @return List<RecipeEquip>
-	 * @throws Exception
-	*/
-	public List<RecipeEquipDTO> findRecipeEquipByImageLoc(int id) throws Exception {
-		List<RecipeEquipDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<RecipeEquipDTO> by foreign key : RecEqTypeIdAndImageLoc
-	 * @param id0
-	 * @param id1
-	 * @return
-	 * @throws Exception
-	 */
-	public List<RecipeEquipDTO> findRecipeEquipByRecEqTypeIdAndImageLoc(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<RecipeEquipDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 import com.schnarbiesnmeowers.nmsmonolith.entities.Ingredients;
-
-
-
-
 import java.math.*;
-
 
 
 /**
@@ -14,26 +18,20 @@ import java.math.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class IngredientsTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		Ingredients classUnderTest = new Ingredients();
-		classUnderTest.setIngrId(1);
+		classUnderTest.setIngrId(2);
 		classUnderTest.setIngrDesc("a");
-		classUnderTest.setIngrTypeId(1);
-		classUnderTest.setBrandId(1);
+		classUnderTest.setIngrTypeId(2);
+		classUnderTest.setBrandId(2);
 		classUnderTest.setServSz(new BigDecimal(1.00));
-		classUnderTest.setServTypeId(1);
+		classUnderTest.setServTypeId(2);
 		classUnderTest.setKcalories(new BigDecimal(1.00));
 		classUnderTest.setTotFat(new BigDecimal(1.00));
 		classUnderTest.setSatFat(new BigDecimal(1.00));
@@ -41,13 +39,13 @@ public class IngredientsTest {
 		classUnderTest.setPolyFat(new BigDecimal(1.00));
 		classUnderTest.setMonoFat(new BigDecimal(1.00));
 		classUnderTest.setCholes(new BigDecimal(1.00));
-		classUnderTest.setSodium(1);
+		classUnderTest.setSodium(2);
 		classUnderTest.setTotCarbs(new BigDecimal(1.00));
 		classUnderTest.setTotFiber(new BigDecimal(1.00));
 		classUnderTest.setTotSugars(new BigDecimal(1.00));
 		classUnderTest.setTotProtein(new BigDecimal(1.00));
 		classUnderTest.setGlycIndx(new BigDecimal(1.00));
-		classUnderTest.setImageLoc(1);
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		Ingredients newitem = new Ingredients(

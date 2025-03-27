@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
@@ -53,7 +53,7 @@ public class GrpUserController {
 
 	/**
 	 * create a new GrpUser
-	 * @param GrpUserDTO
+	 * @param data
 	 * @return GrpUser
 	 */
 	@PostMapping(path = "/create")
@@ -68,7 +68,7 @@ public class GrpUserController {
 
 	/**
 	 * update a GrpUser
-	 * @param GrpUserDTO
+	 * @param data
 	 * @return GrpUser
 	 */
 	@PostMapping(path = "/update")
@@ -90,7 +90,7 @@ public class GrpUserController {
 
 	/**
 	 * get List<GrpUserDTO> by foreign key : grpId
-	 * @param grpId
+	 * @param id
 	 * @return List<GrpUser>
 	 * @throws Exception
 	*/
@@ -102,7 +102,7 @@ public class GrpUserController {
 
 	/**
 	 * get List<GrpUserDTO> by foreign key : userId
-	 * @param userId
+	 * @param id
 	 * @return List<GrpUser>
 	 * @throws Exception
 	*/
@@ -114,7 +114,7 @@ public class GrpUserController {
 
 	/**
 	 * get List<GrpUserDTO> by foreign key : GrpIdAndUserId
-	 * @param GrpIdAndUserId
+	 * @param id0
 	 * @return List<GrpUser>
 	 * @throws Exception
 	*/

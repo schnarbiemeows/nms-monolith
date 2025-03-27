@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.math.*;
 
 
 /**
@@ -14,24 +18,20 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class RecipeStepsDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		RecipeStepsDTO classUnderTest = new RecipeStepsDTO();
-		classUnderTest.setRecipeStepId(1);
-		classUnderTest.setRecipeId(1);
-		classUnderTest.setStepNum(1);
+		classUnderTest.setRecipeStepId(2);
+		classUnderTest.setRecipeId(2);
+		classUnderTest.setStepNum(2);
 		classUnderTest.setStepDesc("a");
-		classUnderTest.setImageLoc(1);
-		classUnderTest.setActv("Y");
+		classUnderTest.setImageLoc(2);
+		classUnderTest.setActv("a");
 		assertTrue(true);
 		RecipeStepsDTO newitem = new RecipeStepsDTO(
 		classUnderTest.getRecipeStepId(),

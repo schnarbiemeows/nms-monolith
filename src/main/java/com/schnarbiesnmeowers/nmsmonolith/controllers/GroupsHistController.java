@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
@@ -53,7 +53,7 @@ public class GroupsHistController {
 
 	/**
 	 * create a new GroupsHist
-	 * @param GroupsHistDTO
+	 * @param data
 	 * @return GroupsHist
 	 */
 	@PostMapping(path = "/create")
@@ -68,7 +68,7 @@ public class GroupsHistController {
 
 	/**
 	 * update a GroupsHist
-	 * @param GroupsHistDTO
+	 * @param data
 	 * @return GroupsHist
 	 */
 	@PostMapping(path = "/update")
@@ -90,7 +90,7 @@ public class GroupsHistController {
 
 	/**
 	 * get List<GroupsHistDTO> by foreign key : grpId
-	 * @param grpId
+	 * @param id
 	 * @return List<GroupsHist>
 	 * @throws Exception
 	*/
@@ -102,7 +102,7 @@ public class GroupsHistController {
 
 	/**
 	 * get List<GroupsHistDTO> by foreign key : actionTypeId
-	 * @param actionTypeId
+	 * @param id
 	 * @return List<GroupsHist>
 	 * @throws Exception
 	*/
@@ -114,7 +114,7 @@ public class GroupsHistController {
 
 	/**
 	 * get List<GroupsHistDTO> by foreign key : evntOperId
-	 * @param evntOperId
+	 * @param id
 	 * @return List<GroupsHist>
 	 * @throws Exception
 	*/
@@ -126,7 +126,7 @@ public class GroupsHistController {
 
 	/**
 	 * get List<GroupsHistDTO> by foreign key : GrpIdAndActionTypeIdAndEvntOperId
-	 * @param GrpIdAndActionTypeIdAndEvntOperId
+	 * @param id0
 	 * @return List<GroupsHist>
 	 * @throws Exception
 	*/

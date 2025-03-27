@@ -1,11 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 import com.schnarbiesnmeowers.nmsmonolith.entities.UserConfig;
-
-
-
-
-
+import java.math.*;
 
 
 /**
@@ -13,22 +18,16 @@ import com.schnarbiesnmeowers.nmsmonolith.entities.UserConfig;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class UserConfigTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		UserConfig classUnderTest = new UserConfig();
-		classUnderTest.setUsersConfigId(1);
-		classUnderTest.setUserId(1);
+		classUnderTest.setUsersConfigId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setPropertyKey("a");
 		classUnderTest.setPropertyValue("a");
 		assertTrue(true);

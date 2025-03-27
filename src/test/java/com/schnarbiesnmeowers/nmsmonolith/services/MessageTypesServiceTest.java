@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.MessageTypesDTO;
-import org.springframework.stereotype.Service;
+import com.schnarbiesnmeowers.nmsmonolith.entities.MessageTypes;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.MessageTypesRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,59 +22,117 @@ import org.springframework.stereotype.Service;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class MessageTypesServiceTest {
+@ExtendWith(MockitoExtension.class)
+class MessageTypesServiceTest {
 
+    @Mock
+    private MessageTypesRepository messagetypesRepository;
 
-	/**
-	 * get all MessageTypes records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<MessageTypesDTO> getAllMessageTypes() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<MessageTypesDTO> messagetypesDTO = new ArrayList<MessageTypesDTO>();
-		return messagetypesDTO;
+    @InjectMocks
+    private MessageTypesService messagetypesService;
+
+    private MessageTypes messagetypes;
+    private MessageTypesDTO messagetypesDTO;
+
+    @BeforeEach
+    void setUp() {
+        messagetypes = generateRandomMessageTypesEntity();
+        messagetypesDTO = generateRandomMessageTypes();
+    }
+
+    @Test
+    void testGetAllMessageTypes() throws Exception {
+        when(messagetypesRepository.findAll()).thenReturn(Collections.singletonList(messagetypes));
+
+        List<MessageTypesDTO> result = messagetypesService.getAllMessageTypes();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindMessageTypesById_Found() throws Exception {
+        when(messagetypesRepository.findById(anyInt())).thenReturn(Optional.of(messagetypes));
+
+        MessageTypesDTO result = messagetypesService.findMessageTypesById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindMessageTypesById_NotFound() {
+        when(messagetypesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            messagetypesService.findMessageTypesById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateMessageTypes() {
+        when(messagetypesRepository.save(any(MessageTypes.class))).thenReturn(messagetypes);
+
+        MessageTypesDTO result = messagetypesService.createMessageTypes(messagetypesDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateMessageTypes_Found() throws Exception {
+        when(messagetypesRepository.findById(anyInt())).thenReturn(Optional.of(messagetypes));
+        when(messagetypesRepository.save(any(MessageTypes.class))).thenReturn(messagetypes);
+
+        MessageTypesDTO result = messagetypesService.updateMessageTypes(messagetypesDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateMessageTypes_NotFound() {
+        when(messagetypesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            messagetypesService.updateMessageTypes(messagetypesDTO);
+        });
+
+        assertEquals("id = " + messagetypesDTO.getMessageTypeId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteMessageTypes_Found() throws Exception {
+        when(messagetypesRepository.findById(anyInt())).thenReturn(Optional.of(messagetypes));
+        doNothing().when(messagetypesRepository).deleteById(anyInt());
+
+        String result = messagetypesService.deleteMessageTypes(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteMessageTypes_NotFound() {
+        when(messagetypesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            messagetypesService.deleteMessageTypes(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static MessageTypesDTO generateRandomMessageTypes() {
+		MessageTypesDTO record = new MessageTypesDTO();
+		record.setMessageTypeId(2);
+		record.setMessageTypeCde(Randomizer.randomString(2));
+		record.setMessageTypeDesc(Randomizer.randomString(20));
+		return record;
 	}
-
-	/**
-	 * get MessageTypes by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public MessageTypesDTO findMessageTypesById(int id) throws Exception {
-		return new MessageTypesDTO();
-	}
-
-	/**
-	 * create a new MessageTypes
-	 * @param data
-	 * @return
-	 */
-	public MessageTypesDTO createMessageTypes(MessageTypesDTO data) {
-        data.setMessageTypeId(1);
-        return data;
-	}
-
-	/**
-	 * update a MessageTypes
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public MessageTypesDTO updateMessageTypes(MessageTypesDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a MessageTypes by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteMessageTypes(int id) throws Exception {
-		return "Successfully Deleted";
+    public static MessageTypes generateRandomMessageTypesEntity() {
+		MessageTypes record = new MessageTypes();
+		record.setMessageTypeId(2);
+		record.setMessageTypeCde(Randomizer.randomString(2));
+		record.setMessageTypeDesc(Randomizer.randomString(20));
+		return record;
 	}
 
 }

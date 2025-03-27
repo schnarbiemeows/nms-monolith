@@ -53,13 +53,13 @@ public class SpecializedExceptionHandler extends ResponseEntityExceptionHandler 
 	/**
 	 * handle validation fail for a given parameter
 	 */
-	@Override
+	/*@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Validation Failed",
 				ex.getBindingResult().toString());
 		return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
-	}
+	}*/
 
 	@ExceptionHandler(DependencyExistsException.class)
 	protected ResponseEntity<Object> handleDependencyExists(DependencyExistsException ex,

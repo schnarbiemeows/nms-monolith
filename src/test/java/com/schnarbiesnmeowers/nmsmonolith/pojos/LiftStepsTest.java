@@ -1,11 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 import com.schnarbiesnmeowers.nmsmonolith.entities.LiftSteps;
-
-
-
-
-
+import java.math.*;
 
 
 /**
@@ -13,25 +18,19 @@ import com.schnarbiesnmeowers.nmsmonolith.entities.LiftSteps;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class LiftStepsTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		LiftSteps classUnderTest = new LiftSteps();
-		classUnderTest.setLiftStepId(1);
-		classUnderTest.setLiftId(1);
-		classUnderTest.setStepNum(1);
+		classUnderTest.setLiftStepId(2);
+		classUnderTest.setLiftId(2);
+		classUnderTest.setStepNum(2);
 		classUnderTest.setStepDesc("a");
-		classUnderTest.setImageLoc(1);
+		classUnderTest.setImageLoc(2);
 		assertTrue(true);
 		LiftSteps newitem = new LiftSteps(
 		classUnderTest.getLiftStepId(),

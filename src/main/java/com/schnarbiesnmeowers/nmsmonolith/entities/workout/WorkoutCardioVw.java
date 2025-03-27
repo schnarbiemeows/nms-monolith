@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.entities.workout;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.WorkoutCardioVwDTO;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -19,7 +19,7 @@ public class WorkoutCardioVw implements Serializable {
      */
     @Column(name = "workout_id")
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer workoutId;
 
     /**

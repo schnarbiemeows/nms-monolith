@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.entities.Periods;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
-
-
-
+import java.sql.Timestamp;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Periods;
+import java.math.*;
 
 
 /**
@@ -14,22 +18,16 @@ import java.util.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class PeriodsTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		Periods classUnderTest = new Periods();
-		classUnderTest.setPeriodId(1);
-		classUnderTest.setPeriodTypeId(1);
+		classUnderTest.setPeriodId(2);
+		classUnderTest.setPeriodTypeId(2);
 		classUnderTest.setOneTimeDate(new Date());
 		classUnderTest.setDayOfWeek("a");
 		classUnderTest.setActv("a");

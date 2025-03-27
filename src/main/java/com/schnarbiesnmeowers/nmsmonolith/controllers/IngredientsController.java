@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -145,7 +145,7 @@ public class IngredientsController {
 	 * @return List<Ingredients>
 	 * @throws Exception
 	*/
-	@GetMapping(path = "/findByIngrTypeId/{id}")
+	@GetMapping(path = "/findByIngrTypeId/{ingrTypeId}")
 	public ResponseEntity<List<IngredientsDTO>> findIngredientsByIngrTypeId(@PathVariable int ingrTypeId) throws Exception {
 		List<IngredientsDTO> results = ingredientsService.findIngredientsByIngrTypeId(ingrTypeId);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
@@ -157,7 +157,7 @@ public class IngredientsController {
 	 * @return List<Ingredients>
 	 * @throws Exception
 	*/
-	@GetMapping(path = "/findByBrandId/{id}")
+	@GetMapping(path = "/findByBrandId/{brandId}")
 	public ResponseEntity<List<IngredientsDTO>> findIngredientsByBrandId(@PathVariable int brandId) throws Exception {
 		List<IngredientsDTO> results = ingredientsService.findIngredientsByBrandId(brandId);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
@@ -169,7 +169,7 @@ public class IngredientsController {
 	 * @return List<Ingredients>
 	 * @throws Exception
 	*/
-	@GetMapping(path = "/findByServTypeId/{id}")
+	@GetMapping(path = "/findByServTypeId/{servTypeId}")
 	public ResponseEntity<List<IngredientsDTO>> findIngredientsByServTypeId(@PathVariable int servTypeId) throws Exception {
 		List<IngredientsDTO> results = ingredientsService.findIngredientsByServTypeId(servTypeId);
 		return ResponseEntity.status(HttpStatus.OK).body(results);
@@ -181,7 +181,7 @@ public class IngredientsController {
 	 * @return List<Ingredients>
 	 * @throws Exception
 	*/
-	@GetMapping(path = "/findByImageLoc/{id}")
+	@GetMapping(path = "/findByImageLoc/{imageLoc}")
 	public ResponseEntity<List<IngredientsDTO>> findIngredientsByImageLoc(@PathVariable int imageLoc) throws Exception {
 		List<IngredientsDTO> results = ingredientsService.findIngredientsByImageLoc(imageLoc);
 		return ResponseEntity.status(HttpStatus.OK).body(results);

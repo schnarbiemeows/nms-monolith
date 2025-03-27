@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RecEqTypeDTO;
-import org.springframework.stereotype.Service;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RecEqType;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.RecEqTypeRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,59 +22,119 @@ import org.springframework.stereotype.Service;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class RecEqTypeServiceTest {
+@ExtendWith(MockitoExtension.class)
+class RecEqTypeServiceTest {
 
+    @Mock
+    private RecEqTypeRepository receqtypeRepository;
 
-	/**
-	 * get all RecEqType records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<RecEqTypeDTO> getAllRecEqType() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<RecEqTypeDTO> receqtypeDTO = new ArrayList<RecEqTypeDTO>();
-		return receqtypeDTO;
+    @InjectMocks
+    private RecEqTypeService receqtypeService;
+
+    private RecEqType receqtype;
+    private RecEqTypeDTO receqtypeDTO;
+
+    @BeforeEach
+    void setUp() {
+        receqtype = generateRandomRecEqTypeEntity();
+        receqtypeDTO = generateRandomRecEqType();
+    }
+
+    @Test
+    void testGetAllRecEqType() throws Exception {
+        when(receqtypeRepository.findAll()).thenReturn(Collections.singletonList(receqtype));
+
+        List<RecEqTypeDTO> result = receqtypeService.getAllRecEqType();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindRecEqTypeById_Found() throws Exception {
+        when(receqtypeRepository.findById(anyInt())).thenReturn(Optional.of(receqtype));
+
+        RecEqTypeDTO result = receqtypeService.findRecEqTypeById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindRecEqTypeById_NotFound() {
+        when(receqtypeRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            receqtypeService.findRecEqTypeById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateRecEqType() {
+        when(receqtypeRepository.save(any(RecEqType.class))).thenReturn(receqtype);
+
+        RecEqTypeDTO result = receqtypeService.createRecEqType(receqtypeDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRecEqType_Found() throws Exception {
+        when(receqtypeRepository.findById(anyInt())).thenReturn(Optional.of(receqtype));
+        when(receqtypeRepository.save(any(RecEqType.class))).thenReturn(receqtype);
+
+        RecEqTypeDTO result = receqtypeService.updateRecEqType(receqtypeDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateRecEqType_NotFound() {
+        when(receqtypeRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            receqtypeService.updateRecEqType(receqtypeDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteRecEqType_Found() throws Exception {
+        when(receqtypeRepository.findById(anyInt())).thenReturn(Optional.of(receqtype));
+        doNothing().when(receqtypeRepository).deleteById(anyInt());
+
+        String result = receqtypeService.deleteRecEqType(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteRecEqType_NotFound() {
+        when(receqtypeRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            receqtypeService.deleteRecEqType(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static RecEqTypeDTO generateRandomRecEqType() {
+		RecEqTypeDTO record = new RecEqTypeDTO();
+		record.setRecEqTypeId(2);
+		record.setRecEqCde(Randomizer.randomString(5));
+		record.setRecEqDesc(Randomizer.randomString(20));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get RecEqType by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public RecEqTypeDTO findRecEqTypeById(int id) throws Exception {
-		return new RecEqTypeDTO();
-	}
-
-	/**
-	 * create a new RecEqType
-	 * @param data
-	 * @return
-	 */
-	public RecEqTypeDTO createRecEqType(RecEqTypeDTO data) {
-        data.setRecEqTypeId(1);
-        return data;
-	}
-
-	/**
-	 * update a RecEqType
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public RecEqTypeDTO updateRecEqType(RecEqTypeDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a RecEqType by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteRecEqType(int id) throws Exception {
-		return "Successfully Deleted";
+    public static RecEqType generateRandomRecEqTypeEntity() {
+		RecEqType record = new RecEqType();
+		record.setRecEqTypeId(2);
+		record.setRecEqCde(Randomizer.randomString(5));
+		record.setRecEqDesc(Randomizer.randomString(20));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
 
 }

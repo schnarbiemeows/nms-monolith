@@ -3,7 +3,7 @@ package com.schnarbiesnmeowers.nmsmonolith.entities;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.RecipeTypeMappingsDTO;
 import org.hibernate.annotations.Immutable;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 import static com.schnarbiesnmeowers.nmsmonolith.utilities.NumberUtility.toIntArr;

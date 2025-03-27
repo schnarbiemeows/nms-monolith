@@ -1,11 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 import com.schnarbiesnmeowers.nmsmonolith.entities.EventsTable;
-
-
-
-
-
+import java.math.*;
 
 
 /**
@@ -13,25 +18,19 @@ import com.schnarbiesnmeowers.nmsmonolith.entities.EventsTable;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class EventsTableTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		EventsTable classUnderTest = new EventsTable();
-		classUnderTest.setEventId(1);
-		classUnderTest.setUserId(1);
+		classUnderTest.setEventId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setEventName("a");
 		classUnderTest.setEventDesc("a");
-		classUnderTest.setPeriodId(1);
+		classUnderTest.setPeriodId(2);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		EventsTable newitem = new EventsTable(

@@ -1,14 +1,17 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.dailydiet.DailyDietDTO;
-
-
-import java.math.BigDecimal;
-import java.util.*;
-
-
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
+
+import java.math.*;
 
 
 /**
@@ -16,28 +19,24 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class DailyDietDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		DailyDietDTO classUnderTest = new DailyDietDTO();
-		classUnderTest.setDailyTotalId(1);
-		classUnderTest.setUserId(1);
+		classUnderTest.setDailyTotalId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setCalendarDate(new Date());
-		classUnderTest.setIngrId(1);
+		classUnderTest.setIngrId(2);
 		classUnderTest.setIsRecipe(true);
 		classUnderTest.setIsLocal(true);
-		classUnderTest.setBldstId(1);
-		classUnderTest.setServTypeId(1);
-		classUnderTest.setNumSrv(BigDecimal.ONE);
-		classUnderTest.setTimeEaten("1000");
+		classUnderTest.setBldstId(2);
+		classUnderTest.setNumSrv(new BigDecimal(1.00));
+		classUnderTest.setServTypeId(2);
+		classUnderTest.setTimeEaten(Randomizer.randomString(10));
 		assertTrue(true);
 		DailyDietDTO newitem = new DailyDietDTO(
 		classUnderTest.getDailyTotalId(),

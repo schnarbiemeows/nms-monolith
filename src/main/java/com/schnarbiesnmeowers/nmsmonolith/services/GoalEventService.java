@@ -113,7 +113,7 @@ public class GoalEventService {
 
 	/**
 	 * get List<GoalEventDTO> by foreign key : userId
-	 * @param userId
+	 * @param id
 	 * @return List<GoalEvent>
 	 * @throws Exception
 	*/
@@ -130,7 +130,7 @@ public class GoalEventService {
 
 	/**
 	 * get List<GoalEventDTO> by foreign key : goalId
-	 * @param goalId
+	 * @param id
 	 * @return List<GoalEvent>
 	 * @throws Exception
 	*/
@@ -147,7 +147,7 @@ public class GoalEventService {
 
 	/**
 	 * get List<GoalEventDTO> by foreign key : eventId
-	 * @param eventId
+	 * @param id
 	 * @return List<GoalEvent>
 	 * @throws Exception
 	*/
@@ -164,7 +164,7 @@ public class GoalEventService {
 
 	/**
 	 * get List<GoalEventDTO> by foreign key : UserIdAndGoalIdAndEventId
-	 * @param UserIdAndGoalIdAndEventId
+	 * @param id0
 	 * @return List<GoalEvent>
 	 * @throws Exception
 	*/

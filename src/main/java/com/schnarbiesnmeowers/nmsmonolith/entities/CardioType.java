@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.entities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.CardioTypeDTO;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 
@@ -14,7 +14,7 @@ public class CardioType implements Serializable {
 
     @Column(name = "cardio_type_id")
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer cardioTypeId;
 
     private String description;

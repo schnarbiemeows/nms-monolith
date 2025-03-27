@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.EventsTableDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.EventsTable;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.EventsTableRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,92 +22,122 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.EventsTableDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class EventsTableServiceTest {
+@ExtendWith(MockitoExtension.class)
+class EventsTableServiceTest {
 
+    @Mock
+    private EventsTableRepository eventstableRepository;
 
-	/**
-	 * get all EventsTable records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<EventsTableDTO> getAllEventsTable() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<EventsTableDTO> eventstableDTO = new ArrayList<EventsTableDTO>();
-		return eventstableDTO;
+    @InjectMocks
+    private EventsTableService eventstableService;
+
+    private EventsTable eventstable;
+    private EventsTableDTO eventstableDTO;
+
+    @BeforeEach
+    void setUp() {
+        eventstable = generateRandomEventsTableEntity();
+        eventstableDTO = generateRandomEventsTable();
+    }
+
+    @Test
+    void testGetAllEventsTable() throws Exception {
+        when(eventstableRepository.findAll()).thenReturn(Collections.singletonList(eventstable));
+
+        List<EventsTableDTO> result = eventstableService.getAllEventsTable();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindEventsTableById_Found() throws Exception {
+        when(eventstableRepository.findById(anyInt())).thenReturn(Optional.of(eventstable));
+
+        EventsTableDTO result = eventstableService.findEventsTableById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindEventsTableById_NotFound() {
+        when(eventstableRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            eventstableService.findEventsTableById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateEventsTable() {
+        when(eventstableRepository.save(any(EventsTable.class))).thenReturn(eventstable);
+
+        EventsTableDTO result = eventstableService.createEventsTable(eventstableDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateEventsTable_Found() throws Exception {
+        when(eventstableRepository.findById(anyInt())).thenReturn(Optional.of(eventstable));
+        when(eventstableRepository.save(any(EventsTable.class))).thenReturn(eventstable);
+
+        EventsTableDTO result = eventstableService.updateEventsTable(eventstableDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateEventsTable_NotFound() {
+        when(eventstableRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            eventstableService.updateEventsTable(eventstableDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteEventsTable_Found() throws Exception {
+        when(eventstableRepository.findById(anyInt())).thenReturn(Optional.of(eventstable));
+        doNothing().when(eventstableRepository).deleteById(anyInt());
+
+        String result = eventstableService.deleteEventsTable(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteEventsTable_NotFound() {
+        when(eventstableRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            eventstableService.deleteEventsTable(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static EventsTableDTO generateRandomEventsTable() {
+		EventsTableDTO record = new EventsTableDTO();
+		record.setEventId(2);
+		record.setUserId(Randomizer.randomInt(1000));
+		record.setEventName(Randomizer.randomString(20));
+		record.setEventDesc(Randomizer.randomString(20));
+		record.setPeriodId(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get EventsTable by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public EventsTableDTO findEventsTableById(int id) throws Exception {
-		return new EventsTableDTO();
+    public static EventsTable generateRandomEventsTableEntity() {
+		EventsTable record = new EventsTable();
+		record.setEventId(2);
+		record.setUserId(Randomizer.randomInt(1000));
+		record.setEventName(Randomizer.randomString(20));
+		record.setEventDesc(Randomizer.randomString(20));
+		record.setPeriodId(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * create a new EventsTable
-	 * @param data
-	 * @return
-	 */
-	public EventsTableDTO createEventsTable(EventsTableDTO data) {
-        data.setEventId(1);
-        return data;
-	}
-
-	/**
-	 * update a EventsTable
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public EventsTableDTO updateEventsTable(EventsTableDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a EventsTable by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteEventsTable(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<EventsTableDTO> by foreign key : userId
-	 * @param userId
-	 * @return List<EventsTable>
-	 * @throws Exception
-	*/
-	public List<EventsTableDTO> findEventsTableByUserId(int id) throws Exception {
-		List<EventsTableDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<EventsTableDTO> by foreign key : periodId
-	 * @param periodId
-	 * @return List<EventsTable>
-	 * @throws Exception
-	*/
-	public List<EventsTableDTO> findEventsTableByPeriodId(int id) throws Exception {
-		List<EventsTableDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<EventsTableDTO> by foreign key : UserIdAndPeriodId
-	 * @param UserIdAndPeriodId
-	 * @return List<EventsTable>
-	 * @throws Exception
-	*/
-	public List<EventsTableDTO> findEventsTableByUserIdAndPeriodId(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<EventsTableDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.math.*;
 
 
 /**
@@ -14,22 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class BrandIngrTypeDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		BrandIngrTypeDTO classUnderTest = new BrandIngrTypeDTO();
-		classUnderTest.setBrandIngrTypeId(1);
-		classUnderTest.setBrandId(1);
-		classUnderTest.setIngrTypeId(1);
-		classUnderTest.setPrntIngrType(1);
+		classUnderTest.setBrandIngrTypeId(2);
+		classUnderTest.setBrandId(2);
+		classUnderTest.setIngrTypeId(2);
+		classUnderTest.setPrntIngrType(2);
 		assertTrue(true);
 		BrandIngrTypeDTO newitem = new BrandIngrTypeDTO(
 		classUnderTest.getBrandIngrTypeId(),

@@ -1,28 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import org.springframework.web.client.RestTemplate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.LiftEquipRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.LiftEquipDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.LiftEquipService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -34,139 +32,128 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class LiftEquipControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private LiftEquipController liftequipController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private LiftEquipService liftequipService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private LiftEquipRepository liftequipRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(liftequipController).build();
+    }
 
 	/**
 	 * test creating a new LiftEquip
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreateLiftEquip() throws URISyntaxException
+	@Test
+	public void testA_CreateLiftEquip() throws Exception
 	{
 	    LiftEquipDTO liftequip = generateRandomLiftEquip();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(liftequip.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/liftequip/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<LiftEquipDTO> request = new HttpEntity<>(liftequip,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(liftequipService.createLiftEquip(any(LiftEquipDTO.class))).thenReturn(liftequip);
+
+        mockMvc.perform(post("/liftequip/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(liftequip)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all LiftEquip
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllLiftEquip() throws URISyntaxException
+	@Test
+	public void testB_GetAllLiftEquip() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/liftequip/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<LiftEquipDTO> liftequips = Arrays.asList(generateRandomLiftEquip(), generateRandomLiftEquip());
+        when(liftequipService.getAllLiftEquip()).thenReturn(liftequips);
+
+        mockMvc.perform(get("/liftequip/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single LiftEquip by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetLiftEquip() throws URISyntaxException
+	@Test
+	public void testC_GetLiftEquip() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/liftequip/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		LiftEquipDTO liftequip = generateRandomLiftEquip();
+        when(liftequipService.findLiftEquipById(anyInt())).thenReturn(liftequip);
+
+        mockMvc.perform(get("/liftequip/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a LiftEquip
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdateLiftEquip() throws URISyntaxException
+	@Test
+	public void testD_UpdateLiftEquip() throws Exception
 	{
 	    LiftEquipDTO liftequip = generateRandomLiftEquip();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/liftequip/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<LiftEquipDTO> request = new HttpEntity<>(liftequip);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(liftequipService.updateLiftEquip(any(LiftEquipDTO.class))).thenReturn(liftequip);
+
+        mockMvc.perform(post("/liftequip/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(liftequip)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a LiftEquip
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeleteLiftEquip() throws URISyntaxException
+	@Test
+	public void testE_DeleteLiftEquip() throws Exception
 	{
-		LiftEquipDTO liftequip = generateRandomLiftEquip();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/liftequip/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<LiftEquipDTO> request = new HttpEntity<>(liftequip);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(liftequipService.deleteLiftEquip(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/liftequip/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all LiftEquip by foreign key imageLoc
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetLiftEquipByImageLoc() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/liftequip/findByImageLoc/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single LiftEquip by field ImageLoc
+ * @throws
+ */
+@Test
+public void testC_findByImageLoc() throws Exception
+{
+    List<LiftEquipDTO> liftequip = Arrays.asList(generateRandomLiftEquip());
+    when(liftequipService.findLiftEquipByImageLoc(anyInt())).thenReturn(liftequip);
 
+    mockMvc.perform(get("/liftequip/findByImageLoc/2"))
+            .andExpect(status().isOk());
+}
 
 	public static LiftEquipDTO generateRandomLiftEquip() {
 		LiftEquipDTO record = new LiftEquipDTO();
 		record.setEquipDesc(Randomizer.randomString(20));
 		record.setEquipLongDesc(Randomizer.randomString(20));
 		record.setImageLoc(Randomizer.randomInt(1000));
-		record.setActv(Randomizer.randomString(1));
+		record.setActv(Randomizer.randomString(2));
 		return record;
 	}
 }

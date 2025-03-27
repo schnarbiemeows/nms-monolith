@@ -1,10 +1,12 @@
 package com.schnarbiesnmeowers.nmsmonolith.utilities;
 
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import static org.junit.jupiter.api.Assertions.*;
-
-
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.math.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 /**
@@ -12,10 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-@ExtendWith(MockitoExtension.class)
 public class RandomizerTest {
 
-	//@Test
+	@Test
 	public void testMethods() {
 	    Randomizer rand = new Randomizer();
 		assertNotNull(Randomizer.randomString(10));

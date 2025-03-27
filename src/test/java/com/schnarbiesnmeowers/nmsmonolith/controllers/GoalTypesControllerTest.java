@@ -1,28 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import org.springframework.web.client.RestTemplate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.GoalTypesRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GoalTypesDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.GoalTypesService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -34,117 +32,108 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class GoalTypesControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private GoalTypesController goaltypesController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private GoalTypesService goaltypesService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private GoalTypesRepository goaltypesRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(goaltypesController).build();
+    }
 
 	/**
 	 * test creating a new GoalTypes
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreateGoalTypes() throws URISyntaxException
+	@Test
+	public void testA_CreateGoalTypes() throws Exception
 	{
 	    GoalTypesDTO goaltypes = generateRandomGoalTypes();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(goaltypes.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/goaltypes/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<GoalTypesDTO> request = new HttpEntity<>(goaltypes,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(goaltypesService.createGoalTypes(any(GoalTypesDTO.class))).thenReturn(goaltypes);
+
+        mockMvc.perform(post("/goaltypes/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(goaltypes)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all GoalTypes
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllGoalTypes() throws URISyntaxException
+	@Test
+	public void testB_GetAllGoalTypes() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/goaltypes/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<GoalTypesDTO> goaltypess = Arrays.asList(generateRandomGoalTypes(), generateRandomGoalTypes());
+        when(goaltypesService.getAllGoalTypes()).thenReturn(goaltypess);
+
+        mockMvc.perform(get("/goaltypes/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single GoalTypes by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetGoalTypes() throws URISyntaxException
+	@Test
+	public void testC_GetGoalTypes() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/goaltypes/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		GoalTypesDTO goaltypes = generateRandomGoalTypes();
+        when(goaltypesService.findGoalTypesById(anyInt())).thenReturn(goaltypes);
+
+        mockMvc.perform(get("/goaltypes/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a GoalTypes
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdateGoalTypes() throws URISyntaxException
+	@Test
+	public void testD_UpdateGoalTypes() throws Exception
 	{
 	    GoalTypesDTO goaltypes = generateRandomGoalTypes();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/goaltypes/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<GoalTypesDTO> request = new HttpEntity<>(goaltypes);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(goaltypesService.updateGoalTypes(any(GoalTypesDTO.class))).thenReturn(goaltypes);
+
+        mockMvc.perform(post("/goaltypes/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(goaltypes)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a GoalTypes
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeleteGoalTypes() throws URISyntaxException
+	@Test
+	public void testE_DeleteGoalTypes() throws Exception
 	{
-		GoalTypesDTO goaltypes = generateRandomGoalTypes();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/goaltypes/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<GoalTypesDTO> request = new HttpEntity<>(goaltypes);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(goaltypesService.deleteGoalTypes(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/goaltypes/delete/2"))
+                .andExpect(status().isOk());
 	}
+
 
 
 	public static GoalTypesDTO generateRandomGoalTypes() {

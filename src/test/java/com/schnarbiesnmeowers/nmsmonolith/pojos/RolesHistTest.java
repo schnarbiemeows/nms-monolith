@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.entities.RolesHist;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
-
-
-
+import java.sql.Timestamp;
+import com.schnarbiesnmeowers.nmsmonolith.entities.RolesHist;
+import java.math.*;
 
 
 /**
@@ -14,27 +18,21 @@ import java.util.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class RolesHistTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		RolesHist classUnderTest = new RolesHist();
-		classUnderTest.setRoleHistId(1);
-		classUnderTest.setRoleId(1);
-		classUnderTest.setGrpId(1);
-		classUnderTest.setRsrcId(1);
-		classUnderTest.setActionTypeId(1);
+		classUnderTest.setRoleHistId(2);
+		classUnderTest.setRoleId(2);
+		classUnderTest.setGrpId(2);
+		classUnderTest.setRsrcId(2);
+		classUnderTest.setActionTypeId(2);
 		classUnderTest.setEvntTmestmp(new Date());
-		classUnderTest.setEvntOperId(1);
+		classUnderTest.setEvntOperId(2);
 		assertTrue(true);
 		RolesHist newitem = new RolesHist(
 		classUnderTest.getRoleHistId(),

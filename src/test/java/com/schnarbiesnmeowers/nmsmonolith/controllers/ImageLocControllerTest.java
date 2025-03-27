@@ -1,28 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import org.springframework.web.client.RestTemplate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.ImageLocRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ImageLocDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.ImageLocService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -34,117 +32,108 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ImageLocControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private ImageLocController imagelocController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private ImageLocService imagelocService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private ImageLocRepository imagelocRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(imagelocController).build();
+    }
 
 	/**
 	 * test creating a new ImageLoc
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreateImageLoc() throws URISyntaxException
+	@Test
+	public void testA_CreateImageLoc() throws Exception
 	{
 	    ImageLocDTO imageloc = generateRandomImageLoc();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(imageloc.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/imageloc/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<ImageLocDTO> request = new HttpEntity<>(imageloc,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(imagelocService.createImageLoc(any(ImageLocDTO.class))).thenReturn(imageloc);
+
+        mockMvc.perform(post("/imageloc/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(imageloc)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all ImageLoc
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllImageLoc() throws URISyntaxException
+	@Test
+	public void testB_GetAllImageLoc() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/imageloc/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<ImageLocDTO> imagelocs = Arrays.asList(generateRandomImageLoc(), generateRandomImageLoc());
+        when(imagelocService.getAllImageLoc()).thenReturn(imagelocs);
+
+        mockMvc.perform(get("/imageloc/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single ImageLoc by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetImageLoc() throws URISyntaxException
+	@Test
+	public void testC_GetImageLoc() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/imageloc/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		ImageLocDTO imageloc = generateRandomImageLoc();
+        when(imagelocService.findImageLocById(anyInt())).thenReturn(imageloc);
+
+        mockMvc.perform(get("/imageloc/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a ImageLoc
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdateImageLoc() throws URISyntaxException
+	@Test
+	public void testD_UpdateImageLoc() throws Exception
 	{
 	    ImageLocDTO imageloc = generateRandomImageLoc();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/imageloc/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<ImageLocDTO> request = new HttpEntity<>(imageloc);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(imagelocService.updateImageLoc(any(ImageLocDTO.class))).thenReturn(imageloc);
+
+        mockMvc.perform(post("/imageloc/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(imageloc)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a ImageLoc
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeleteImageLoc() throws URISyntaxException
+	@Test
+	public void testE_DeleteImageLoc() throws Exception
 	{
-		ImageLocDTO imageloc = generateRandomImageLoc();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/imageloc/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<ImageLocDTO> request = new HttpEntity<>(imageloc);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(imagelocService.deleteImageLoc(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/imageloc/delete/2"))
+                .andExpect(status().isOk());
 	}
+
 
 
 	public static ImageLocDTO generateRandomImageLoc() {

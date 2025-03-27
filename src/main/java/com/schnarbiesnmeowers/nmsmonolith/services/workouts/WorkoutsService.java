@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.utility.GraphWrapperDTO;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.*;
-import com.schnarbiesnmeowers.nmsmonolith.entities.WeightWorkoutType;
+import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WeightWorkoutType;
 import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutCardioVw;
 import com.schnarbiesnmeowers.nmsmonolith.entities.workout.WorkoutSteps;
 import com.schnarbiesnmeowers.nmsmonolith.repositories.WeightWorkoutTypeRepository;
@@ -130,7 +130,6 @@ public class WorkoutsService {
 		} else {
 			throw new ResourceNotFoundException(ID_EQUALS + id + NOT_FOUND);
 		}
-
 	}
 
 	/**

@@ -1,12 +1,17 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.recipes.RecipesDTO;
-import java.math.BigDecimal;
-
-
-
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
+
+import java.math.*;
 
 
 /**
@@ -14,30 +19,27 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class RecipesDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		RecipesDTO classUnderTest = new RecipesDTO();
-		classUnderTest.setRecipeId(1);
+		classUnderTest.setRecipeId(2);
 		classUnderTest.setRecipeName("a");
-		classUnderTest.setIngrId(1);
+		classUnderTest.setRecipeTypeId(2);
+		classUnderTest.setIngrId(2);
 		classUnderTest.setRecipeDesc("a");
 		classUnderTest.setRecipeLink("a");
-		classUnderTest.setNumSrv(BigDecimal.ONE);
+		classUnderTest.setNumSrv(new BigDecimal(1.00));
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		RecipesDTO newitem = new RecipesDTO(
 		classUnderTest.getRecipeId(),
 		classUnderTest.getRecipeName(),
-		classUnderTest.getIngrId(),
+		classUnderTest.getRecipeTypeId(),
 		classUnderTest.getIngrId(),
 		classUnderTest.getRecipeDesc(),
 		classUnderTest.getRecipeLink(),

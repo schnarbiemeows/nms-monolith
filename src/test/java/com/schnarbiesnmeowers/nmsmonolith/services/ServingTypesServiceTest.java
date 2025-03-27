@@ -1,9 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.mockito.Mockito.*;
+
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.servingtypes.ServingTypesDTO;
-import org.springframework.stereotype.Service;
+import com.schnarbiesnmeowers.nmsmonolith.entities.ServingTypes;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.ServingTypesRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -11,70 +22,119 @@ import org.springframework.stereotype.Service;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class ServingTypesServiceTest {
+@ExtendWith(MockitoExtension.class)
+class ServingTypesServiceTest {
 
+    @Mock
+    private ServingTypesRepository servingtypesRepository;
 
-	/**
-	 * get all ServingTypes records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<ServingTypesDTO> getAllServingTypes() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<ServingTypesDTO> servingtypesDTO = new ArrayList<ServingTypesDTO>();
-		return servingtypesDTO;
+    @InjectMocks
+    private ServingTypesService servingtypesService;
+
+    private ServingTypes servingtypes;
+    private ServingTypesDTO servingtypesDTO;
+
+    @BeforeEach
+    void setUp() {
+        servingtypes = generateRandomServingTypesEntity();
+        servingtypesDTO = generateRandomServingTypes();
+    }
+
+    @Test
+    void testGetAllServingTypes() throws Exception {
+        when(servingtypesRepository.findActiveServingTypes())
+                .thenReturn(Collections.singletonList(servingtypes));
+        List<ServingTypesDTO> result = servingtypesService.getAllServingTypes();
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindServingTypesById_Found() throws Exception {
+        when(servingtypesRepository.findById(anyInt())).thenReturn(Optional.of(servingtypes));
+
+        ServingTypesDTO result = servingtypesService.findServingTypesById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindServingTypesById_NotFound() {
+        when(servingtypesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            servingtypesService.findServingTypesById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateServingTypes() {
+        when(servingtypesRepository.save(any(ServingTypes.class))).thenReturn(servingtypes);
+
+        ServingTypesDTO result = servingtypesService.createServingTypes(servingtypesDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateServingTypes_Found() throws Exception {
+        when(servingtypesRepository.findById(anyInt())).thenReturn(Optional.of(servingtypes));
+        when(servingtypesRepository.save(any(ServingTypes.class))).thenReturn(servingtypes);
+
+        ServingTypesDTO result = servingtypesService.updateServingTypes(servingtypesDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateServingTypes_NotFound() {
+        when(servingtypesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            servingtypesService.updateServingTypes(servingtypesDTO);
+        });
+
+        assertEquals("id = " + servingtypesDTO.getServTypeId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteServingTypes_Found() throws Exception {
+        when(servingtypesRepository.findById(anyInt())).thenReturn(Optional.of(servingtypes));
+        doNothing().when(servingtypesRepository).deleteById(anyInt());
+
+        String result = servingtypesService.deleteServingTypes(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteServingTypes_NotFound() {
+        when(servingtypesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            servingtypesService.deleteServingTypes(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static ServingTypesDTO generateRandomServingTypes() {
+		ServingTypesDTO record = new ServingTypesDTO();
+		record.setServTypeId(2);
+		record.setServTypeCde(Randomizer.randomString(10));
+		record.setServTypeDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get ServingTypes by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public ServingTypesDTO findServingTypesById(int id) throws Exception {
-		return new ServingTypesDTO();
+    public static ServingTypes generateRandomServingTypesEntity() {
+		ServingTypes record = new ServingTypes();
+		record.setServTypeId(2);
+		record.setServTypeCde(Randomizer.randomString(10));
+		record.setServTypeDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * create a new ServingTypes
-	 * @param data
-	 * @return
-	 */
-	public ServingTypesDTO createServingTypes(ServingTypesDTO data) {
-        data.setServTypeId(1);
-        return data;
-	}
-
-	/**
-	 * update a ServingTypes
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public ServingTypesDTO updateServingTypes(ServingTypesDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a ServingTypes by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteServingTypes(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<ServingTypesDTO> by foreign key : imageLoc
-	 * @param id
-	 * @return List<ServingTypes>
-	 * @throws Exception
-	*/
-	public List<ServingTypesDTO> findServingTypesByImageLoc(int id) throws Exception {
-		List<ServingTypesDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

@@ -1,12 +1,17 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ingredients.IngredientsDTO;
-
-
-
-
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
+
+import java.math.*;
 
 
 /**
@@ -14,40 +19,34 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.math.BigDecimal;
-
-@ExtendWith(MockitoExtension.class)
 public class IngredientsDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		IngredientsDTO classUnderTest = new IngredientsDTO();
-		classUnderTest.setIngrId(1);
+		classUnderTest.setIngrId(2);
 		classUnderTest.setIngrDesc("a");
-		classUnderTest.setIngrTypeId(1);
-		classUnderTest.setBrandId(1);
-		classUnderTest.setServSz(BigDecimal.ONE);
-		classUnderTest.setServTypeId(1);
-		classUnderTest.setKcalories(BigDecimal.ONE);
-		classUnderTest.setTotFat(BigDecimal.ONE);
-		classUnderTest.setSatFat(BigDecimal.ONE);
-		classUnderTest.setTransFat(BigDecimal.ONE);
-		classUnderTest.setPolyFat(BigDecimal.ONE);
-		classUnderTest.setMonoFat(BigDecimal.ONE);
-		classUnderTest.setCholes(BigDecimal.ONE);
-		classUnderTest.setSodium(1);
-		classUnderTest.setTotCarbs(BigDecimal.ONE);
-		classUnderTest.setTotFiber(BigDecimal.ONE);
-		classUnderTest.setTotSugars(BigDecimal.ONE);
-		classUnderTest.setTotProtein(BigDecimal.ONE);
-		classUnderTest.setGlycIndx(BigDecimal.ONE);
-		classUnderTest.setImageLoc(1);
+		classUnderTest.setIngrTypeId(2);
+		classUnderTest.setBrandId(2);
+		classUnderTest.setServSz(new BigDecimal(1.00));
+		classUnderTest.setServTypeId(2);
+		classUnderTest.setKcalories(new BigDecimal(1.00));
+		classUnderTest.setTotFat(new BigDecimal(1.00));
+		classUnderTest.setSatFat(new BigDecimal(1.00));
+		classUnderTest.setTransFat(new BigDecimal(1.00));
+		classUnderTest.setPolyFat(new BigDecimal(1.00));
+		classUnderTest.setMonoFat(new BigDecimal(1.00));
+		classUnderTest.setCholes(new BigDecimal(1.00));
+		classUnderTest.setSodium(2);
+		classUnderTest.setTotCarbs(new BigDecimal(1.00));
+		classUnderTest.setTotFiber(new BigDecimal(1.00));
+		classUnderTest.setTotSugars(new BigDecimal(1.00));
+		classUnderTest.setTotProtein(new BigDecimal(1.00));
+		classUnderTest.setGlycIndx(new BigDecimal(1.00));
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		IngredientsDTO newitem = new IngredientsDTO(

@@ -1,33 +1,36 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.entities.Lifts;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Lifts;
+import java.math.*;
+
 
 /**
  * class to test the Lifts class
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class LiftsTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		Lifts classUnderTest = new Lifts();
-		classUnderTest.setLiftId(1);
+		classUnderTest.setLiftId(2);
 		classUnderTest.setLiftDesc("a");
-		classUnderTest.setImageLoc(1);
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
+		classUnderTest.setMuscleGroupId(2);
 		assertTrue(true);
 		Lifts newitem = new Lifts(
 		classUnderTest.getLiftId(),

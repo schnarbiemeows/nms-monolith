@@ -1,13 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-import java.time.LocalDate;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.math.*;
 
 
 /**
@@ -15,23 +18,19 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class UserCalendarDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		UserCalendarDTO classUnderTest = new UserCalendarDTO();
-		classUnderTest.setUserCalendarId(1);
-		classUnderTest.setUserId(1);
+		classUnderTest.setUserCalendarId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setCalendarDate(new Date());
 		classUnderTest.setCalendarTime(new java.sql.Time(1000));
-		classUnderTest.setEventId(1);
+		classUnderTest.setEventId(2);
 		assertTrue(true);
 		UserCalendarDTO newitem = new UserCalendarDTO(
 		classUnderTest.getUserCalendarId(),

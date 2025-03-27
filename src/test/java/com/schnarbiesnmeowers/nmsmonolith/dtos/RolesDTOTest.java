@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.math.*;
 
 
 /**
@@ -14,22 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class RolesDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		RolesDTO classUnderTest = new RolesDTO();
-		classUnderTest.setRoleId(1);
-		classUnderTest.setGrpId(1);
-		classUnderTest.setRsrcId(1);
-		classUnderTest.setActionTypeId(1);
+		classUnderTest.setRoleId(2);
+		classUnderTest.setGrpId(2);
+		classUnderTest.setRsrcId(2);
+		classUnderTest.setActionTypeId(2);
 		assertTrue(true);
 		RolesDTO newitem = new RolesDTO(
 		classUnderTest.getRoleId(),

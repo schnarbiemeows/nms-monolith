@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.entities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.LiftMuscleDTO;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -19,7 +19,7 @@ public class LiftMuscle implements Serializable {
      */
     @Column(name = "lift_muscle_id")
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer liftMuscleId;
 
     @Column(name = "lift_id")

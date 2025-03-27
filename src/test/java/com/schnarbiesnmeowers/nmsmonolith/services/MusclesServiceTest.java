@@ -1,12 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.MusclesDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Muscles;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.MusclesRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -14,93 +22,120 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.MusclesDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class MusclesServiceTest {
+@ExtendWith(MockitoExtension.class)
+class MusclesServiceTest {
 
+    @Mock
+    private MusclesRepository musclesRepository;
 
-	/**
-	 * get all Muscles records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<MusclesDTO> getAllMuscles() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<MusclesDTO> musclesDTO = new ArrayList<MusclesDTO>();
-		return musclesDTO;
+    @InjectMocks
+    private MusclesService musclesService;
+
+    private Muscles muscles;
+    private MusclesDTO musclesDTO;
+
+    @BeforeEach
+    void setUp() {
+        muscles = generateRandomMusclesEntity();
+        musclesDTO = generateRandomMuscles();
+    }
+
+    @Test
+    void testGetAllMuscles() throws Exception {
+        when(musclesRepository.findAll()).thenReturn(Collections.singletonList(muscles));
+
+        List<MusclesDTO> result = musclesService.getAllMuscles();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindMusclesById_Found() throws Exception {
+        when(musclesRepository.findById(anyInt())).thenReturn(Optional.of(muscles));
+
+        MusclesDTO result = musclesService.findMusclesById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindMusclesById_NotFound() {
+        when(musclesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            musclesService.findMusclesById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateMuscles() {
+        when(musclesRepository.save(any(Muscles.class))).thenReturn(muscles);
+
+        MusclesDTO result = musclesService.createMuscles(musclesDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateMuscles_Found() throws Exception {
+        when(musclesRepository.findById(anyInt())).thenReturn(Optional.of(muscles));
+        when(musclesRepository.save(any(Muscles.class))).thenReturn(muscles);
+
+        MusclesDTO result = musclesService.updateMuscles(musclesDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateMuscles_NotFound() {
+        when(musclesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            musclesService.updateMuscles(musclesDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteMuscles_Found() throws Exception {
+        when(musclesRepository.findById(anyInt())).thenReturn(Optional.of(muscles));
+        doNothing().when(musclesRepository).deleteById(anyInt());
+
+        String result = musclesService.deleteMuscles(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteMuscles_NotFound() {
+        when(musclesRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            musclesService.deleteMuscles(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static MusclesDTO generateRandomMuscles() {
+		MusclesDTO record = new MusclesDTO();
+		record.setMuscleId(2);
+		record.setMuscleGroupId(Randomizer.randomInt(1000));
+		record.setMuscleName(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get Muscles by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public MusclesDTO findMusclesById(int id) throws Exception {
-		return new MusclesDTO();
+    public static Muscles generateRandomMusclesEntity() {
+		Muscles record = new Muscles();
+		record.setMuscleId(2);
+		record.setMuscleGroupId(Randomizer.randomInt(1000));
+		record.setMuscleName(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * create a new Muscles
-	 * @param data
-	 * @return
-	 */
-	public MusclesDTO createMuscles(MusclesDTO data) {
-        data.setMuscleId(1);
-        return data;
-	}
-
-	/**
-	 * update a Muscles
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public MusclesDTO updateMuscles(MusclesDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a Muscles by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteMuscles(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<MusclesDTO> by foreign key : muscleGroupId
-	 * @param id
-	 * @return List<Muscles>
-	 * @throws Exception
-	*/
-	public List<MusclesDTO> findMusclesByMuscleGroupId(int id) throws Exception {
-		List<MusclesDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<MusclesDTO> by foreign key : imageLoc
-	 * @param id
-	 * @return List<Muscles>
-	 * @throws Exception
-	*/
-	public List<MusclesDTO> findMusclesByImageLoc(int id) throws Exception {
-		List<MusclesDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<MusclesDTO> by foreign key : MuscleGroupIdAndImageLoc
-	 * @param id0
-	 * @param id1
-	 * @return
-	 * @throws Exception
-	 */
-	public List<MusclesDTO> findMusclesByMuscleGroupIdAndImageLoc(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<MusclesDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

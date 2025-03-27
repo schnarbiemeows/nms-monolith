@@ -1,13 +1,19 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.WorkoutsDTO;
-import java.math.BigDecimal;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.*;
+import java.sql.Timestamp;
 
-
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.math.*;
 
 
 /**
@@ -15,26 +21,22 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class WorkoutsDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		WorkoutsDTO classUnderTest = new WorkoutsDTO();
-		classUnderTest.setWorkoutId(1);
-		classUnderTest.setUserId(1);
+		classUnderTest.setWorkoutId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setCalendarDate(LocalDate.now());
-		classUnderTest.setExerciseTypeId(1);
-		classUnderTest.setDuration(1);
-		classUnderTest.setRating(BigDecimal.ONE);
+		classUnderTest.setExerciseTypeId(2);
+		classUnderTest.setDuration(2);
+		classUnderTest.setRating(new BigDecimal(1.00));
+		classUnderTest.setNotes("a");
 		classUnderTest.setActv("a");
-		classUnderTest.setNotes("notes");
 		assertTrue(true);
 		WorkoutsDTO newitem = new WorkoutsDTO(
 		classUnderTest.getWorkoutId(),
@@ -43,8 +45,8 @@ public class WorkoutsDTOTest {
 		classUnderTest.getExerciseTypeId(),
 		classUnderTest.getDuration(),
 		classUnderTest.getRating(),
-		classUnderTest.getActv(),
-		classUnderTest.getNotes());
+		classUnderTest.getNotes(),
+		classUnderTest.getActv());
 		assertNotNull(newitem);
 		String string = classUnderTest.toString();
 		assertNotNull(string);

@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.PaymentTypeDTO;
-import org.springframework.stereotype.Service;
+import com.schnarbiesnmeowers.nmsmonolith.entities.PaymentType;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.PaymentTypeRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,70 +22,120 @@ import org.springframework.stereotype.Service;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class PaymentTypeServiceTest {
+@ExtendWith(MockitoExtension.class)
+class PaymentTypeServiceTest {
 
+    @Mock
+    private PaymentTypeRepository paymenttypeRepository;
 
-	/**
-	 * get all PaymentType records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<PaymentTypeDTO> getAllPaymentType() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<PaymentTypeDTO> paymenttypeDTO = new ArrayList<PaymentTypeDTO>();
-		return paymenttypeDTO;
+    @InjectMocks
+    private PaymentTypeService paymenttypeService;
+
+    private PaymentType paymenttype;
+    private PaymentTypeDTO paymenttypeDTO;
+
+    @BeforeEach
+    void setUp() {
+        paymenttype = generateRandomPaymentTypeEntity();
+        paymenttypeDTO = generateRandomPaymentType();
+    }
+
+    @Test
+    void testGetAllPaymentType() throws Exception {
+        when(paymenttypeRepository.findAll()).thenReturn(Collections.singletonList(paymenttype));
+
+        List<PaymentTypeDTO> result = paymenttypeService.getAllPaymentType();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindPaymentTypeById_Found() throws Exception {
+        when(paymenttypeRepository.findById(anyInt())).thenReturn(Optional.of(paymenttype));
+
+        PaymentTypeDTO result = paymenttypeService.findPaymentTypeById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindPaymentTypeById_NotFound() {
+        when(paymenttypeRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            paymenttypeService.findPaymentTypeById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreatePaymentType() {
+        when(paymenttypeRepository.save(any(PaymentType.class))).thenReturn(paymenttype);
+
+        PaymentTypeDTO result = paymenttypeService.createPaymentType(paymenttypeDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdatePaymentType_Found() throws Exception {
+        when(paymenttypeRepository.findById(anyInt())).thenReturn(Optional.of(paymenttype));
+        when(paymenttypeRepository.save(any(PaymentType.class))).thenReturn(paymenttype);
+
+        PaymentTypeDTO result = paymenttypeService.updatePaymentType(paymenttypeDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdatePaymentType_NotFound() {
+        when(paymenttypeRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            paymenttypeService.updatePaymentType(paymenttypeDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeletePaymentType_Found() throws Exception {
+        when(paymenttypeRepository.findById(anyInt())).thenReturn(Optional.of(paymenttype));
+        doNothing().when(paymenttypeRepository).deleteById(anyInt());
+
+        String result = paymenttypeService.deletePaymentType(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeletePaymentType_NotFound() {
+        when(paymenttypeRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            paymenttypeService.deletePaymentType(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static PaymentTypeDTO generateRandomPaymentType() {
+		PaymentTypeDTO record = new PaymentTypeDTO();
+		record.setPaymentTypeId(2);
+		record.setPaymentTypeCde(Randomizer.randomString(10));
+		record.setPaymentTypeDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get PaymentType by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public PaymentTypeDTO findPaymentTypeById(int id) throws Exception {
-		return new PaymentTypeDTO();
+    public static PaymentType generateRandomPaymentTypeEntity() {
+		PaymentType record = new PaymentType();
+		record.setPaymentTypeId(2);
+		record.setPaymentTypeCde(Randomizer.randomString(10));
+		record.setPaymentTypeDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * create a new PaymentType
-	 * @param data
-	 * @return
-	 */
-	public PaymentTypeDTO createPaymentType(PaymentTypeDTO data) {
-        data.setPaymentTypeId(1);
-        return data;
-	}
-
-	/**
-	 * update a PaymentType
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public PaymentTypeDTO updatePaymentType(PaymentTypeDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a PaymentType by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deletePaymentType(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<PaymentTypeDTO> by foreign key : imageLoc
-	 * @param id
-	 * @return List<PaymentType>
-	 * @throws Exception
-	*/
-	public List<PaymentTypeDTO> findPaymentTypeByImageLoc(int id) throws Exception {
-		List<PaymentTypeDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

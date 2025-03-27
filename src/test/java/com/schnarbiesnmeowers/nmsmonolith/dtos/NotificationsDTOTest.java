@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.math.*;
 
 
 /**
@@ -14,20 +18,16 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class NotificationsDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		NotificationsDTO classUnderTest = new NotificationsDTO();
-		classUnderTest.setNotificationId(1);
-		classUnderTest.setEventId(1);
+		classUnderTest.setNotificationId(2);
+		classUnderTest.setEventId(2);
 		classUnderTest.setNotifTime(new java.sql.Time(1000));
 		classUnderTest.setNextNotifDate(new Date());
 		classUnderTest.setDelivered("a");

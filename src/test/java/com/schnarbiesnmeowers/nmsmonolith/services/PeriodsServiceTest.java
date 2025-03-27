@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Component;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.PeriodsDTO;
-import org.springframework.stereotype.Service;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Periods;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.PeriodsRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,70 +22,120 @@ import org.springframework.stereotype.Service;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class PeriodsServiceTest {
+@ExtendWith(MockitoExtension.class)
+class PeriodsServiceTest {
 
+    @Mock
+    private PeriodsRepository periodsRepository;
 
-	/**
-	 * get all Periods records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<PeriodsDTO> getAllPeriods() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<PeriodsDTO> periodsDTO = new ArrayList<PeriodsDTO>();
-		return periodsDTO;
+    @InjectMocks
+    private PeriodsService periodsService;
+
+    private Periods periods;
+    private PeriodsDTO periodsDTO;
+
+    @BeforeEach
+    void setUp() {
+        periods = generateRandomPeriodsEntity();
+        periodsDTO = generateRandomPeriods();
+    }
+
+    @Test
+    void testGetAllPeriods() throws Exception {
+        when(periodsRepository.findAll()).thenReturn(Collections.singletonList(periods));
+
+        List<PeriodsDTO> result = periodsService.getAllPeriods();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindPeriodsById_Found() throws Exception {
+        when(periodsRepository.findById(anyInt())).thenReturn(Optional.of(periods));
+
+        PeriodsDTO result = periodsService.findPeriodsById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindPeriodsById_NotFound() {
+        when(periodsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            periodsService.findPeriodsById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreatePeriods() {
+        when(periodsRepository.save(any(Periods.class))).thenReturn(periods);
+
+        PeriodsDTO result = periodsService.createPeriods(periodsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdatePeriods_Found() throws Exception {
+        when(periodsRepository.findById(anyInt())).thenReturn(Optional.of(periods));
+        when(periodsRepository.save(any(Periods.class))).thenReturn(periods);
+
+        PeriodsDTO result = periodsService.updatePeriods(periodsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdatePeriods_NotFound() {
+        when(periodsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            periodsService.updatePeriods(periodsDTO);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeletePeriods_Found() throws Exception {
+        when(periodsRepository.findById(anyInt())).thenReturn(Optional.of(periods));
+        doNothing().when(periodsRepository).deleteById(anyInt());
+
+        String result = periodsService.deletePeriods(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeletePeriods_NotFound() {
+        when(periodsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            periodsService.deletePeriods(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static PeriodsDTO generateRandomPeriods() {
+		PeriodsDTO record = new PeriodsDTO();
+		record.setPeriodId(2);
+		record.setPeriodTypeId(Randomizer.randomInt(1000));
+		record.setOneTimeDate(Randomizer.randomDate());
+		record.setDayOfWeek(Randomizer.randomString(2));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * get Periods by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public PeriodsDTO findPeriodsById(int id) throws Exception {
-		return new PeriodsDTO();
+    public static Periods generateRandomPeriodsEntity() {
+		Periods record = new Periods();
+		record.setPeriodId(2);
+		record.setPeriodTypeId(Randomizer.randomInt(1000));
+		record.setOneTimeDate(Randomizer.randomDate());
+		record.setDayOfWeek(Randomizer.randomString(2));
+		record.setActv(Randomizer.randomString(2));
+		return record;
 	}
-
-	/**
-	 * create a new Periods
-	 * @param data
-	 * @return
-	 */
-	public PeriodsDTO createPeriods(PeriodsDTO data) {
-        data.setPeriodId(1);
-        return data;
-	}
-
-	/**
-	 * update a Periods
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public PeriodsDTO updatePeriods(PeriodsDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a Periods by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deletePeriods(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<PeriodsDTO> by foreign key : periodTypeId
-	 * @param id
-	 * @return List<Periods>
-	 * @throws Exception
-	*/
-	public List<PeriodsDTO> findPeriodsByPeriodTypeId(int id) throws Exception {
-		List<PeriodsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

@@ -1,11 +1,17 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.brands.BrandsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 
-
-
-
+import java.math.*;
 
 
 /**
@@ -13,24 +19,18 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.brands.BrandsDTO;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class BrandsDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		BrandsDTO classUnderTest = new BrandsDTO();
-		classUnderTest.setBrandId(1);
+		classUnderTest.setBrandId(2);
 		classUnderTest.setBrandType("a");
 		classUnderTest.setBrandName("a");
-		classUnderTest.setImageLoc(1);
+		classUnderTest.setImageLoc(2);
 		classUnderTest.setActv("a");
 		assertTrue(true);
 		BrandsDTO newitem = new BrandsDTO(

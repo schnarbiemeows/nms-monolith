@@ -3,7 +3,7 @@ package com.schnarbiesnmeowers.nmsmonolith.entities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.TemplateItemsDTO;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -14,7 +14,7 @@ public class TemplateItems implements Serializable {
 
     @Column(name = "template_items_id")
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer templateItemsId;
 
     @Column(name = "template_id")

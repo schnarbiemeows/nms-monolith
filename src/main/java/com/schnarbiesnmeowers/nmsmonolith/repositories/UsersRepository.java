@@ -7,7 +7,7 @@ import com.schnarbiesnmeowers.nmsmonolith.entities.Users;
  * @author Dylan I. Kessler
  *
  */
-public interface UsersRepository extends JpaRepository<Users, Integer> {
+public interface UsersRepository extends JpaRepository<Users, Integer>{
 
 
 }

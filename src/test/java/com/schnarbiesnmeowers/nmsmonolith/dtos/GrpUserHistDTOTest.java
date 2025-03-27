@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.math.*;
 
 
 /**
@@ -14,25 +18,21 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class GrpUserHistDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		GrpUserHistDTO classUnderTest = new GrpUserHistDTO();
-		classUnderTest.setGrpUserHistId(1);
-		classUnderTest.setGrpUserId(1);
-		classUnderTest.setGrpId(1);
-		classUnderTest.setUserId(1);
-		classUnderTest.setActionTypeId(1);
+		classUnderTest.setGrpUserHistId(2);
+		classUnderTest.setGrpUserId(2);
+		classUnderTest.setGrpId(2);
+		classUnderTest.setUserId(2);
+		classUnderTest.setActionTypeId(2);
 		classUnderTest.setEvntTmestmp(new Date());
-		classUnderTest.setEvntOperId(1);
+		classUnderTest.setEvntOperId(2);
 		assertTrue(true);
 		GrpUserHistDTO newitem = new GrpUserHistDTO(
 		classUnderTest.getGrpUserHistId(),

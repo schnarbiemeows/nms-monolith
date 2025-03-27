@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
-import com.schnarbiesnmeowers.nmsmonolith.entities.Notifications;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
-
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
-
-
-
+import java.sql.Timestamp;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Notifications;
+import java.math.*;
 
 
 /**
@@ -14,22 +18,16 @@ import java.util.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class NotificationsTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		Notifications classUnderTest = new Notifications();
-		classUnderTest.setNotificationId(1);
-		classUnderTest.setEventId(1);
+		classUnderTest.setNotificationId(2);
+		classUnderTest.setEventId(2);
 		classUnderTest.setNotifTime(new java.sql.Time(1000));
 		classUnderTest.setNextNotifDate(new Date());
 		classUnderTest.setDelivered("a");

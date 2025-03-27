@@ -1,29 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import org.springframework.web.client.RestTemplate;
+import java.util.Arrays;
+import java.util.List;
 
+import com.schnarbiesnmeowers.nmsmonolith.repositories.ActionTypeRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.ActionTypeDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.ActionTypeService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -35,124 +32,115 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ActionTypeControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private ActionTypeController actiontypeController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private ActionTypeService actiontypeService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private ActionTypeRepository actiontypeRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(actiontypeController).build();
+    }
 
 	/**
 	 * test creating a new ActionType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreateActionType() throws URISyntaxException
+	@Test
+	public void testA_CreateActionType() throws Exception
 	{
 	    ActionTypeDTO actiontype = generateRandomActionType();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(actiontype.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/actiontype/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<ActionTypeDTO> request = new HttpEntity<>(actiontype,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(actiontypeService.createActionType(any(ActionTypeDTO.class))).thenReturn(actiontype);
+
+        mockMvc.perform(post("/actiontype/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(actiontype)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all ActionType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllActionType() throws URISyntaxException
+	@Test
+	public void testB_GetAllActionType() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/actiontype/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<ActionTypeDTO> actiontypes = Arrays.asList(generateRandomActionType(), generateRandomActionType());
+        when(actiontypeService.getAllActionType()).thenReturn(actiontypes);
+
+        mockMvc.perform(get("/actiontype/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single ActionType by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetActionType() throws URISyntaxException
+	@Test
+	public void testC_GetActionType() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/actiontype/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		ActionTypeDTO actiontype = generateRandomActionType();
+        when(actiontypeService.findActionTypeById(anyInt())).thenReturn(actiontype);
+
+        mockMvc.perform(get("/actiontype/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a ActionType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdateActionType() throws URISyntaxException
+	@Test
+	public void testD_UpdateActionType() throws Exception
 	{
 	    ActionTypeDTO actiontype = generateRandomActionType();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/actiontype/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<ActionTypeDTO> request = new HttpEntity<>(actiontype);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(actiontypeService.updateActionType(any(ActionTypeDTO.class))).thenReturn(actiontype);
+
+        mockMvc.perform(post("/actiontype/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(actiontype)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a ActionType
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeleteActionType() throws URISyntaxException
+	@Test
+	public void testE_DeleteActionType() throws Exception
 	{
-		ActionTypeDTO actiontype = generateRandomActionType();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/actiontype/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<ActionTypeDTO> request = new HttpEntity<>(actiontype);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(actiontypeService.deleteActionType(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/actiontype/delete/2"))
+                .andExpect(status().isOk());
 	}
+
 
 
 	public static ActionTypeDTO generateRandomActionType() {
 		ActionTypeDTO record = new ActionTypeDTO();
 		record.setActionTypeCde(Randomizer.randomString(5));
 		record.setActionTypeDesc(Randomizer.randomString(20));
-		record.setActv(Randomizer.randomString(1));
+		record.setActv(Randomizer.randomString(2));
 		return record;
 	}
 }

@@ -1,28 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import org.springframework.web.client.RestTemplate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.PeriodsRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.PeriodsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.PeriodsService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -34,139 +32,128 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class PeriodsControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private PeriodsController periodsController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private PeriodsService periodsService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private PeriodsRepository periodsRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(periodsController).build();
+    }
 
 	/**
 	 * test creating a new Periods
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreatePeriods() throws URISyntaxException
+	@Test
+	public void testA_CreatePeriods() throws Exception
 	{
 	    PeriodsDTO periods = generateRandomPeriods();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(periods.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/periods/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<PeriodsDTO> request = new HttpEntity<>(periods,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(periodsService.createPeriods(any(PeriodsDTO.class))).thenReturn(periods);
+
+        mockMvc.perform(post("/periods/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(periods)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all Periods
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllPeriods() throws URISyntaxException
+	@Test
+	public void testB_GetAllPeriods() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/periods/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<PeriodsDTO> periodss = Arrays.asList(generateRandomPeriods(), generateRandomPeriods());
+        when(periodsService.getAllPeriods()).thenReturn(periodss);
+
+        mockMvc.perform(get("/periods/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single Periods by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetPeriods() throws URISyntaxException
+	@Test
+	public void testC_GetPeriods() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/periods/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		PeriodsDTO periods = generateRandomPeriods();
+        when(periodsService.findPeriodsById(anyInt())).thenReturn(periods);
+
+        mockMvc.perform(get("/periods/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a Periods
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdatePeriods() throws URISyntaxException
+	@Test
+	public void testD_UpdatePeriods() throws Exception
 	{
 	    PeriodsDTO periods = generateRandomPeriods();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/periods/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<PeriodsDTO> request = new HttpEntity<>(periods);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(periodsService.updatePeriods(any(PeriodsDTO.class))).thenReturn(periods);
+
+        mockMvc.perform(post("/periods/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(periods)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a Periods
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeletePeriods() throws URISyntaxException
+	@Test
+	public void testE_DeletePeriods() throws Exception
 	{
-		PeriodsDTO periods = generateRandomPeriods();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/periods/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<PeriodsDTO> request = new HttpEntity<>(periods);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(periodsService.deletePeriods(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/periods/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all Periods by foreign key periodTypeId
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetPeriodsByPeriodTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/periods/findByPeriodTypeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single Periods by field PeriodTypeId
+ * @throws
+ */
+@Test
+public void testC_findByPeriodTypeId() throws Exception
+{
+    List<PeriodsDTO> periods = Arrays.asList(generateRandomPeriods());
+    when(periodsService.findPeriodsByPeriodTypeId(anyInt())).thenReturn(periods);
 
+    mockMvc.perform(get("/periods/findByPeriodTypeId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static PeriodsDTO generateRandomPeriods() {
 		PeriodsDTO record = new PeriodsDTO();
 		record.setPeriodTypeId(Randomizer.randomInt(1000));
 		record.setOneTimeDate(Randomizer.randomDate());
 		record.setDayOfWeek(Randomizer.randomString(2));
-		record.setActv(Randomizer.randomString(1));
+		record.setActv(Randomizer.randomString(2));
 		return record;
 	}
 }

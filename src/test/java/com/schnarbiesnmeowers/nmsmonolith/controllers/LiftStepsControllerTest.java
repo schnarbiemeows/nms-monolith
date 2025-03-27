@@ -1,28 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import org.springframework.web.client.RestTemplate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.LiftStepsRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.LiftStepsDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.LiftStepsService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -34,160 +32,133 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class LiftStepsControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private LiftStepsController liftstepsController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private LiftStepsService liftstepsService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private LiftStepsRepository liftstepsRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(liftstepsController).build();
+    }
 
 	/**
 	 * test creating a new LiftSteps
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreateLiftSteps() throws URISyntaxException
+	@Test
+	public void testA_CreateLiftSteps() throws Exception
 	{
 	    LiftStepsDTO liftsteps = generateRandomLiftSteps();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(liftsteps.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/liftsteps/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<LiftStepsDTO> request = new HttpEntity<>(liftsteps,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(liftstepsService.createLiftSteps(any(LiftStepsDTO.class))).thenReturn(liftsteps);
+
+        mockMvc.perform(post("/liftsteps/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(liftsteps)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all LiftSteps
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllLiftSteps() throws URISyntaxException
+	@Test
+	public void testB_GetAllLiftSteps() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/liftsteps/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<LiftStepsDTO> liftstepss = Arrays.asList(generateRandomLiftSteps(), generateRandomLiftSteps());
+        when(liftstepsService.getAllLiftSteps()).thenReturn(liftstepss);
+
+        mockMvc.perform(get("/liftsteps/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single LiftSteps by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetLiftSteps() throws URISyntaxException
+	@Test
+	public void testC_GetLiftSteps() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/liftsteps/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		LiftStepsDTO liftsteps = generateRandomLiftSteps();
+        when(liftstepsService.findLiftStepsById(anyInt())).thenReturn(liftsteps);
+
+        mockMvc.perform(get("/liftsteps/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a LiftSteps
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdateLiftSteps() throws URISyntaxException
+	@Test
+	public void testD_UpdateLiftSteps() throws Exception
 	{
 	    LiftStepsDTO liftsteps = generateRandomLiftSteps();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/liftsteps/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<LiftStepsDTO> request = new HttpEntity<>(liftsteps);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(liftstepsService.updateLiftSteps(any(LiftStepsDTO.class))).thenReturn(liftsteps);
+
+        mockMvc.perform(post("/liftsteps/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(liftsteps)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a LiftSteps
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeleteLiftSteps() throws URISyntaxException
+	@Test
+	public void testE_DeleteLiftSteps() throws Exception
 	{
-		LiftStepsDTO liftsteps = generateRandomLiftSteps();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/liftsteps/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<LiftStepsDTO> request = new HttpEntity<>(liftsteps);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(liftstepsService.deleteLiftSteps(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/liftsteps/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all LiftSteps by foreign key liftId
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetLiftStepsByLiftId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/liftsteps/findByLiftId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single LiftSteps by field LiftId
+ * @throws
+ */
+@Test
+public void testC_findByLiftId() throws Exception
+{
+    List<LiftStepsDTO> liftsteps = Arrays.asList(generateRandomLiftSteps());
+    when(liftstepsService.findLiftStepsByLiftId(anyInt())).thenReturn(liftsteps);
 
-	/**
-	 * test getting all LiftSteps by foreign key imageLoc
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetLiftStepsByImageLoc() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/liftsteps/findByImageLoc/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/liftsteps/findByLiftId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single LiftSteps by field ImageLoc
+ * @throws
+ */
+@Test
+public void testC_findByImageLoc() throws Exception
+{
+    List<LiftStepsDTO> liftsteps = Arrays.asList(generateRandomLiftSteps());
+    when(liftstepsService.findLiftStepsByImageLoc(anyInt())).thenReturn(liftsteps);
 
-	/**
-	 * test getting all LiftSteps by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetLiftStepsByLiftIdAndImageLoc() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/liftsteps/findByLiftIdAndImageLoc/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/liftsteps/findByImageLoc/2"))
+            .andExpect(status().isOk());
+}
 
 	public static LiftStepsDTO generateRandomLiftSteps() {
 		LiftStepsDTO record = new LiftStepsDTO();

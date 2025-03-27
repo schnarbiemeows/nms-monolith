@@ -1,7 +1,7 @@
 package com.schnarbiesnmeowers.nmsmonolith.entities.workout;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.StepsDTO;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import com.google.gson.Gson;
 
@@ -23,7 +23,7 @@ public class Steps implements Serializable {
 	 */
 	@Column(name = "step_id")
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer stepId;
 
 	/**

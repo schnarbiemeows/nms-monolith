@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.entities;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.DailyJournalDTO;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,7 +12,7 @@ public class DailyJournal implements Serializable {
 
     @Column(name = "daily_journal_id")
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer dailyJournalId;
 
     @Column(name = "user_id")

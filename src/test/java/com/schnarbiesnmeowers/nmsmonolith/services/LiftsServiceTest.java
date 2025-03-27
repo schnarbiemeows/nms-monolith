@@ -1,11 +1,20 @@
 package com.schnarbiesnmeowers.nmsmonolith.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.LiftsDTO;
+import com.schnarbiesnmeowers.nmsmonolith.entities.Lifts;
+import com.schnarbiesnmeowers.nmsmonolith.repositories.LiftsRepository;
+import com.schnarbiesnmeowers.nmsmonolith.exceptions.ResourceNotFoundException;
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
 
 /**
  * this class retrieves data from the controller class
@@ -13,92 +22,120 @@ import com.schnarbiesnmeowers.nmsmonolith.dtos.LiftsDTO;
  * @author Dylan I. Kessler
  *
  */
-@Service
-public class LiftsServiceTest {
+@ExtendWith(MockitoExtension.class)
+class LiftsServiceTest {
 
+    @Mock
+    private LiftsRepository liftsRepository;
 
-	/**
-	 * get all Lifts records
-	 * @return
-	 * @throws Exception
-	 */
-	public List<LiftsDTO> getAllLifts() throws Exception {
-	    System.out.println("Inside Mock Business Class");
-		List<LiftsDTO> liftsDTO = new ArrayList<LiftsDTO>();
-		return liftsDTO;
+    @InjectMocks
+    private LiftsService liftsService;
+
+    private Lifts lifts;
+    private LiftsDTO liftsDTO;
+
+    @BeforeEach
+    void setUp() {
+        lifts = generateRandomLiftsEntity();
+        liftsDTO = generateRandomLifts();
+    }
+
+    @Test
+    void testGetAllLifts() throws Exception {
+        when(liftsRepository.findAll()).thenReturn(Collections.singletonList(lifts));
+
+        List<LiftsDTO> result = liftsService.getAllLifts();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testFindLiftsById_Found() throws Exception {
+        when(liftsRepository.findById(anyInt())).thenReturn(Optional.of(lifts));
+
+        LiftsDTO result = liftsService.findLiftsById(anyInt());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindLiftsById_NotFound() {
+        when(liftsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            liftsService.findLiftsById(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void testCreateLifts() {
+        when(liftsRepository.save(any(Lifts.class))).thenReturn(lifts);
+
+        LiftsDTO result = liftsService.createLifts(liftsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateLifts_Found() throws Exception {
+        when(liftsRepository.findById(anyInt())).thenReturn(Optional.of(lifts));
+        when(liftsRepository.save(any(Lifts.class))).thenReturn(lifts);
+
+        LiftsDTO result = liftsService.updateLifts(liftsDTO);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdateLifts_NotFound() {
+        when(liftsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            liftsService.updateLifts(liftsDTO);
+        });
+
+        assertEquals("id = " + liftsDTO.getLiftId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteLifts_Found() throws Exception {
+        when(liftsRepository.findById(anyInt())).thenReturn(Optional.of(lifts));
+        doNothing().when(liftsRepository).deleteById(anyInt());
+
+        String result = liftsService.deleteLifts(anyInt());
+
+        assertEquals("Successfully Deleted", result);
+    }
+
+    @Test
+    void testDeleteLifts_NotFound() {
+        when(liftsRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            liftsService.deleteLifts(2);
+        });
+
+        assertEquals("id = 2 not found", exception.getMessage());
+    }
+
+    public static LiftsDTO generateRandomLifts() {
+		LiftsDTO record = new LiftsDTO();
+		record.setLiftId(2);
+		record.setLiftDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		record.setMuscleGroupId(Randomizer.randomInt(1000));
+		return record;
 	}
-
-	/**
-	 * get Lifts by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public LiftsDTO findLiftsById(int id) throws Exception {
-		return new LiftsDTO();
+    public static Lifts generateRandomLiftsEntity() {
+		Lifts record = new Lifts();
+		record.setLiftId(2);
+		record.setLiftDesc(Randomizer.randomString(20));
+		record.setImageLoc(Randomizer.randomInt(1000));
+		record.setActv(Randomizer.randomString(2));
+		record.setMuscleGroupId(Randomizer.randomInt(1000));
+		return record;
 	}
-
-	/**
-	 * create a new Lifts
-	 * @param data
-	 * @return
-	 */
-	public LiftsDTO createLifts(LiftsDTO data) {
-        data.setLiftId(1);
-        return data;
-	}
-
-	/**
-	 * update a Lifts
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	public LiftsDTO updateLifts(LiftsDTO data) throws Exception {
-		return data;
-	}
-
-	/**
-	 * delete a Lifts by primary key
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public String deleteLifts(int id) throws Exception {
-		return "Successfully Deleted";
-	}
-
-	/**
-	 * get List<LiftsDTO> by foreign key : muscleId
-	 * @param muscleId
-	 * @return List<Lifts>
-	 * @throws Exception
-	*/
-	public List<LiftsDTO> findLiftsByMuscleId(int id) throws Exception {
-		List<LiftsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<LiftsDTO> by foreign key : imageLoc
-	 * @param imageLoc
-	 * @return List<Lifts>
-	 * @throws Exception
-	*/
-	public List<LiftsDTO> findLiftsByImageLoc(int id) throws Exception {
-		List<LiftsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
-	/**
-	 * get List<LiftsDTO> by foreign key : MuscleIdAndImageLoc
-	 * @param MuscleIdAndImageLoc
-	 * @return List<Lifts>
-	 * @throws Exception
-	*/
-	public List<LiftsDTO> findLiftsByMuscleIdAndImageLoc(@PathVariable int id0,@PathVariable int id1) throws Exception {
-		List<LiftsDTO> resultsdto = new ArrayList();
-		return resultsdto;
-	}
-
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 
 import com.schnarbiesnmeowers.nmsmonolith.services.*;
@@ -53,7 +53,7 @@ public class GoalGroupsController {
 
 	/**
 	 * create a new GoalGroups
-	 * @param GoalGroupsDTO
+	 * @param data
 	 * @return GoalGroups
 	 */
 	@PostMapping(path = "/create")
@@ -68,7 +68,7 @@ public class GoalGroupsController {
 
 	/**
 	 * update a GoalGroups
-	 * @param GoalGroupsDTO
+	 * @param data
 	 * @return GoalGroups
 	 */
 	@PostMapping(path = "/update")
@@ -90,7 +90,7 @@ public class GoalGroupsController {
 
 	/**
 	 * get List<GoalGroupsDTO> by foreign key : goalId1
-	 * @param goalId1
+	 * @param id
 	 * @return List<GoalGroups>
 	 * @throws Exception
 	*/
@@ -102,7 +102,7 @@ public class GoalGroupsController {
 
 	/**
 	 * get List<GoalGroupsDTO> by foreign key : goalId2
-	 * @param goalId2
+	 * @param id
 	 * @return List<GoalGroups>
 	 * @throws Exception
 	*/
@@ -114,7 +114,7 @@ public class GoalGroupsController {
 
 	/**
 	 * get List<GoalGroupsDTO> by foreign key : GoalId1AndGoalId2
-	 * @param GoalId1AndGoalId2
+	 * @param id0
 	 * @return List<GoalGroups>
 	 * @throws Exception
 	*/

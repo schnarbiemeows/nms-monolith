@@ -1,12 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.math.*;
 
 
 /**
@@ -14,21 +18,17 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class LiftLiftEqpDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		LiftLiftEqpDTO classUnderTest = new LiftLiftEqpDTO();
-		classUnderTest.setLiftLiftEqpId(1);
-		classUnderTest.setLiftId(1);
-		classUnderTest.setLiftEquipId(1);
+		classUnderTest.setLiftLiftEqpId(2);
+		classUnderTest.setLiftId(2);
+		classUnderTest.setLiftEquipId(2);
 		assertTrue(true);
 		LiftLiftEqpDTO newitem = new LiftLiftEqpDTO(
 		classUnderTest.getLiftLiftEqpId(),

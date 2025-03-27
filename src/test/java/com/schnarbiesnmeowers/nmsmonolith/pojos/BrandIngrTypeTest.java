@@ -1,11 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.pojos;
 
+import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
 import com.schnarbiesnmeowers.nmsmonolith.entities.BrandIngrType;
-
-
-
-
-
+import java.math.*;
 
 
 /**
@@ -13,24 +18,18 @@ import com.schnarbiesnmeowers.nmsmonolith.entities.BrandIngrType;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(MockitoExtension.class)
 public class BrandIngrTypeTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		BrandIngrType classUnderTest = new BrandIngrType();
-		classUnderTest.setBrandIngrTypeId(1);
-		classUnderTest.setBrandId(1);
-		classUnderTest.setIngrTypeId(1);
-		classUnderTest.setPrntIngrType(1);
+		classUnderTest.setBrandIngrTypeId(2);
+		classUnderTest.setBrandId(2);
+		classUnderTest.setIngrTypeId(2);
+		classUnderTest.setPrntIngrType(2);
 		assertTrue(true);
 		BrandIngrType newitem = new BrandIngrType(
 		classUnderTest.getBrandIngrTypeId(),

@@ -1,30 +1,29 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.BldstTableRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.BldstTableDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.BldstTableService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * this class tests the BldstTableController class
@@ -33,124 +32,115 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class BldstTableControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private BldstTableController bldsttableController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private BldstTableService bldsttableService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private BldstTableRepository bldsttableRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(bldsttableController).build();
+    }
 
 	/**
 	 * test creating a new BldstTable
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreateBldstTable() throws URISyntaxException
+	@Test
+	public void testA_CreateBldstTable() throws Exception
 	{
 	    BldstTableDTO bldsttable = generateRandomBldstTable();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(bldsttable.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/bldsttable/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<BldstTableDTO> request = new HttpEntity<>(bldsttable,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(bldsttableService.createBldstTable(any(BldstTableDTO.class))).thenReturn(bldsttable);
+
+        mockMvc.perform(post("/bldsttable/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(bldsttable)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all BldstTable
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllBldstTable() throws URISyntaxException
+	@Test
+	public void testB_GetAllBldstTable() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/bldsttable/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<BldstTableDTO> bldsttables = Arrays.asList(generateRandomBldstTable(), generateRandomBldstTable());
+        when(bldsttableService.getAllBldstTable()).thenReturn(bldsttables);
+
+        mockMvc.perform(get("/bldsttable/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single BldstTable by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetBldstTable() throws URISyntaxException
+	@Test
+	public void testC_GetBldstTable() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/bldsttable/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		BldstTableDTO bldsttable = generateRandomBldstTable();
+        when(bldsttableService.findBldstTableById(anyInt())).thenReturn(bldsttable);
+
+        mockMvc.perform(get("/bldsttable/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a BldstTable
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdateBldstTable() throws URISyntaxException
+	@Test
+	public void testD_UpdateBldstTable() throws Exception
 	{
 	    BldstTableDTO bldsttable = generateRandomBldstTable();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/bldsttable/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<BldstTableDTO> request = new HttpEntity<>(bldsttable);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(bldsttableService.updateBldstTable(any(BldstTableDTO.class))).thenReturn(bldsttable);
+
+        mockMvc.perform(post("/bldsttable/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(bldsttable)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a BldstTable
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeleteBldstTable() throws URISyntaxException
+	@Test
+	public void testE_DeleteBldstTable() throws Exception
 	{
-		BldstTableDTO bldsttable = generateRandomBldstTable();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/bldsttable/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<BldstTableDTO> request = new HttpEntity<>(bldsttable);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(bldsttableService.deleteBldstTable(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/bldsttable/delete/2"))
+                .andExpect(status().isOk());
 	}
+
 
 
 	public static BldstTableDTO generateRandomBldstTable() {
 		BldstTableDTO record = new BldstTableDTO();
 		record.setBldstCde(Randomizer.randomString(3));
 		record.setBldstDesc(Randomizer.randomString(20));
-		record.setActv(Randomizer.randomString(1));
+		record.setActv(Randomizer.randomString(2));
 		return record;
 	}
 }

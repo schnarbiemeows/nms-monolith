@@ -1,11 +1,16 @@
 package com.schnarbiesnmeowers.nmsmonolith.dtos;
 
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
-
-import java.util.*;
-import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.sql.Timestamp;
+
+import java.math.*;
 
 
 /**
@@ -13,34 +18,30 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Dylan I. Kessler
  *
  */
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 public class DailyDietTotalsDTOTest {
 
 	/**
 	 * test both constructors, getters and setters, and toString() method
 	 */
-	//@Test
+	@Test
 	public void testClass() {
 		DailyDietTotalsDTO classUnderTest = new DailyDietTotalsDTO();
-		classUnderTest.setDailyDietTotalId(1);
-		classUnderTest.setUserId(1);
+		classUnderTest.setDailyDietTotalId(2);
+		classUnderTest.setUserId(2);
 		classUnderTest.setCalendarDate(new Date());
-		classUnderTest.setBldstId(1);
-		classUnderTest.setKcalories(BigDecimal.ONE);
-		classUnderTest.setTotFat(BigDecimal.ONE);
-		classUnderTest.setSatFat(BigDecimal.ONE);
-		classUnderTest.setTransFat(BigDecimal.ONE);
-		classUnderTest.setPolyFat(BigDecimal.ONE);
-		classUnderTest.setMonoFat(BigDecimal.ONE);
-		classUnderTest.setCholes(BigDecimal.ONE);
-		classUnderTest.setSodium(1);
-		classUnderTest.setTotCarbs(BigDecimal.ONE);
-		classUnderTest.setTotFiber(BigDecimal.ONE);
-		classUnderTest.setTotSugars(BigDecimal.ONE);
-		classUnderTest.setTotProtein(BigDecimal.ONE);
+		classUnderTest.setBldstId(2);
+		classUnderTest.setKcalories(new BigDecimal(1.00));
+		classUnderTest.setTotFat(new BigDecimal(1.00));
+		classUnderTest.setSatFat(new BigDecimal(1.00));
+		classUnderTest.setTransFat(new BigDecimal(1.00));
+		classUnderTest.setPolyFat(new BigDecimal(1.00));
+		classUnderTest.setMonoFat(new BigDecimal(1.00));
+		classUnderTest.setCholes(new BigDecimal(1.00));
+		classUnderTest.setSodium(2);
+		classUnderTest.setTotCarbs(new BigDecimal(1.00));
+		classUnderTest.setTotFiber(new BigDecimal(1.00));
+		classUnderTest.setTotSugars(new BigDecimal(1.00));
+		classUnderTest.setTotProtein(new BigDecimal(1.00));
 		assertTrue(true);
 		DailyDietTotalsDTO newitem = new DailyDietTotalsDTO(
 		classUnderTest.getDailyDietTotalId(),

@@ -2,7 +2,7 @@ package com.schnarbiesnmeowers.nmsmonolith.entities.workout;
 
 import com.schnarbiesnmeowers.nmsmonolith.dtos.workout.LiftSetDTO;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -13,7 +13,7 @@ public class LiftSet {
 
     @Column(name = "lift_set_id")
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer liftSetId;
 
     @Column(name = "workout_lift_id")

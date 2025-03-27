@@ -1,28 +1,26 @@
 package com.schnarbiesnmeowers.nmsmonolith.controllers;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import org.springframework.web.client.RestTemplate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+import java.util.List;
+
+import com.schnarbiesnmeowers.nmsmonolith.repositories.GrpUserHistRepository;
 import com.schnarbiesnmeowers.nmsmonolith.dtos.GrpUserHistDTO;
 import com.schnarbiesnmeowers.nmsmonolith.services.GrpUserHistService;
 import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
@@ -34,202 +32,169 @@ import com.schnarbiesnmeowers.nmsmonolith.utilities.Randomizer;
  *
  */
 @ExtendWith(MockitoExtension.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class GrpUserHistControllerTest {
 
 	/**
 	 * generate a random port for testing
 	 */
-	@LocalServerPort
-	int randomServerPort;
+	private MockMvc mockMvc;
+
+    @InjectMocks
+    private GrpUserHistController grpuserhistController;
 
 	/**
 	 * create a Mock Business object
 	 */
+
 	@Mock
 	private GrpUserHistService grpuserhistService;
 
-	/**
-     * inject the Mock into the RestTemplate
-     */
-    @InjectMocks
-    private RestTemplate restTemplate = new RestTemplate();
+    @Mock
+    private GrpUserHistRepository grpuserhistRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+	@BeforeEach
+    void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mockMvc = MockMvcBuilders.standaloneSetup(grpuserhistController).build();
+    }
 
 	/**
 	 * test creating a new GrpUserHist
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testA_CreateGrpUserHist() throws URISyntaxException
+	@Test
+	public void testA_CreateGrpUserHist() throws Exception
 	{
 	    GrpUserHistDTO grpuserhist = generateRandomGrpUserHist();
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		System.out.println(grpuserhist.toString());
-		final String createUrl = "http://localhost:" + randomServerPort + "/grpuserhist/create";
-		URI uri = new URI(createUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<GrpUserHistDTO> request = new HttpEntity<>(grpuserhist,headers);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testCreate + " + result.getBody().toString());
-		assertEquals(201, result.getStatusCodeValue());
+        when(grpuserhistService.createGrpUserHist(any(GrpUserHistDTO.class))).thenReturn(grpuserhist);
+
+        mockMvc.perform(post("/grpuserhist/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(grpuserhist)))
+                .andExpect(status().isCreated());
     }
 
     /**
 	 * test getting all GrpUserHist
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testB_GetAllGrpUserHist() throws URISyntaxException
+	@Test
+	public void testB_GetAllGrpUserHist() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/all";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		List<GrpUserHistDTO> grpuserhists = Arrays.asList(generateRandomGrpUserHist(), generateRandomGrpUserHist());
+        when(grpuserhistService.getAllGrpUserHist()).thenReturn(grpuserhists);
+
+        mockMvc.perform(get("/grpuserhist/all"))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test getting a single GrpUserHist by primary key
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testC_GetGrpUserHist() throws URISyntaxException
+	@Test
+	public void testC_GetGrpUserHist() throws Exception
 	{
-		System.out.println("RANDOM SERVER PORT = " + randomServerPort);
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findById/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		GrpUserHistDTO grpuserhist = generateRandomGrpUserHist();
+        when(grpuserhistService.findGrpUserHistById(anyInt())).thenReturn(grpuserhist);
+
+        mockMvc.perform(get("/grpuserhist/findById/2"))
+                .andExpect(status().isOk());
 	}
 
     /**
 	 * test updating a GrpUserHist
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testD_UpdateGrpUserHist() throws URISyntaxException
+	@Test
+	public void testD_UpdateGrpUserHist() throws Exception
 	{
 	    GrpUserHistDTO grpuserhist = generateRandomGrpUserHist();
-		final String updateUrl = "http://localhost:" + randomServerPort + "/grpuserhist/update";
-		URI uri = new URI(updateUrl);
-		HttpEntity<GrpUserHistDTO> request = new HttpEntity<>(grpuserhist);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-		// Verify request succeed
-		System.out.println("FINISHED testUpdate + " + result.getBody().toString());
-		assertEquals(200, result.getStatusCodeValue());
+        when(grpuserhistService.updateGrpUserHist(any(GrpUserHistDTO.class))).thenReturn(grpuserhist);
+
+        mockMvc.perform(post("/grpuserhist/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(grpuserhist)))
+                .andExpect(status().isOk());
 	}
 
 	/**
 	 * test deleting a GrpUserHist
-	 * @throws URISyntaxException
+	 * @throws 
 	 */
-	//@Test
-	public void testE_DeleteGrpUserHist() throws URISyntaxException
+	@Test
+	public void testE_DeleteGrpUserHist() throws Exception
 	{
-		GrpUserHistDTO grpuserhist = generateRandomGrpUserHist();
-		int num = 1;
-		final String deleteUrl = "http://localhost:" + randomServerPort + "/grpuserhist/delete/" + num;
-		URI uri = new URI(deleteUrl);
-		HttpEntity<GrpUserHistDTO> request = new HttpEntity<>(grpuserhist);
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
-		System.out.println("FINISHED testDelete");
-		// Verify request succeed
-		assertEquals(200, result.getStatusCodeValue());
+		when(grpuserhistService.deleteGrpUserHist(anyInt())).thenReturn("successfully deleted");
+
+        mockMvc.perform(delete("/grpuserhist/delete/2"))
+                .andExpect(status().isOk());
 	}
 
-	/**
-	 * test getting all GrpUserHist by foreign key grpUserId
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetGrpUserHistByGrpUserId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByGrpUserId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+/**
+ * test getting a single GrpUserHist by field GrpUserId
+ * @throws
+ */
+@Test
+public void testC_findByGrpUserId() throws Exception
+{
+    List<GrpUserHistDTO> grpuserhist = Arrays.asList(generateRandomGrpUserHist());
+    when(grpuserhistService.findGrpUserHistByGrpUserId(anyInt())).thenReturn(grpuserhist);
 
-	/**
-	 * test getting all GrpUserHist by foreign key grpId
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetGrpUserHistByGrpId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByGrpId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/grpuserhist/findByGrpUserId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single GrpUserHist by field GrpId
+ * @throws
+ */
+@Test
+public void testC_findByGrpId() throws Exception
+{
+    List<GrpUserHistDTO> grpuserhist = Arrays.asList(generateRandomGrpUserHist());
+    when(grpuserhistService.findGrpUserHistByGrpId(anyInt())).thenReturn(grpuserhist);
 
-	/**
-	 * test getting all GrpUserHist by foreign key userId
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetGrpUserHistByUserId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByUserId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/grpuserhist/findByGrpId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single GrpUserHist by field UserId
+ * @throws
+ */
+@Test
+public void testC_findByUserId() throws Exception
+{
+    List<GrpUserHistDTO> grpuserhist = Arrays.asList(generateRandomGrpUserHist());
+    when(grpuserhistService.findGrpUserHistByUserId(anyInt())).thenReturn(grpuserhist);
 
-	/**
-	 * test getting all GrpUserHist by foreign key actionTypeId
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetGrpUserHistByActionTypeId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByActionTypeId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/grpuserhist/findByUserId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single GrpUserHist by field ActionTypeId
+ * @throws
+ */
+@Test
+public void testC_findByActionTypeId() throws Exception
+{
+    List<GrpUserHistDTO> grpuserhist = Arrays.asList(generateRandomGrpUserHist());
+    when(grpuserhistService.findGrpUserHistByActionTypeId(anyInt())).thenReturn(grpuserhist);
 
-	/**
-	 * test getting all GrpUserHist by foreign key evntOperId
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetGrpUserHistByEvntOperId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByEvntOperId/" + num;
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
+    mockMvc.perform(get("/grpuserhist/findByActionTypeId/2"))
+            .andExpect(status().isOk());
+}/**
+ * test getting a single GrpUserHist by field EvntOperId
+ * @throws
+ */
+@Test
+public void testC_findByEvntOperId() throws Exception
+{
+    List<GrpUserHistDTO> grpuserhist = Arrays.asList(generateRandomGrpUserHist());
+    when(grpuserhistService.findGrpUserHistByEvntOperId(anyInt())).thenReturn(grpuserhist);
 
-	/**
-	 * test getting all GrpUserHist by all foreign keys
-	 * @throws URISyntaxException
-	*/
-	//@Test
-	public void testGetGrpUserHistByGrpUserIdAndGrpIdAndUserIdAndActionTypeIdAndEvntOperId() throws URISyntaxException {
-		int num = 1;
-		final String baseUrl = "http://localhost:" + randomServerPort + "/grpuserhist/findByGrpUserIdAndGrpIdAndUserIdAndActionTypeIdAndEvntOperId/1/1/1/1/1";
-		URI uri = new URI(baseUrl);
-		HttpEntity<String> request = new HttpEntity<>(new String());
-		ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-		assertEquals(200, result.getStatusCodeValue());
-	}
-
+    mockMvc.perform(get("/grpuserhist/findByEvntOperId/2"))
+            .andExpect(status().isOk());
+}
 
 	public static GrpUserHistDTO generateRandomGrpUserHist() {
 		GrpUserHistDTO record = new GrpUserHistDTO();
